@@ -10,7 +10,7 @@ team. Each phase ends with a usable technical capability and an explicit gate.
 - [x] initial pure event-stream primitive;
 - [ ] repository governance, code of conduct, ownership, and licence
       confirmation;
-- [ ] private vulnerability reporting enabled on GitHub.
+- [x] private vulnerability reporting enabled on GitHub.
 
 Gate: maintainers accept the foundational ADRs and an operator is identified.
 
