@@ -1,0 +1,16 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+
+node_modules/
+dist/
+coverage/
+.turbo/
+.vite/
+.vercel/
+.supabase/
+
+*.log
+*.local
+*.tsbuildinfo

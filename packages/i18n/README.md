@@ -1,0 +1,18 @@
+# Internationalisation
+
+Locale dictionaries use stable semantic keys. `sk-SK` is the initial and
+fallback locale for the pilot; another locale must be loadable without changing
+domain events or jurisdiction routing.
+
+Rules:
+
+- no user-visible strings in components, domain events, or API error details;
+- ICU-compatible plural/select messages rather than concatenated fragments;
+- locale-aware dates, times, numbers, lists, and relative time;
+- accessibility labels, validation errors, email text, and document UI are
+  translated too;
+- legal/privacy copy has an independent version and review record;
+- missing keys fail CI for production dictionaries.
+
+The current dictionary contains metadata only. Product copy will be imported
+after the team's approved wording/designs are available.
