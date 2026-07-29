@@ -91,8 +91,11 @@ should be referenced from issues and tests.
   do not load third-party scripts on pages handling case/admin state. Avoid
   inline script, dynamic HTML insertion, and unbounded postMessage listeners.
 - **AH-SEC-024 — MUST:** The service worker caches only allow-listed static
-  assets. It never caches API responses, private media, signed URLs, contact
-  data, or capabilities and has a tested upgrade/rollback strategy.
+  assets and the minimal offline shell in the Cache API; it never places API
+  responses, private media, signed URLs, contact data, capabilities, or case
+  content there. Local case state and schema-validated public guidance use
+  separate IndexedDB stores under the documented offline model. Cache and
+  IndexedDB migrations have tested upgrade/rollback strategies.
 - **AH-SEC-025 — MUST:** Sensitive responses use `Cache-Control: no-store`,
   `X-Content-Type-Options: nosniff`, appropriate frame restrictions, a
   restrictive referrer policy, and no search indexing.
@@ -170,6 +173,24 @@ should be referenced from issues and tests.
 - **AH-SEC-045 — MUST:** Secrets and private data scanning run before
   production; exposed credentials are rotated, not merely removed from Git
   history.
+
+## Published guidance
+
+- **AH-SEC-046 — MUST:** Public guidance endpoints return only the active,
+  immutable revision compatible with the requested code-owned flow schema,
+  locale, and jurisdiction. Drafts, creator identity, and withdrawn historical
+  revisions are never publicly addressable.
+- **AH-SEC-047 — MUST:** Guidance contains bounded plain text and references to
+  allow-listed typed actions only. Server publication validation rejects unknown
+  keys, incomplete results, conflicting instructions, invalid action targets,
+  non-public contact targets, and missing generic guidance. Contact actions are
+  resolved from a pinned jurisdiction-pack version into the immutable public
+  projection. Clients reject incomplete or incompatible payloads and use a
+  last-known-valid or bundled reviewed fallback.
+- **AH-SEC-048 — MUST:** Publish and rollback require an individually
+  authenticated, TOTP-assured administrator, explicit confirmation, immutable
+  revision/source-review metadata, and an audit record containing old/new
+  revision identifiers and content hashes.
 
 ## Verification
 

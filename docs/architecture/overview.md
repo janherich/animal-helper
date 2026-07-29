@@ -14,6 +14,8 @@ changing these boundaries unnecessarily.
 - Preserve submitted work durably and make retries idempotent.
 - Give a small administrator team a secure, auditable backoffice.
 - Support reviewed, jurisdiction-specific outbound communication.
+- Let administrators maintain a fixed-schema, animal-specific guidance flow
+  without making the customer PWA a generic workflow runtime.
 - Minimise recurring cost and operational work.
 - Keep the system portable between hosting providers.
 - Make Slovak the first locale and Slovakia the first jurisdiction without
@@ -113,7 +115,8 @@ enqueues required effects. A unique `command_id` makes offline retries
 idempotent; `(stream_id, stream_version)` provides optimistic concurrency.
 
 See [Domain events](domain-events.md) and
-[Data lifecycle](data-and-retention.md).
+[Data lifecycle](data-and-retention.md), and the
+[administered guidance flow](administered-guidance-flow.md).
 
 ## Anonymous capability access
 
@@ -184,7 +187,8 @@ Initial signals:
 - search-engine optimisation;
 - real-time updates (polling with backoff is sufficient);
 - arbitrary user-authored HTML or arbitrary URL fetching;
-- a generic workflow engine.
+- a generic workflow engine; the fixed-schema guidance configuration described
+  in [Administered guidance flow](administered-guidance-flow.md) is in scope.
 
 The case aggregate is a small, explicit state machine. Generalisation is
 deferred until a second proven workflow requires it.

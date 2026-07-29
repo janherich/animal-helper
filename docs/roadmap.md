@@ -32,6 +32,8 @@ with an owner and deadline; no real personal data is used.
 ## Phase 2 — customer PWA
 
 - integrate approved Figma screens using accessible, responsive components;
+- implement the fixed guidance-flow contract, safe bundled fallback, and
+  validated public revision loading;
 - implement the `sk-SK` dictionary with professional language review;
 - implement IndexedDB draft and command queue;
 - add offline/install/update behaviour and clear durability states;
@@ -46,6 +48,12 @@ legal launch checklist are approved.
 ## Phase 3 — backoffice and dispatch
 
 - implement queue/detail projections and audited restricted-data reads;
+- implement guidance matrix editing, mobile preview, validation, publication,
+  rollback, and audit;
+- establish guidance sources, subject-matter review records, compatibility
+  policy, and emergency rollback rehearsal;
+- prove preview/public-payload equivalence and old-client schema compatibility
+  with shared fixtures;
 - add Slovak authority directory and routing data from authoritative sources;
 - implement versioned form snapshots and administrator review;
 - add transactional email dispatch, SPF/DKIM/DMARC, retry, and delivery
@@ -73,7 +81,8 @@ availability.
 
 - reporter accounts or interactive post-submission conversation;
 - multiple administrator roles;
-- generic workflow/configuration engine;
+- generic workflow/configuration engine beyond the fixed-schema guidance
+  capability;
 - real-time subscriptions;
 - full-text cross-case search;
 - machine-learning classification or automated authority selection;

@@ -17,10 +17,16 @@ IndexedDB stores:
 - acknowledged server command IDs and stream version;
 - the last sanitised status response.
 
+In a separate IndexedDB store, the PWA may keep the last schema-valid public
+guidance revision for each supported flow-schema version. This is content, not
+case state; it has no capability, contact, media, or private report data and is
+replaced only after complete validation.
+
 The service worker caches only versioned application assets and a minimal
 offline shell. It must not put API responses, signed media URLs, capabilities,
-or case content in the Cache API. A visible action lets the reporter remove
-local case data from the device.
+or case content in the Cache API. IndexedDB persistence is governed separately
+by the rules above. A visible action lets the reporter remove local case data
+from the device.
 
 Browser storage is best effort, not a backup. The UI must say when a case is
 only on the device and when the server has confirmed durable submission.

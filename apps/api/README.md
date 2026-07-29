@@ -12,6 +12,8 @@ The API is the sole public domain-command boundary. It:
 - invokes pure domain decisions;
 - atomically appends events, updates projections, and enqueues outbox work;
 - signs narrow object-store operations;
+- validates guidance drafts, atomically publishes compatible revisions, and
+  serves only the active public projection for a requested flow schema;
 - returns explicit, non-sensitive command/query results.
 
 It does not proxy bulk media, expose tables directly to browsers, embed provider

@@ -14,7 +14,7 @@ specific GDPR analysis.
 | Restricted   | report text, exact location, media, email, capability, generated forms, outbound message body | encrypted in transit/at rest, narrowly authorised, never logged |
 | Confidential | administrator identity, audit records, recipient directory, delivery metadata                 | authenticated administrator/API access                          |
 | Internal     | event metadata, coarse operational metrics, non-sensitive configuration                       | service/team access                                             |
-| Public       | PWA assets, documentation, deliberately sanitised aggregate statistics                        | public                                                          |
+| Public       | PWA assets, published guidance, documentation, deliberately sanitised aggregate statistics    | public                                                          |
 
 The permanent capability status is a restricted endpoint even though its
 response is deliberately sparse.
@@ -28,6 +28,8 @@ response is deliberately sparse.
 - Media bucket: private originals and derived previews under opaque keys.
 - Status projection: coarse state only.
 - Analytics projection: non-identifying aggregates with small-cell suppression.
+- Guidance store: drafts and immutable published revisions; only the active,
+  compatible projection is public.
 - Outbox: encrypted transient message material, deleted after terminal delivery
   plus a short operational window.
 - Audit log: administrator/action metadata, no report body or capability.
@@ -47,6 +49,7 @@ without an explicit, audited administrator operation.
 | Transient outbox message body                  | delete after terminal delivery and short retry/debug window                    |
 | Coarse status projection                       | indefinite                                                                     |
 | Non-identifying aggregate statistics           | indefinite                                                                     |
+| Published/withdrawn guidance revisions         | indefinite for provenance and incident reconstruction                          |
 | Security audit metadata                        | policy to be set by legal/security review                                      |
 | Provider/system logs                           | minimum supported duration, target 30 days or less                             |
 

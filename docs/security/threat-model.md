@@ -13,16 +13,17 @@ real-data pilot.
 
 ## Assets and safety properties
 
-| Asset                                      | Required property                                           |
-| ------------------------------------------ | ----------------------------------------------------------- |
-| Reporter capability and optional email     | confidentiality; unlinkability outside operational need     |
-| Report text, location, media, voice        | confidentiality, integrity, bounded retention               |
-| Reporter safety                            | no disclosure to an alleged offender or unrelated recipient |
-| Case event history and status              | integrity, availability, correct authorisation              |
-| Administrator identity/session             | confidentiality, authenticity, accountability               |
-| Authority directory/forms/outbound message | integrity, human approval, delivery traceability            |
-| Service credentials and signing keys       | confidentiality, rotation, least privilege                  |
-| Public statistics                          | useful but non-identifying                                  |
+| Asset                                      | Required property                                            |
+| ------------------------------------------ | ------------------------------------------------------------ |
+| Reporter capability and optional email     | confidentiality; unlinkability outside operational need      |
+| Report text, location, media, voice        | confidentiality, integrity, bounded retention                |
+| Reporter safety                            | no disclosure to an alleged offender or unrelated recipient  |
+| Case event history and status              | integrity, availability, correct authorisation               |
+| Administrator identity/session             | confidentiality, authenticity, accountability                |
+| Authority directory/forms/outbound message | integrity, human approval, delivery traceability             |
+| Published animal guidance                  | integrity, reviewed correctness, availability, compatibility |
+| Service credentials and signing keys       | confidentiality, rotation, least privilege                   |
+| Public statistics                          | useful but non-identifying                                   |
 
 ## Relevant adversaries
 
@@ -103,6 +104,8 @@ content.
 | T26 | Attacker uploads unlawful content or fabricates reports to harm a person                                | High          | terms/reporting notice, bounded uploads, administrator quarantine/triage, audit, escalation and deletion procedure                  | Medium                          |
 | T27 | IP/risk controls create a new tracking dataset or block vulnerable reporters                            | High          | coarse/short-lived signals, no behavioural advertising, accessible fallback, monitor false positives, never require account         | Medium                          |
 | T28 | Free-text or attachments are sent to a generative AI/analytics service unintentionally                  | Critical      | no AI/analytics processing of case data, provider allow-list, egress review, static-only Vercel boundary                            | Low                             |
+| T29 | Compromised or mistaken administrator publishes unsafe, contradictory, or misleading animal guidance    | Critical      | fixed schema, bounded typed actions, whole-flow validation, provenance/review record, exhaustive preview/diff, MFA, audit, rollback | Medium                          |
+| T30 | Offline or old PWA receives stale/incompatible guidance or loses all useful guidance                    | High          | schema-version publication pointers, last-known-valid revision, bundled reviewed fallback, compatibility window, rejection signal   | Medium                          |
 
 ## High-residual-risk decisions
 
@@ -141,7 +144,10 @@ Before pilot, rehearse at least:
 7. the deletion worker cannot remove one object;
 8. a dependency used by both PWAs is compromised;
 9. the database provider is unavailable while an offline reporter submits;
-10. a person requests erasure of data contained in another person's report.
+10. a person requests erasure of data contained in another person's report;
+11. an administrator publishes an instruction that conflicts with another
+    instruction for one animal kind;
+12. an older installed PWA opens after a newer flow schema is published.
 
 Each exercise must produce a decision owner, containment action, evidence that
 may be safely retained, notification assessment, and recovery verification.

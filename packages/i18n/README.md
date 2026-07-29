@@ -1,8 +1,9 @@
 # Internationalisation
 
-Locale dictionaries use stable semantic keys. `sk-SK` is the initial and
-fallback locale for the pilot; another locale must be loadable without changing
-domain events or jurisdiction routing.
+Package locale dictionaries use stable semantic keys for application chrome,
+validation, and accessibility copy. `sk-SK` is the initial and fallback locale
+for the pilot; another locale must be loadable without changing domain events or
+jurisdiction routing.
 
 Rules:
 
@@ -13,6 +14,11 @@ Rules:
   translated too;
 - legal/privacy copy has an independent version and review record;
 - missing keys fail CI for production dictionaries.
+
+Administrator-managed animal guidance is also locale data, but it is delivered
+as an immutable, locale-scoped guidance revision so wording can change without a
+frontend release. Its copy slots are code-owned semantic keys and use the same
+formatting/accessibility rules; jurisdiction remains a separate scope.
 
 The current dictionary contains metadata only. Product copy will be imported
 after the team's approved wording/designs are available.

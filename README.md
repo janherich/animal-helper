@@ -69,6 +69,7 @@ docs/
 Start with:
 
 - [Architecture overview](docs/architecture/overview.md)
+- [Administered guidance flow](docs/architecture/administered-guidance-flow.md)
 - [Delivery plan](docs/roadmap.md)
 - [Security requirements](docs/security/security-requirements.md)
 - [Threat model](docs/security/threat-model.md)
