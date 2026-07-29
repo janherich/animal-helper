@@ -73,6 +73,7 @@ Start with:
 - [Security requirements](docs/security/security-requirements.md)
 - [Threat model](docs/security/threat-model.md)
 - [Cost model](docs/operations/cost-model.md)
+- [Entire checkpoint workflow](docs/operations/entire.md)
 
 ## Local development
 
