@@ -42,8 +42,10 @@ with an owner and deadline; no real personal data is used.
 - complete Slovak privacy notice integration and consent/lawful-basis UX as
   advised.
 
-Gate: offline/retry test matrix passes, accessibility review passes, DPIA and
-legal launch checklist are approved.
+Gate: offline/retry test matrix passes, accessibility review passes, and the
+DPIA and
+[legal launch checklist](legal/gdpr-and-legal-risks.md#prioritised-launch-checklist)
+are approved.
 
 ## Phase 3 — backoffice and dispatch
 

@@ -2,6 +2,11 @@
 
 Status: **proposed baseline; legal review required before real data**
 
+See the project-specific
+[GDPR and legal-risk briefing](../legal/gdpr-and-legal-risks.md) for lawful
+bases, Article 9/10 issues, controller roles, transparency, rights, DPIA, and
+non-GDPR legal risks.
+
 Anonymous reporting does not mean anonymous data. Free text, images, voices,
 locations, network metadata, and allegations may identify reporters or other
 people. Allegations can also involve data relating to offences, which requires
