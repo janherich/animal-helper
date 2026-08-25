@@ -1,8 +1,8 @@
 # Customer PWA
 
-The customer application will be a mobile-first, installable, anonymous PWA. UI
-implementation is intentionally deferred until the approved Figma designs
-arrive.
+The customer application is a mobile-first, installable, anonymous Vue 3 + Vite
+PWA. Screens follow approved Figma work; writes go through versioned commands.
+See [ADR 0007](../../docs/architecture/decisions/0007-vue-static-pwas.md).
 
 Its technical responsibilities are:
 

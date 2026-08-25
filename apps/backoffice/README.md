@@ -1,8 +1,9 @@
 # Backoffice PWA
 
-The backoffice will be a desktop/tablet-oriented online PWA for individually
-authenticated administrators. UI implementation is intentionally deferred until
-the approved Figma designs arrive.
+The backoffice is a desktop/tablet-oriented online Vue 3 + Vite PWA for
+individually authenticated administrators. It previews the customer guidance
+flow with the same Vue renderer. See
+[ADR 0007](../../docs/architecture/decisions/0007-vue-static-pwas.md).
 
 Its technical responsibilities are:
 

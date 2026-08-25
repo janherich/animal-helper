@@ -51,8 +51,8 @@ and a portability choice.
 
 ```text
 apps/
-  customer/       anonymous, offline-capable PWA (implementation follows designs)
-  backoffice/     authenticated administration PWA
+  customer/       anonymous, offline-capable Vue PWA
+  backoffice/     authenticated Vue administration PWA
   api/            Supabase Edge Function/API composition root
 packages/
   domain/         pure domain types, event evolution, and invariants

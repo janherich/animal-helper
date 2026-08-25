@@ -2,7 +2,7 @@
 
 Status: **proposed baseline**
 
-Last reviewed: 2026-07-29
+Last reviewed: 2026-08-25
 
 This document defines technical boundaries, not product screens. Domain
 vocabulary and transitions will be refined with the product team without
@@ -53,7 +53,8 @@ boundary for domain commands.
 
 ## Deployment baseline
 
-- `apps/customer` and `apps/backoffice`: static assets on Vercel.
+- `apps/customer` and `apps/backoffice`: Vue 3 + Vite static PWAs on Vercel
+  ([ADR 0007](decisions/0007-vue-static-pwas.md)).
 - `apps/api` / `supabase/functions`: Supabase Edge Functions (TypeScript/Deno).
 - state: Supabase PostgreSQL in a selected European region where available.
 - media: private Cloudflare R2 bucket with an EU data-jurisdiction restriction.
