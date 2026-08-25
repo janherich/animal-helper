@@ -36,6 +36,8 @@ export default defineConfig(
       globals: {
         console: "readonly",
         process: "readonly",
+        setInterval: "readonly",
+        clearInterval: "readonly",
       },
     },
   },

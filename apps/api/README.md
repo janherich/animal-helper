@@ -1,21 +1,29 @@
-# API composition root
+# API
 
-The central API will run as Supabase Edge Functions using TypeScript/Deno. This
-directory will contain application composition and HTTP adapters; deployable
-function entry points live under `supabase/functions`.
+Local Node HTTP command and status boundary. Production can later move this
+composition root to Supabase Edge Functions without changing the contracts.
 
 The API is the sole public domain-command boundary. It:
 
 - validates versioned contracts;
-- authenticates a case capability or administrator session;
-- enforces authorisation, assurance level, quotas, and rate limits;
-- invokes pure domain decisions;
-- atomically appends events, updates projections, and enqueues outbox work;
-- signs narrow object-store operations;
-- validates guidance drafts, atomically publishes compatible revisions, and
-  serves only the active public projection for a requested flow schema;
-- returns explicit, non-sensitive command/query results.
+- authenticates a case capability;
+- invokes the event-store adapter;
+- returns explicit, non-sensitive command and status results.
 
-It does not proxy bulk media, expose tables directly to browsers, embed provider
-SDK objects in domain code, or perform external delivery inside a database
-transaction.
+It does not proxy bulk media, expose tables directly to browsers, or log
+capabilities, command bodies, or `Authorization` headers.
+
+## Local endpoints
+
+`npm run dev` starts isolated Postgres and this process on
+`http://127.0.0.1:8787`.
+
+| Method | Path        | Auth                                    | Purpose                        |
+| ------ | ----------- | --------------------------------------- | ------------------------------ |
+| `GET`  | `/health`   | none                                    | liveness                       |
+| `POST` | `/commands` | `Authorization: Capability <base64url>` | reporter draft commands        |
+| `GET`  | `/status`   | `Authorization: Capability <base64url>` | public `draft/received/closed` |
+
+Reporter commands in this slice: `create_draft`, `attach_private_data`,
+`submit_draft`. Administrator and system commands return `UNSUPPORTED_COMMAND`.
+Query strings on `/commands` and `/status` are rejected (`AH-SEC-007`).

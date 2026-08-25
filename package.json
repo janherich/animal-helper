@@ -12,11 +12,15 @@
   },
   "scripts": {
     "build": "pnpm --recursive --if-present build",
-    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
+    "check": "node scripts/require-node.mjs && pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
+    "dev": "node scripts/dev.mjs",
+    "dev:status": "node scripts/local-postgres.mjs status",
+    "dev:stop": "node scripts/local-postgres.mjs stop",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint .",
     "test": "pnpm --recursive --if-present test",
+    "test:integration": "pnpm --filter @animal-helper/event-store test:integration",
     "typecheck": "pnpm --recursive --if-present typecheck"
   },
   "devDependencies": {

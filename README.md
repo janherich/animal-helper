@@ -57,6 +57,7 @@ apps/
 packages/
   domain/         pure domain types, event evolution, and invariants
   contracts/      versioned transport schemas
+  event-store/    PostgreSQL append/project/outbox adapter
   i18n/           locale dictionaries, starting with sk-SK
   jurisdictions/  country-specific routing and form definitions
 supabase/          migrations and Edge Function deployment sources
@@ -80,18 +81,49 @@ Start with:
 
 ## Local development
 
-Node.js 24 LTS and pnpm 11.18.0 are pinned for deterministic builds.
+Node.js 24 LTS and pnpm 11.18.0 are pinned for deterministic builds. pnpm 11
+imports `node:sqlite`, which older Node 23 builds (including Homebrew 23.1) do
+not provide.
 
 ```sh
-nvm use
-npm install --global pnpm@11.18.0
+# Homebrew (keg-only; keep this on PATH in the project shell)
+brew install node@24
+export PATH="$(brew --prefix node@24)/bin:$PATH"
+
+corepack enable
+corepack prepare pnpm@11.18.0 --activate
 pnpm install
 pnpm check
 ```
 
-There are intentionally no deployable user interfaces yet. The initial
-executable package is a small framework-free TypeScript domain core that
-establishes the project's functional and event-stream conventions.
+If `pnpm` dies with `Cannot find package node:sqlite`, the `node` on `PATH` is
+not 24. Check with `node --version`.
+
+There are intentionally no deployable user interfaces yet. The executable
+foundation is a framework-free domain core, versioned case-command contracts, a
+local PostgreSQL event store, and a loopback HTTP API for reporter commands and
+capability-scoped status.
+
+Postgres 16 on the machine is enough. Supabase is not required. `npm run dev`
+starts an isolated cluster in `.local/postgres` (port 55432), applies
+migrations, and serves the API on `http://127.0.0.1:8787`. It does not use a
+system-wide server on 5432.
+
+```sh
+npm run dev
+```
+
+In another terminal:
+
+```sh
+pnpm check
+```
+
+Stop Postgres and the API with Ctrl+C in the `dev` terminal, or:
+
+```sh
+npm run dev:stop
+```
 
 ## Licence
 

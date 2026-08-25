@@ -1,16 +1,16 @@
-# Supabase infrastructure
+# Database migrations
 
-This tree will contain reviewed PostgreSQL migrations and Edge Function
-deployment entry points.
+SQL migrations live here so they can later deploy to Supabase. Local development
+does not need the Supabase CLI: `npm run dev` starts an isolated Postgres 16
+cluster and applies these files.
 
-The platform spike must provide local commands for:
+Do not link a developer machine to a hosted project by default. Generated dumps,
+real data, service-role keys, and `.env` files are never committed.
 
-- starting an isolated Supabase stack;
-- resetting and applying all migrations;
-- generating types from the schema;
-- running event-store/RLS/capability/outbox integration tests;
-- rebuilding projections;
-- purging a synthetic case and verifying object/contact deletion.
+Default local database URL:
 
-Do not link a developer's local project to production by default. Generated
-dumps, real data, service-role keys, and `.env` files are never committed.
+```text
+postgres://postgres@127.0.0.1:55432/animal_helper
+```
+
+CI applies the same migrations to an isolated Postgres service.

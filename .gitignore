@@ -10,6 +10,7 @@ coverage/
 .vite/
 .vercel/
 .supabase/
+.local/
 
 *.log
 *.local

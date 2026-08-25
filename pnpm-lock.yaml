@@ -32,7 +32,43 @@ importers:
         specifier: 4.1.10
         version: 4.1.10(@types/node@24.13.3)(vite@7.3.6(@types/node@24.13.3)(lightningcss@1.33.0))
 
+  apps/api:
+    dependencies:
+      "@animal-helper/contracts":
+        specifier: workspace:*
+        version: link:../../packages/contracts
+      "@animal-helper/domain":
+        specifier: workspace:*
+        version: link:../../packages/domain
+      "@animal-helper/event-store":
+        specifier: workspace:*
+        version: link:../../packages/event-store
+      postgres:
+        specifier: 3.4.8
+        version: 3.4.8
+
+  packages/contracts:
+    dependencies:
+      "@animal-helper/domain":
+        specifier: workspace:*
+        version: link:../domain
+      zod:
+        specifier: 4.3.6
+        version: 4.3.6
+
   packages/domain: {}
+
+  packages/event-store:
+    dependencies:
+      "@animal-helper/contracts":
+        specifier: workspace:*
+        version: link:../contracts
+      "@animal-helper/domain":
+        specifier: workspace:*
+        version: link:../domain
+      postgres:
+        specifier: 3.4.8
+        version: 3.4.8
 
 packages:
   "@esbuild/aix-ppc64@0.28.1":
@@ -1320,6 +1356,13 @@ packages:
       }
     engines: { node: ^10 || ^12 || >=14 }
 
+  postgres@3.4.8:
+    resolution:
+      {
+        integrity: sha512-d+JFcLM17njZaOLkv6SCev7uoLaBtfK86vMUXhW1Z4glPWh4jozno9APvW/XKFJ3CCxVoC7OL38BqRydtu5nGg==,
+      }
+    engines: { node: ">=12" }
+
   prelude-ls@1.2.1:
     resolution:
       {
@@ -1586,6 +1629,12 @@ packages:
         integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==,
       }
     engines: { node: ">=10" }
+
+  zod@4.3.6:
+    resolution:
+      {
+        integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==,
+      }
 
 snapshots:
   "@esbuild/aix-ppc64@0.28.1":
@@ -2252,6 +2301,8 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
+  postgres@3.4.8: {}
+
   prelude-ls@1.2.1: {}
 
   prettier@3.9.6: {}
@@ -2395,3 +2446,5 @@ snapshots:
   word-wrap@1.2.5: {}
 
   yocto-queue@0.1.0: {}
+
+  zod@4.3.6: {}

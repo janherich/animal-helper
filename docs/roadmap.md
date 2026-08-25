@@ -16,11 +16,14 @@ Gate: maintainers accept the foundational ADRs and an operator is identified.
 
 ## Phase 1 — data and platform spike
 
-- define versioned command/event contracts with synthetic fixtures;
-- implement the first case aggregate from the team's approved state diagram;
-- write PostgreSQL event-store, projection, capability, audit, and outbox
-  migrations;
-- prove atomic append/project/outbox behaviour and idempotent retries;
+- [x] define versioned command/event contracts with synthetic fixtures;
+- [x] implement the first conservative case aggregate;
+- [x] inventory Figma reporter fields and version the injured/stray
+      `form_snapshot` contract;
+- [x] write PostgreSQL event-store, projection, capability, audit, and outbox
+      migrations;
+- [x] prove atomic append/project/outbox behaviour and idempotent retries;
+- [x] expose a local HTTP command/status API on the event store;
 - prove a signed R2 upload, server validation, and orphan cleanup;
 - implement administrator invite/allow-list and mandatory TOTP;
 - add local Supabase development and isolated integration tests;

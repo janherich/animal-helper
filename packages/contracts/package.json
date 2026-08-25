@@ -1,8 +1,8 @@
 {
-  "name": "@animal-helper/domain",
+  "name": "@animal-helper/contracts",
   "version": "0.0.0",
   "private": true,
-  "description": "Pure domain primitives for Animal Helper.",
+  "description": "Versioned transport schemas for Animal Helper.",
   "license": "AGPL-3.0-or-later",
   "type": "module",
   "exports": {
@@ -15,5 +15,9 @@
     "build": "tsc --project tsconfig.build.json",
     "test": "vitest run",
     "typecheck": "tsc --project tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@animal-helper/domain": "workspace:*",
+    "zod": "4.3.6"
   }
 }

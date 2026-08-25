@@ -1,0 +1,26 @@
+{
+  "name": "@animal-helper/api",
+  "version": "0.0.0",
+  "private": true,
+  "description": "HTTP command and status boundary for Animal Helper.",
+  "license": "AGPL-3.0-or-later",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json",
+    "start": "node --experimental-strip-types --import ../../scripts/strip-types-resolve.mjs src/main.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --project tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@animal-helper/contracts": "workspace:*",
+    "@animal-helper/domain": "workspace:*",
+    "@animal-helper/event-store": "workspace:*",
+    "postgres": "3.4.8"
+  }
+}
