@@ -1,6 +1,10 @@
 import { randomBytes, randomUUID } from "node:crypto";
 
 import {
+  createCaseSession,
+  createMemoryCaseStore,
+} from "@animal-helper/client";
+import {
   syntheticAttachFormSnapshotCommand,
   syntheticAttachPrivateDataCommand,
   syntheticCreateDraftCommand,
@@ -474,5 +478,49 @@ describe("HTTP adapter", () => {
       ok: false,
       error: { code: "INVALID_REQUEST" },
     });
+  });
+
+  it("lets the shared client submit an injured snapshot through the handler", async () => {
+    const { handle } = createHarness();
+    const session = createCaseSession({
+      store: createMemoryCaseStore(),
+      transport: {
+        sendCommand: async ({ authorization, command }) => {
+          const response = await request(handle, {
+            method: "POST",
+            pathname: "/commands",
+            authorization,
+            body: command,
+          });
+          return { status: response.status, body: response.body };
+        },
+        getStatus: async ({ authorization }) => {
+          const response = await request(handle, {
+            method: "GET",
+            pathname: "/status",
+            authorization,
+          });
+          return { status: response.status, body: response.body };
+        },
+      },
+      now: () => now,
+    });
+
+    const opened = await session.openDraft();
+    expect(opened.ok).toBe(true);
+    const attached = await session.attachFormSnapshot(syntheticFormSnapshot);
+    expect(attached.ok).toBe(true);
+    const submitted = await session.submit();
+    expect(submitted.ok).toBe(true);
+    if (!submitted.ok) {
+      throw new Error("expected client submit to succeed");
+    }
+
+    expect(submitted.value).toMatchObject({
+      publicState: "received",
+      durability: "received",
+      pendingCount: 0,
+    });
+    expect(JSON.stringify(submitted.value)).not.toContain("domestic_cat");
   });
 });

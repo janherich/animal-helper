@@ -34,6 +34,7 @@ with an owner and deadline; no real personal data is used.
 
 ## Phase 2 — customer PWA
 
+- [x] shared reporter command client (capability, queue, fetch transport);
 - integrate approved Figma screens using accessible, responsive components;
 - implement the fixed guidance-flow contract, safe bundled fallback, and
   validated public revision loading;

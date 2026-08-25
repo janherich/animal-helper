@@ -46,6 +46,19 @@ importers:
       postgres:
         specifier: 3.4.8
         version: 3.4.8
+    devDependencies:
+      "@animal-helper/client":
+        specifier: workspace:*
+        version: link:../../packages/client
+
+  packages/client:
+    dependencies:
+      "@animal-helper/contracts":
+        specifier: workspace:*
+        version: link:../contracts
+      "@animal-helper/domain":
+        specifier: workspace:*
+        version: link:../domain
 
   packages/contracts:
     dependencies:

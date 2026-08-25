@@ -150,3 +150,43 @@ export const publicCaseStatusSchema = z.strictObject({
 });
 
 export type PublicCaseStatus = z.infer<typeof publicCaseStatusSchema>;
+
+export const commandAcceptedSchema = z.strictObject({
+  outcome: z.enum(["applied", "duplicate"]),
+  committedVersion: z.int().nonnegative(),
+  publicState: z.enum(["draft", "received", "closed"]),
+});
+
+export type CommandAccepted = z.infer<typeof commandAcceptedSchema>;
+
+export const commandAcceptedBodySchema = z.strictObject({
+  ok: z.literal(true),
+  value: commandAcceptedSchema,
+});
+
+export const publicCaseStatusBodySchema = z.strictObject({
+  ok: z.literal(true),
+  value: publicCaseStatusSchema,
+});
+
+export const apiErrorBodySchema = z.strictObject({
+  ok: z.literal(false),
+  error: z.strictObject({
+    code: z.string().min(1).max(64),
+  }),
+});
+
+export const parseCommandAcceptedBody = (
+  value: unknown,
+): z.ZodSafeParseResult<z.infer<typeof commandAcceptedBodySchema>> =>
+  commandAcceptedBodySchema.safeParse(value);
+
+export const parsePublicCaseStatusBody = (
+  value: unknown,
+): z.ZodSafeParseResult<z.infer<typeof publicCaseStatusBodySchema>> =>
+  publicCaseStatusBodySchema.safeParse(value);
+
+export const parseApiErrorBody = (
+  value: unknown,
+): z.ZodSafeParseResult<z.infer<typeof apiErrorBodySchema>> =>
+  apiErrorBodySchema.safeParse(value);

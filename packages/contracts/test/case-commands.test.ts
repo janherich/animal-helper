@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  parseApiErrorBody,
   parseCaseCommand,
+  parseCommandAcceptedBody,
+  parsePublicCaseStatusBody,
   syntheticAttachContactCommand,
   syntheticAttachLocationCommand,
   syntheticAttachPrivateDataCommand,
@@ -68,6 +71,47 @@ describe("case command contracts", () => {
         privatePayload: {
           ...syntheticAttachContactCommand.privatePayload,
           email: "not-an-email",
+        },
+      }).success,
+    ).toBe(false);
+  });
+
+  it("parses command and status envelopes without private fields", () => {
+    expect(
+      parseCommandAcceptedBody({
+        ok: true,
+        value: {
+          outcome: "applied",
+          committedVersion: 1,
+          publicState: "draft",
+        },
+      }).success,
+    ).toBe(true);
+    expect(
+      parsePublicCaseStatusBody({
+        ok: true,
+        value: {
+          streamId: syntheticCreateDraftCommand.streamId,
+          publicState: "draft",
+          createdAt: syntheticCreateDraftCommand.occurredAt,
+          updatedAt: syntheticCreateDraftCommand.occurredAt,
+        },
+      }).success,
+    ).toBe(true);
+    expect(
+      parseApiErrorBody({
+        ok: false,
+        error: { code: "VERSION_CONFLICT" },
+      }).success,
+    ).toBe(true);
+    expect(
+      parseCommandAcceptedBody({
+        ok: true,
+        value: {
+          outcome: "applied",
+          committedVersion: 1,
+          publicState: "draft",
+          eventIds: ["secret"],
         },
       }).success,
     ).toBe(false);

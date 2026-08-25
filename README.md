@@ -57,6 +57,7 @@ apps/
 packages/
   domain/         pure domain types, event evolution, and invariants
   contracts/      versioned transport schemas
+  client/         reporter capability, command queue, and HTTP transport
   event-store/    PostgreSQL append/project/outbox adapter
   i18n/           locale dictionaries, starting with sk-SK
   jurisdictions/  country-specific routing and form definitions

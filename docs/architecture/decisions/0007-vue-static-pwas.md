@@ -13,9 +13,8 @@ performance. ADR 0004 already requires static assets on the public host and
 direct API/object-store traffic for report data.
 
 A meta-framework (Nuxt, Next) would pull server rendering and host-runtime
-coupling that this architecture does not need. Two different UI frameworks
-would duplicate the customer guidance renderer that the backoffice must
-preview.
+coupling that this architecture does not need. Two different UI frameworks would
+duplicate the customer guidance renderer that the backoffice must preview.
 
 ## Decision
 
@@ -29,15 +28,16 @@ static SPAs, installable as PWAs.
 - Keep views thin: a screen projects local draft or query state and issues a
   command. Vue does not own durability, retries, or case transitions.
 - Put capability create/import, the IndexedDB draft and command queue,
-  `expectedVersion` reconciliation, and contract parsing in a framework-free
-  TypeScript package. Both PWAs depend on that package.
+  `expectedVersion` reconciliation, and contract parsing in the framework-free
+  `@animal-helper/client` package. Both PWAs depend on that package. IndexedDB
+  is a later `CaseStore` adapter; the first store is in-memory.
 - Treat `@animal-helper/contracts` as the write schema. Do not introduce a
   second client field model or a form library that retries HTTP on its own.
 - Do not add a generic form builder or client-executed workflow engine. Flow
   topology stays in application code (ADR 0006).
 - Keep the frontend dependency set small: Vue, Vue Router, the PWA plugin, and
-  locale wiring. Ephemeral chrome state may use Pinia; case and queue state
-  must not.
+  locale wiring. Ephemeral chrome state may use Pinia; case and queue state must
+  not.
 
 ## Consequences
 

@@ -1,8 +1,8 @@
 {
-  "name": "@animal-helper/api",
+  "name": "@animal-helper/client",
   "version": "0.0.0",
   "private": true,
-  "description": "HTTP command and status boundary for Animal Helper.",
+  "description": "Framework-free reporter command client for Animal Helper.",
   "license": "AGPL-3.0-or-later",
   "type": "module",
   "exports": {
@@ -13,17 +13,11 @@
   },
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
-    "start": "node --experimental-strip-types --import ../../scripts/strip-types-resolve.mjs src/main.ts",
     "test": "vitest run",
     "typecheck": "tsc --project tsconfig.json --noEmit"
   },
   "dependencies": {
     "@animal-helper/contracts": "workspace:*",
-    "@animal-helper/domain": "workspace:*",
-    "@animal-helper/event-store": "workspace:*",
-    "postgres": "3.4.8"
-  },
-  "devDependencies": {
-    "@animal-helper/client": "workspace:*"
+    "@animal-helper/domain": "workspace:*"
   }
 }
