@@ -65,7 +65,7 @@ packages/
 supabase/          migrations and Edge Function deployment sources
 docs/
   architecture/   boundaries, decisions, event model, offline synchronisation
-  product/        case-matrix sources and screen mapping
+  product/        UI cookbook, case-matrix sources, and screen mapping
   legal/          GDPR requirements, Slovak legal risks, and launch blockers
   security/       security requirements and threat model
   operations/     costs and operational guidance
@@ -75,6 +75,7 @@ Start with:
 
 - [Architecture overview](docs/architecture/overview.md)
 - [Administered guidance flow](docs/architecture/administered-guidance-flow.md)
+- [UI cookbook](docs/product/ui-cookbook.md)
 - [Case matrices and screen map](docs/product/case-matrices/README.md)
 - [GDPR and legal-risk briefing](docs/legal/gdpr-and-legal-risks.md)
 - [Delivery plan](docs/roadmap.md)

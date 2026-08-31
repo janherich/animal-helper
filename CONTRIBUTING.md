@@ -27,6 +27,7 @@ mechanism.
 
 User-visible text belongs in locale dictionaries. Routing rules and
 official-form definitions belong in jurisdiction packages, not UI components.
+Customer screens follow the [UI cookbook](docs/product/ui-cookbook.md).
 
 ## Changes
 

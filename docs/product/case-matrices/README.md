@@ -10,7 +10,8 @@ are **not** a published guidance revision: cells still contain draft notes,
 missing stray copy, and operational to-dos.
 
 Typed keys derived from these files live in `@animal-helper/guidance`. Screen
-IDs map onto the current customer PWA in [screen-map.md](screen-map.md).
+IDs map onto the current customer PWA in [screen-map.md](screen-map.md). How to
+implement those screens is the [UI cookbook](../ui-cookbook.md).
 
 ## Files
 

@@ -44,7 +44,8 @@ static SPAs, installable as PWAs.
 Frontend work can start from a fixed stack without reopening React versus Vue.
 Contributors who only know React can still work in the shared TypeScript
 packages and contracts. Replacing Vue later is possible if views stay thin;
-replacing the command client is not a UI rewrite.
+replacing the command client is not a UI rewrite. Day-to-day screen rules are in
+the [UI cookbook](../../product/ui-cookbook.md).
 
 The main risk is later pressure to adopt Nuxt for convenience. That requires a
 new ADR and would have to preserve the static-host and capability-fragment

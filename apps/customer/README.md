@@ -2,7 +2,8 @@
 
 The customer application is a mobile-first, installable, anonymous Vue 3 + Vite
 PWA. Screens follow approved Figma work; writes go through
-`@animal-helper/client` and versioned commands. See
+`@animal-helper/client` and versioned commands. Start with the
+[UI cookbook](../../docs/product/ui-cookbook.md) and
 [ADR 0007](../../docs/architecture/decisions/0007-vue-static-pwas.md).
 
 This slice is an injured/stray skeleton, not the visual design. Routes follow
