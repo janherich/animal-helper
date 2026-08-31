@@ -54,7 +54,8 @@ boundary for domain commands.
 ## Deployment baseline
 
 - `apps/customer` and `apps/backoffice`: Vue 3 + Vite static PWAs on Vercel
-  ([ADR 0007](decisions/0007-vue-static-pwas.md)).
+  ([ADR 0007](decisions/0007-vue-static-pwas.md)). Local `npm run dev` serves
+  the customer shell at `http://127.0.0.1:5173`.
 - `apps/api` / `supabase/functions`: Supabase Edge Functions (TypeScript/Deno).
 - state: Supabase PostgreSQL in a selected European region where available.
 - media: private Cloudflare R2 bucket with an EU data-jurisdiction restriction.

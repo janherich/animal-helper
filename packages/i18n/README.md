@@ -20,5 +20,5 @@ as an immutable, locale-scoped guidance revision so wording can change without a
 frontend release. Its copy slots are code-owned semantic keys and use the same
 formatting/accessibility rules; jurisdiction remains a separate scope.
 
-The current dictionary contains metadata only. Product copy will be imported
-after the team's approved wording/designs are available.
+The `sk-SK` dictionary now includes temporary customer-shell labels for the
+injured/stray walk. Product copy will replace those after language review.

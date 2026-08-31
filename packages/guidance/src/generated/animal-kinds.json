@@ -1,0 +1,3280 @@
+[
+  {
+    "key": "amphibian_frog",
+    "groupKey": "wildlife",
+    "categoryKey": "amphibian",
+    "labelSk": "Žaba",
+    "matrix": {
+      "crueltyId": "TYR-077",
+      "injuredId": "ZRZAT-153",
+      "strayId": "ZRZAT-154"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "amphibian_newt",
+    "groupKey": "wildlife",
+    "categoryKey": "amphibian",
+    "labelSk": "Mlok",
+    "matrix": {
+      "crueltyId": "TYR-081",
+      "injuredId": "ZRZAT-161",
+      "strayId": "ZRZAT-162"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "amphibian_salamander",
+    "groupKey": "wildlife",
+    "categoryKey": "amphibian",
+    "labelSk": "Salamandra",
+    "matrix": {
+      "crueltyId": "TYR-082",
+      "injuredId": "ZRZAT-163",
+      "strayId": "ZRZAT-164"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "amphibian_toad",
+    "groupKey": "wildlife",
+    "categoryKey": "amphibian",
+    "labelSk": "Ropucha",
+    "matrix": {
+      "crueltyId": "TYR-078",
+      "injuredId": "ZRZAT-155",
+      "strayId": "ZRZAT-156"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "amphibian_tree_frog",
+    "groupKey": "wildlife",
+    "categoryKey": "amphibian",
+    "labelSk": "Rosnička",
+    "matrix": {
+      "crueltyId": "TYR-080",
+      "injuredId": "ZRZAT-159",
+      "strayId": "ZRZAT-160"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "amphibian_water_frog",
+    "groupKey": "wildlife",
+    "categoryKey": "amphibian",
+    "labelSk": "Skokan",
+    "matrix": {
+      "crueltyId": "TYR-079",
+      "injuredId": "ZRZAT-157",
+      "strayId": "ZRZAT-158"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "aquatic_aquatic_turtle",
+    "groupKey": "wildlife",
+    "categoryKey": "aquatic",
+    "labelSk": "Vodná korytnačka",
+    "matrix": {
+      "crueltyId": "TYR-068",
+      "injuredId": "ZRZAT-135",
+      "strayId": "ZRZAT-136"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "aquatic_beaver",
+    "groupKey": "wildlife",
+    "categoryKey": "aquatic",
+    "labelSk": "Bobor",
+    "matrix": {
+      "crueltyId": "TYR-070",
+      "injuredId": "ZRZAT-139",
+      "strayId": "ZRZAT-140"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w13",
+      "primaryContact": "sop_rescue",
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "aquatic_crayfish",
+    "groupKey": "wildlife",
+    "categoryKey": "aquatic",
+    "labelSk": "Rak",
+    "matrix": {
+      "crueltyId": "TYR-066",
+      "injuredId": "ZRZAT-131",
+      "strayId": "ZRZAT-132"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp_manual"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "aquatic_fish",
+    "groupKey": "wildlife",
+    "categoryKey": "aquatic",
+    "labelSk": "Ryba",
+    "matrix": {
+      "crueltyId": "TYR-065",
+      "injuredId": "ZRZAT-129",
+      "strayId": "ZRZAT-130"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "aquatic_mussel",
+    "groupKey": "wildlife",
+    "categoryKey": "aquatic",
+    "labelSk": "Lastúrnik",
+    "matrix": {
+      "crueltyId": "TYR-067",
+      "injuredId": "ZRZAT-133",
+      "strayId": "ZRZAT-134"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp_manual"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "aquatic_otter",
+    "groupKey": "wildlife",
+    "categoryKey": "aquatic",
+    "labelSk": "Vydra",
+    "matrix": {
+      "crueltyId": "TYR-069",
+      "injuredId": "ZRZAT-137",
+      "strayId": "ZRZAT-138"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w13",
+      "primaryContact": "sop_rescue",
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_barn_owl",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "owls",
+    "labelSk": "Plamienka",
+    "matrix": {
+      "crueltyId": "TYR-036",
+      "injuredId": "ZRZAT-071",
+      "strayId": "ZRZAT-072"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_black_stork",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "storks_waders",
+    "labelSk": "Bocian čierny",
+    "matrix": {
+      "crueltyId": "TYR-051",
+      "injuredId": "ZRZAT-101",
+      "strayId": "ZRZAT-102"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_buzzard",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "raptors",
+    "labelSk": "Myšiak",
+    "matrix": {
+      "crueltyId": "TYR-029",
+      "injuredId": "ZRZAT-057",
+      "strayId": "ZRZAT-058"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_collared_dove",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "pigeons",
+    "labelSk": "Hrdlička",
+    "matrix": {
+      "crueltyId": "TYR-064",
+      "injuredId": "ZRZAT-127",
+      "strayId": "ZRZAT-128"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_cormorant",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "waterfowl",
+    "labelSk": "Kormorán",
+    "matrix": {
+      "crueltyId": "TYR-047",
+      "injuredId": "ZRZAT-093",
+      "strayId": "ZRZAT-094"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_crane",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "storks_waders",
+    "labelSk": "Žeriav",
+    "matrix": {
+      "crueltyId": "TYR-053",
+      "injuredId": "ZRZAT-105",
+      "strayId": "ZRZAT-106"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_crow",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "corvids",
+    "labelSk": "Vrana",
+    "matrix": {
+      "crueltyId": "TYR-037",
+      "injuredId": "ZRZAT-073",
+      "strayId": "ZRZAT-074"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_duck",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "waterfowl",
+    "labelSk": "Kačica",
+    "matrix": {
+      "crueltyId": "TYR-044",
+      "injuredId": "ZRZAT-087",
+      "strayId": "ZRZAT-088"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_eagle",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "raptors",
+    "labelSk": "Orol",
+    "matrix": {
+      "crueltyId": "TYR-026",
+      "injuredId": "ZRZAT-051",
+      "strayId": "ZRZAT-052"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_eagle_owl",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "owls",
+    "labelSk": "Výr",
+    "matrix": {
+      "crueltyId": "TYR-033",
+      "injuredId": "ZRZAT-065",
+      "strayId": "ZRZAT-066"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_falcon",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "raptors",
+    "labelSk": "Sokol",
+    "matrix": {
+      "crueltyId": "TYR-027",
+      "injuredId": "ZRZAT-053",
+      "strayId": "ZRZAT-054"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_finch",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "songbirds",
+    "labelSk": "Pinka",
+    "matrix": {
+      "crueltyId": "TYR-061",
+      "injuredId": "ZRZAT-121",
+      "strayId": "ZRZAT-122"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_goose",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "waterfowl",
+    "labelSk": "Hus",
+    "matrix": {
+      "crueltyId": "TYR-045",
+      "injuredId": "ZRZAT-089",
+      "strayId": "ZRZAT-090"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_goshawk",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "raptors",
+    "labelSk": "Jastrab",
+    "matrix": {
+      "crueltyId": "TYR-028",
+      "injuredId": "ZRZAT-055",
+      "strayId": "ZRZAT-056"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_grebe",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "waterfowl",
+    "labelSk": "Potápka",
+    "matrix": {
+      "crueltyId": "TYR-049",
+      "injuredId": "ZRZAT-097",
+      "strayId": "ZRZAT-098"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_gull",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "waterfowl",
+    "labelSk": "Čajka",
+    "matrix": {
+      "crueltyId": "TYR-048",
+      "injuredId": "ZRZAT-095",
+      "strayId": "ZRZAT-096"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_harrier",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "raptors",
+    "labelSk": "Kaňa",
+    "matrix": {
+      "crueltyId": "TYR-031",
+      "injuredId": "ZRZAT-061",
+      "strayId": "ZRZAT-062"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_heron_wading",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "storks_waders",
+    "labelSk": "Volavka",
+    "matrix": {
+      "crueltyId": "TYR-052",
+      "injuredId": "ZRZAT-103",
+      "strayId": "ZRZAT-104"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_heron_waterfowl",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "waterfowl",
+    "labelSk": "Volavka",
+    "matrix": {
+      "crueltyId": "TYR-046",
+      "injuredId": "ZRZAT-091",
+      "strayId": "ZRZAT-092"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_house_martin",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "songbirds",
+    "labelSk": "Belorítka",
+    "matrix": {
+      "crueltyId": "TYR-058",
+      "injuredId": "ZRZAT-115",
+      "strayId": "ZRZAT-116"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_jackdaw",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "corvids",
+    "labelSk": "Kavka",
+    "matrix": {
+      "crueltyId": "TYR-042",
+      "injuredId": "ZRZAT-083",
+      "strayId": "ZRZAT-084"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_jay",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "corvids",
+    "labelSk": "Sojka",
+    "matrix": {
+      "crueltyId": "TYR-041",
+      "injuredId": "ZRZAT-081",
+      "strayId": "ZRZAT-082"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_kite",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "raptors",
+    "labelSk": "Haja",
+    "matrix": {
+      "crueltyId": "TYR-030",
+      "injuredId": "ZRZAT-059",
+      "strayId": "ZRZAT-060"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_little_owl",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "owls",
+    "labelSk": "Kuvik",
+    "matrix": {
+      "crueltyId": "TYR-034",
+      "injuredId": "ZRZAT-067",
+      "strayId": "ZRZAT-068"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_magpie",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "corvids",
+    "labelSk": "Straka",
+    "matrix": {
+      "crueltyId": "TYR-040",
+      "injuredId": "ZRZAT-079",
+      "strayId": "ZRZAT-080"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_owl",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "owls",
+    "labelSk": "Sova",
+    "matrix": {
+      "crueltyId": "TYR-032",
+      "injuredId": "ZRZAT-063",
+      "strayId": "ZRZAT-064"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_pigeon",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "pigeons",
+    "labelSk": "Holub",
+    "matrix": {
+      "crueltyId": "TYR-063",
+      "injuredId": "ZRZAT-125",
+      "strayId": "ZRZAT-126"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_pigeon_identify",
+      "askConscious": true,
+      "askJuvenile": true,
+      "primaryContact": "conditional_sop_if_wild_pigeon",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_raven",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "corvids",
+    "labelSk": "Krkavec",
+    "matrix": {
+      "crueltyId": "TYR-039",
+      "injuredId": "ZRZAT-077",
+      "strayId": "ZRZAT-078"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_robin",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "songbirds",
+    "labelSk": "Červienka",
+    "matrix": {
+      "crueltyId": "TYR-062",
+      "injuredId": "ZRZAT-123",
+      "strayId": "ZRZAT-124"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_rook",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "corvids",
+    "labelSk": "Havran",
+    "matrix": {
+      "crueltyId": "TYR-038",
+      "injuredId": "ZRZAT-075",
+      "strayId": "ZRZAT-076"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_sparrow",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "songbirds",
+    "labelSk": "Vrabec",
+    "matrix": {
+      "crueltyId": "TYR-055",
+      "injuredId": "ZRZAT-109",
+      "strayId": "ZRZAT-110"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_starling",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "songbirds",
+    "labelSk": "Škorec",
+    "matrix": {
+      "crueltyId": "TYR-060",
+      "injuredId": "ZRZAT-119",
+      "strayId": "ZRZAT-120"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_swallow",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "songbirds",
+    "labelSk": "Lastovička",
+    "matrix": {
+      "crueltyId": "TYR-057",
+      "injuredId": "ZRZAT-113",
+      "strayId": "ZRZAT-114"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_swan",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "waterfowl",
+    "labelSk": "Labuť",
+    "matrix": {
+      "crueltyId": "TYR-043",
+      "injuredId": "ZRZAT-085",
+      "strayId": "ZRZAT-086"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_swift",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "songbirds",
+    "labelSk": "Dážďovník",
+    "matrix": {
+      "crueltyId": "TYR-059",
+      "injuredId": "ZRZAT-117",
+      "strayId": "ZRZAT-118"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_tawny_owl",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "owls",
+    "labelSk": "Myšiarka",
+    "matrix": {
+      "crueltyId": "TYR-035",
+      "injuredId": "ZRZAT-069",
+      "strayId": "ZRZAT-070"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_thrush",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "songbirds",
+    "labelSk": "Drozd",
+    "matrix": {
+      "crueltyId": "TYR-056",
+      "injuredId": "ZRZAT-111",
+      "strayId": "ZRZAT-112"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_tit",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "songbirds",
+    "labelSk": "Sýkorka",
+    "matrix": {
+      "crueltyId": "TYR-054",
+      "injuredId": "ZRZAT-107",
+      "strayId": "ZRZAT-108"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "bird_white_stork",
+    "groupKey": "wildlife",
+    "categoryKey": "bird",
+    "subcategoryKey": "storks_waders",
+    "labelSk": "Bocian biely",
+    "matrix": {
+      "crueltyId": "TYR-050",
+      "injuredId": "ZRZAT-099",
+      "strayId": "ZRZAT-100"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "domestic_cat",
+    "groupKey": "domestic",
+    "categoryKey": "companion",
+    "labelSk": "Mačka",
+    "matrix": {
+      "crueltyId": "TYR-002",
+      "injuredId": "ZRZAT-003",
+      "strayId": "ZRZAT-004"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_companion",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "municipality_capture",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "domestic_chinchilla",
+    "groupKey": "domestic",
+    "categoryKey": "companion",
+    "labelSk": "Činčila",
+    "matrix": {
+      "crueltyId": "TYR-008",
+      "injuredId": "ZRZAT-015",
+      "strayId": "ZRZAT-016"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_companion",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "municipality_capture",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "domestic_dog",
+    "groupKey": "domestic",
+    "categoryKey": "companion",
+    "labelSk": "Pes",
+    "matrix": {
+      "crueltyId": "TYR-001",
+      "injuredId": "ZRZAT-001",
+      "strayId": "ZRZAT-002"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_companion",
+      "askConscious": true,
+      "askJuvenile": false,
+      "warningFrame": "w14",
+      "primaryContact": "municipality_capture",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "domestic_ferret",
+    "groupKey": "domestic",
+    "categoryKey": "companion",
+    "labelSk": "Fretka",
+    "matrix": {
+      "crueltyId": "TYR-003",
+      "injuredId": "ZRZAT-005",
+      "strayId": "ZRZAT-006"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_companion",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "municipality_capture",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "domestic_guinea_pig",
+    "groupKey": "domestic",
+    "categoryKey": "companion",
+    "labelSk": "Morča",
+    "matrix": {
+      "crueltyId": "TYR-005",
+      "injuredId": "ZRZAT-009",
+      "strayId": "ZRZAT-010"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_companion",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "municipality_capture",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "domestic_hamster",
+    "groupKey": "domestic",
+    "categoryKey": "companion",
+    "labelSk": "Škrečok",
+    "matrix": {
+      "crueltyId": "TYR-006",
+      "injuredId": "ZRZAT-011",
+      "strayId": "ZRZAT-012"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_companion",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "municipality_capture",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "domestic_lizard",
+    "groupKey": "domestic",
+    "categoryKey": "companion",
+    "labelSk": "Jašterica",
+    "matrix": {
+      "crueltyId": "TYR-012",
+      "strayId": "ZRZAT-024"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "domestic_parrot",
+    "groupKey": "domestic",
+    "categoryKey": "companion",
+    "labelSk": "Papagáj",
+    "matrix": {
+      "crueltyId": "TYR-009",
+      "injuredId": "ZRZAT-017",
+      "strayId": "ZRZAT-018"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_companion",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "municipality_capture",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "domestic_rabbit",
+    "groupKey": "domestic",
+    "categoryKey": "companion",
+    "labelSk": "Králik",
+    "matrix": {
+      "crueltyId": "TYR-004",
+      "injuredId": "ZRZAT-007",
+      "strayId": "ZRZAT-008"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_companion",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "municipality_capture",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "domestic_rat",
+    "groupKey": "domestic",
+    "categoryKey": "companion",
+    "labelSk": "Potkan",
+    "matrix": {
+      "crueltyId": "TYR-007"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    }
+  },
+  {
+    "key": "domestic_snake",
+    "groupKey": "domestic",
+    "categoryKey": "companion",
+    "labelSk": "Had",
+    "matrix": {
+      "crueltyId": "TYR-011",
+      "strayId": "ZRZAT-022"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "domestic_turtle",
+    "groupKey": "domestic",
+    "categoryKey": "companion",
+    "labelSk": "Korytnačka",
+    "matrix": {
+      "crueltyId": "TYR-010",
+      "injuredId": "ZRZAT-019",
+      "strayId": "ZRZAT-020"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_companion",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "municipality_capture",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "exotic_coypu",
+    "groupKey": "exotic",
+    "categoryKey": "exotic",
+    "labelSk": "Nutria",
+    "matrix": {
+      "crueltyId": "TYR-084",
+      "injuredId": "ZRZAT-167",
+      "strayId": "ZRZAT-168"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_game",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w13",
+      "primaryContact": "hunting_manager_or_opk",
+      "showVolunteers": true,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "exotic_exotic_lizard",
+    "groupKey": "exotic",
+    "categoryKey": "exotic",
+    "labelSk": "Exotická jašterica",
+    "matrix": {
+      "crueltyId": "TYR-089",
+      "injuredId": "ZRZAT-177",
+      "strayId": "ZRZAT-178"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_exotic",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w13",
+      "primaryContact": "municipality_capture",
+      "secondaryContact": "vet_exotic",
+      "showVolunteers": true,
+      "selfHelp": "after_contacts_if_safe"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "exotic_exotic_snake",
+    "groupKey": "exotic",
+    "categoryKey": "exotic",
+    "labelSk": "Exotický had",
+    "matrix": {
+      "crueltyId": "TYR-088",
+      "injuredId": "ZRZAT-175",
+      "strayId": "ZRZAT-176"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_exotic",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w13",
+      "primaryContact": "municipality_capture",
+      "secondaryContact": "vet_exotic",
+      "selfHelp": "after_contacts_if_safe"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "exotic_kangaroo",
+    "groupKey": "exotic",
+    "categoryKey": "exotic",
+    "labelSk": "Klokan",
+    "matrix": {
+      "crueltyId": "TYR-090",
+      "injuredId": "ZRZAT-179",
+      "strayId": "ZRZAT-180"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_exotic",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w13",
+      "primaryContact": "municipality_capture",
+      "secondaryContact": "vet_exotic",
+      "showVolunteers": true,
+      "selfHelp": "after_contacts_if_safe"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "exotic_mink",
+    "groupKey": "exotic",
+    "categoryKey": "exotic",
+    "labelSk": "Norka",
+    "matrix": {
+      "crueltyId": "TYR-086",
+      "injuredId": "ZRZAT-171",
+      "strayId": "ZRZAT-172"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_game",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w13",
+      "primaryContact": "hunting_manager_or_opk",
+      "showVolunteers": true,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "exotic_parrot",
+    "groupKey": "exotic",
+    "categoryKey": "exotic",
+    "labelSk": "Papagáj",
+    "matrix": {
+      "crueltyId": "TYR-087",
+      "injuredId": "ZRZAT-173",
+      "strayId": "ZRZAT-174"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_exotic",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "municipality_capture",
+      "secondaryContact": "vet_exotic",
+      "showVolunteers": true,
+      "selfHelp": "after_contacts_if_safe"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "exotic_raccoon",
+    "groupKey": "exotic",
+    "categoryKey": "exotic",
+    "labelSk": "Medvedík čistotný",
+    "matrix": {
+      "crueltyId": "TYR-085",
+      "injuredId": "ZRZAT-169",
+      "strayId": "ZRZAT-170"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_game",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w13",
+      "primaryContact": "hunting_manager_or_opk",
+      "showVolunteers": true,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "exotic_tiger",
+    "groupKey": "exotic",
+    "categoryKey": "exotic",
+    "labelSk": "Tiger",
+    "matrix": {
+      "crueltyId": "TYR-091",
+      "injuredId": "ZRZAT-181",
+      "strayId": "ZRZAT-182"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_exotic_dangerous",
+      "askConscious": true,
+      "askJuvenile": true,
+      "primaryContact": "emergency_112",
+      "showVolunteers": false,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "exotic_turtle",
+    "groupKey": "exotic",
+    "categoryKey": "exotic",
+    "labelSk": "Korytnačka",
+    "matrix": {
+      "crueltyId": "TYR-083",
+      "injuredId": "ZRZAT-165",
+      "strayId": "ZRZAT-166"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_exotic",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "municipality_capture",
+      "secondaryContact": "vet_exotic",
+      "showVolunteers": true,
+      "selfHelp": "after_contacts_if_safe"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "farm_bees",
+    "groupKey": "farm",
+    "categoryKey": "farm",
+    "labelSk": "Včely",
+    "matrix": {
+      "crueltyId": "TYR-025",
+      "strayId": "ZRZAT-050"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "farm_chicken",
+    "groupKey": "farm",
+    "categoryKey": "farm",
+    "labelSk": "Sliepka",
+    "matrix": {
+      "crueltyId": "TYR-019",
+      "injuredId": "ZRZAT-037",
+      "strayId": "ZRZAT-038"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_farm",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "showVolunteers": true,
+      "selfHelp": "after_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "farm_cow",
+    "groupKey": "farm",
+    "categoryKey": "farm",
+    "labelSk": "Krava",
+    "matrix": {
+      "crueltyId": "TYR-015",
+      "injuredId": "ZRZAT-029",
+      "strayId": "ZRZAT-030"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_farm",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w13",
+      "showVolunteers": true,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "farm_donkey",
+    "groupKey": "farm",
+    "categoryKey": "farm",
+    "labelSk": "Somár",
+    "matrix": {
+      "crueltyId": "TYR-014",
+      "injuredId": "ZRZAT-027",
+      "strayId": "ZRZAT-028"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_farm",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w13",
+      "showVolunteers": true,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "farm_duck",
+    "groupKey": "farm",
+    "categoryKey": "farm",
+    "labelSk": "Kačica",
+    "matrix": {
+      "crueltyId": "TYR-020",
+      "injuredId": "ZRZAT-039",
+      "strayId": "ZRZAT-040"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_farm",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "showVolunteers": true,
+      "selfHelp": "after_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "farm_goat",
+    "groupKey": "farm",
+    "categoryKey": "farm",
+    "labelSk": "Koza",
+    "matrix": {
+      "crueltyId": "TYR-017",
+      "injuredId": "ZRZAT-033",
+      "strayId": "ZRZAT-034"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_farm",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "showVolunteers": true,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "farm_goose",
+    "groupKey": "farm",
+    "categoryKey": "farm",
+    "labelSk": "Hus",
+    "matrix": {
+      "crueltyId": "TYR-021",
+      "injuredId": "ZRZAT-041",
+      "strayId": "ZRZAT-042"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_farm",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "showVolunteers": true,
+      "selfHelp": "after_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "farm_horse",
+    "groupKey": "farm",
+    "categoryKey": "farm",
+    "labelSk": "Kôň",
+    "matrix": {
+      "crueltyId": "TYR-013",
+      "injuredId": "ZRZAT-025",
+      "strayId": "ZRZAT-026"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_farm",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w13",
+      "showVolunteers": true,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "farm_pig",
+    "groupKey": "farm",
+    "categoryKey": "farm",
+    "labelSk": "Prasa",
+    "matrix": {
+      "crueltyId": "TYR-018",
+      "injuredId": "ZRZAT-035",
+      "strayId": "ZRZAT-036"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_farm",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w13",
+      "showVolunteers": true,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "farm_pigeon",
+    "groupKey": "farm",
+    "categoryKey": "farm",
+    "labelSk": "Holub",
+    "matrix": {
+      "crueltyId": "TYR-024",
+      "injuredId": "ZRZAT-047",
+      "strayId": "ZRZAT-048"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_farm",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "showVolunteers": true,
+      "selfHelp": "after_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "farm_rabbit",
+    "groupKey": "farm",
+    "categoryKey": "farm",
+    "labelSk": "Králik",
+    "matrix": {
+      "crueltyId": "TYR-023",
+      "injuredId": "ZRZAT-045",
+      "strayId": "ZRZAT-046"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_farm",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "showVolunteers": true,
+      "selfHelp": "after_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "farm_sheep",
+    "groupKey": "farm",
+    "categoryKey": "farm",
+    "labelSk": "Ovca",
+    "matrix": {
+      "crueltyId": "TYR-016",
+      "injuredId": "ZRZAT-031",
+      "strayId": "ZRZAT-032"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_farm",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "showVolunteers": true,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "farm_turkey",
+    "groupKey": "farm",
+    "categoryKey": "farm",
+    "labelSk": "Morka",
+    "matrix": {
+      "crueltyId": "TYR-022",
+      "injuredId": "ZRZAT-043",
+      "strayId": "ZRZAT-044"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_farm",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "showVolunteers": true,
+      "selfHelp": "after_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "reptile_grass_snake",
+    "groupKey": "wildlife",
+    "categoryKey": "reptile",
+    "labelSk": "Užovka",
+    "matrix": {
+      "crueltyId": "TYR-072",
+      "injuredId": "ZRZAT-143",
+      "strayId": "ZRZAT-144"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w13",
+      "primaryContact": "sop_rescue",
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "reptile_lizard",
+    "groupKey": "wildlife",
+    "categoryKey": "reptile",
+    "labelSk": "Jašterica",
+    "matrix": {
+      "crueltyId": "TYR-074",
+      "injuredId": "ZRZAT-147",
+      "strayId": "ZRZAT-148"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w13",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "reptile_slow_worm",
+    "groupKey": "wildlife",
+    "categoryKey": "reptile",
+    "labelSk": "Slepúch",
+    "matrix": {
+      "crueltyId": "TYR-075",
+      "injuredId": "ZRZAT-149",
+      "strayId": "ZRZAT-150"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w13",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "reptile_snake",
+    "groupKey": "wildlife",
+    "categoryKey": "reptile",
+    "labelSk": "Had",
+    "matrix": {
+      "crueltyId": "TYR-071",
+      "injuredId": "ZRZAT-141",
+      "strayId": "ZRZAT-142"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w13",
+      "primaryContact": "sop_rescue",
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "reptile_turtle",
+    "groupKey": "wildlife",
+    "categoryKey": "reptile",
+    "labelSk": "Korytnačka",
+    "matrix": {
+      "crueltyId": "TYR-076",
+      "injuredId": "ZRZAT-151",
+      "strayId": "ZRZAT-152"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_turtle_identify",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "dynamic",
+      "primaryContact": "dynamic_sop_or_municipality",
+      "showVolunteers": true
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "reptile_viper",
+    "groupKey": "wildlife",
+    "categoryKey": "reptile",
+    "labelSk": "Vretenica",
+    "matrix": {
+      "crueltyId": "TYR-073",
+      "injuredId": "ZRZAT-145",
+      "strayId": "ZRZAT-146"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w13",
+      "primaryContact": "sop_rescue",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "wild_badger",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "forest_game",
+    "labelSk": "Jazvec",
+    "matrix": {
+      "crueltyId": "TYR-099",
+      "injuredId": "ZRZAT-197",
+      "strayId": "ZRZAT-198"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_district_land_forest"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_game",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "hunting_manager_or_opk",
+      "showVolunteers": true,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "wild_bat",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "small_wild_mammals",
+    "labelSk": "Netopier",
+    "matrix": {
+      "crueltyId": "TYR-107",
+      "injuredId": "ZRZAT-213",
+      "strayId": "ZRZAT-214"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "wild_bear",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "large_carnivores",
+    "labelSk": "Medveď",
+    "matrix": {
+      "crueltyId": "TYR-113",
+      "injuredId": "ZRZAT-225",
+      "strayId": "ZRZAT-226"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "wild_dormouse",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "small_wild_mammals",
+    "labelSk": "Plch",
+    "matrix": {
+      "crueltyId": "TYR-108",
+      "injuredId": "ZRZAT-215",
+      "strayId": "ZRZAT-216"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "wild_fallow_deer",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "forest_game",
+    "labelSk": "Daniel",
+    "matrix": {
+      "crueltyId": "TYR-094",
+      "injuredId": "ZRZAT-187",
+      "strayId": "ZRZAT-188"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_district_land_forest"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_game",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "hunting_manager_or_opk",
+      "showVolunteers": true,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "wild_fox",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "forest_game",
+    "labelSk": "Líška",
+    "matrix": {
+      "crueltyId": "TYR-098",
+      "injuredId": "ZRZAT-195",
+      "strayId": "ZRZAT-196"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_district_land_forest"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_game",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "hunting_manager_or_opk",
+      "showVolunteers": true,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "wild_hare",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "forest_game",
+    "labelSk": "Zajac",
+    "matrix": {
+      "crueltyId": "TYR-097",
+      "injuredId": "ZRZAT-193",
+      "strayId": "ZRZAT-194"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_district_land_forest"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_game",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "hunting_manager_or_opk",
+      "showVolunteers": true,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "wild_hedgehog",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "small_wild_mammals",
+    "labelSk": "Jež",
+    "matrix": {
+      "crueltyId": "TYR-105",
+      "injuredId": "ZRZAT-209",
+      "strayId": "ZRZAT-210"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "wild_lynx",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "large_carnivores",
+    "labelSk": "Rys",
+    "matrix": {
+      "crueltyId": "TYR-115",
+      "injuredId": "ZRZAT-229",
+      "strayId": "ZRZAT-230"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "wild_marten",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "forest_game",
+    "labelSk": "Kuna",
+    "matrix": {
+      "crueltyId": "TYR-100",
+      "injuredId": "ZRZAT-199",
+      "strayId": "ZRZAT-200"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_district_land_forest"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_game",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "showVolunteers": true,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "wild_mole",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "small_wild_mammals",
+    "labelSk": "Krt",
+    "matrix": {
+      "crueltyId": "TYR-109",
+      "injuredId": "ZRZAT-217",
+      "strayId": "ZRZAT-218"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_small_wild",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "showVolunteers": true,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "wild_mouflon",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "forest_game",
+    "labelSk": "Muflón",
+    "matrix": {
+      "crueltyId": "TYR-095",
+      "injuredId": "ZRZAT-189",
+      "strayId": "ZRZAT-190"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_district_land_forest"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_game",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "hunting_manager_or_opk",
+      "showVolunteers": true,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "wild_mouse",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "small_wild_mammals",
+    "labelSk": "Myš",
+    "matrix": {
+      "crueltyId": "TYR-110"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    }
+  },
+  {
+    "key": "wild_polecat",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "forest_game",
+    "labelSk": "Tchor",
+    "matrix": {
+      "crueltyId": "TYR-102",
+      "injuredId": "ZRZAT-203",
+      "strayId": "ZRZAT-204"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_district_land_forest"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_game",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "hunting_manager_or_opk",
+      "showVolunteers": true,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "wild_rat",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "small_wild_mammals",
+    "labelSk": "Potkan",
+    "matrix": {
+      "crueltyId": "TYR-111"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    }
+  },
+  {
+    "key": "wild_red_deer",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "forest_game",
+    "labelSk": "Jeleň",
+    "matrix": {
+      "crueltyId": "TYR-093",
+      "injuredId": "ZRZAT-185",
+      "strayId": "ZRZAT-186"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_district_land_forest"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_game",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "hunting_manager_or_opk",
+      "showVolunteers": true,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "wild_roe_deer",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "forest_game",
+    "labelSk": "Srnka",
+    "matrix": {
+      "crueltyId": "TYR-092",
+      "injuredId": "ZRZAT-183",
+      "strayId": "ZRZAT-184"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_district_land_forest"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_game",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "hunting_manager_or_opk",
+      "showVolunteers": true,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "wild_squirrel",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "small_wild_mammals",
+    "labelSk": "Veverica",
+    "matrix": {
+      "crueltyId": "TYR-106",
+      "injuredId": "ZRZAT-211",
+      "strayId": "ZRZAT-212"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "wild_urban_fox",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "forest_game",
+    "labelSk": "Líška v meste",
+    "matrix": {
+      "crueltyId": "TYR-103",
+      "injuredId": "ZRZAT-205",
+      "strayId": "ZRZAT-206"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_district_land_forest"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_game",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "hunting_manager_or_opk",
+      "showVolunteers": true,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "wild_urban_marten",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "forest_game",
+    "labelSk": "Kuna v meste",
+    "matrix": {
+      "crueltyId": "TYR-104",
+      "injuredId": "ZRZAT-207",
+      "strayId": "ZRZAT-208"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_district_land_forest"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_game",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "showVolunteers": true,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "wild_vole",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "small_wild_mammals",
+    "labelSk": "Hraboš",
+    "matrix": {
+      "crueltyId": "TYR-112",
+      "injuredId": "ZRZAT-223",
+      "strayId": "ZRZAT-224"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_small_wild",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "showVolunteers": true,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "wild_weasel",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "forest_game",
+    "labelSk": "Lasica",
+    "matrix": {
+      "crueltyId": "TYR-101",
+      "injuredId": "ZRZAT-201",
+      "strayId": "ZRZAT-202"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_district_land_forest"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "showVolunteers": true
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "wild_wild_boar",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "forest_game",
+    "labelSk": "Diviak",
+    "matrix": {
+      "crueltyId": "TYR-096",
+      "injuredId": "ZRZAT-191",
+      "strayId": "ZRZAT-192"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_district_land_forest"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_game",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "hunting_manager_or_opk",
+      "showVolunteers": true,
+      "selfHelp": "none"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "wild_wildcat",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "large_carnivores",
+    "labelSk": "Mačka divá",
+    "matrix": {
+      "crueltyId": "TYR-116",
+      "injuredId": "ZRZAT-231",
+      "strayId": "ZRZAT-232"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_sizp"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  },
+  {
+    "key": "wild_wolf",
+    "groupKey": "wildlife",
+    "categoryKey": "wild_mammal",
+    "subcategoryKey": "large_carnivores",
+    "labelSk": "Vlk",
+    "matrix": {
+      "crueltyId": "TYR-114",
+      "injuredId": "ZRZAT-227",
+      "strayId": "ZRZAT-228"
+    },
+    "cruelty": {
+      "flowKey": "cruelty_standard",
+      "authorityKey": "rvps_district_land_forest"
+    },
+    "injured": {
+      "content": "ready",
+      "flowKey": "injured_protected_standard",
+      "askConscious": true,
+      "askJuvenile": true,
+      "warningFrame": "w14",
+      "primaryContact": "sop_rescue",
+      "secondaryContact": "vet_clinic",
+      "showVolunteers": true,
+      "selfHelp": "after_all_contacts"
+    },
+    "stray": {
+      "content": "stub"
+    }
+  }
+]

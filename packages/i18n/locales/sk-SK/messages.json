@@ -2,5 +2,47 @@
   "meta": {
     "languageName": "Slovenčina",
     "locale": "sk-SK"
+  },
+  "customer": {
+    "appName": "Zvierací ombudsman",
+    "startOver": "Začať odznova",
+    "error": "Požiadavku sa nepodarilo dokončiť",
+    "durability": {
+      "device_only": "Uložené len na tomto zariadení",
+      "queued": "Čaká na odoslanie",
+      "acknowledged": "Koncept je na serveri",
+      "received": "Nahlásenie bolo prijaté",
+      "closed": "Prípad je uzavretý",
+      "needs_attention": "Vyžaduje pozornosť"
+    },
+    "situation": {
+      "title": "Čo ste našli?",
+      "injured": "Zranené zviera",
+      "stray": "Túlavé zviera",
+      "continue": "Pokračovať"
+    },
+    "location": {
+      "title": "Kde sa zviera nachádza?",
+      "address": "Adresa",
+      "confirm": "Potvrdiť polohu"
+    },
+    "details": {
+      "title": "Podrobnosti o zvierati",
+      "photoSkipped": "Fotografia sa v tomto prototype preskakuje.",
+      "continue": "Pokračovať"
+    },
+    "contact": {
+      "title": "Kontakt a odoslanie",
+      "name": "Meno (nepovinné)",
+      "phone": "Telefón (nepovinný)",
+      "email": "E-mail (nepovinný)",
+      "shareWithAuthorities": "Súhlasím so zdieľaním kontaktu s úradmi",
+      "newsletter": "Chcem dostávať novinky",
+      "submit": "Odoslať a ukončiť"
+    },
+    "thanks": {
+      "title": "Ďakujeme",
+      "status": "Stav hlásenia"
+    }
   }
 }

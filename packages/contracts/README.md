@@ -17,4 +17,6 @@ writes them to erasable private records.
 
 The injured/stray happy path uses versioned private-record payloads:
 `form_snapshot`, `location`, `media_ref`, and `contact`. Cruelty, dead-animal,
-and other-situation branches are rejected until their schemas exist.
+and other-situation branches are rejected until their schemas exist. Animal-kind
+and flow keys for those branches are inventoried in `@animal-helper/guidance`
+without changing this payload version.

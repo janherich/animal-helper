@@ -92,8 +92,13 @@ target into the immutable public projection. A later directory edit cannot
 silently change already published guidance or its content hash.
 
 The exact animal kinds, instruction registry, conflict groups, and fallback copy
-remain product/content work. Stable semantic keys—not labels—allow wording and
-translations to change without changing stored selections.
+remain product/content work. A first inventory of animal-kind keys, flow
+templates, and W-screen mapping is in `@animal-helper/guidance`, derived from
+the [case matrices](../product/case-matrices/README.md). That inventory is not a
+reviewed publication: stray rows are stubs, and instructional copy stays in the
+matrices until a guidance revision is published. Stable semantic keys—not
+labels—allow wording and translations to change without changing stored
+selections.
 
 ## Content governance
 
@@ -244,10 +249,11 @@ metrics.
 
 ## Product decisions required before implementation
 
-Architecture deliberately does not choose:
+A first animal-kind and screen inventory exists; architecture still does not
+choose:
 
-- the reviewed animal-kind, instruction, conflict-group, and fallback
-  registries;
+- the reviewed instruction, conflict-group, and fallback registries, or
+  subject-matter sign-off of the imported matrices;
 - which fixed screen/option copy slots administrators may edit;
 - whether guide selections are discarded after display or become erasable case
   data for triage;

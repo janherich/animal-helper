@@ -11,6 +11,12 @@ Authoritative seed sources to review during implementation:
 - [ŠOP SR rescue-facility map](https://www.sopsr.sk/web/?cl=57najdite) for
   injured wildlife.
 
+Internal routing keys derived from the case matrices (`rvps`, `rvps_sizp`,
+`sop_rescue`, `municipality_capture`, and others) live in
+`@animal-helper/guidance`. Directory entries with telephone numbers and
+addresses still belong here, with source URL, retrieval date, effective date if
+known, reviewer, and version.
+
 Do not copy addresses or forms without recording source URL, retrieval date,
 effective date if known, reviewer, and version. Authority data can change
 between releases and must be administrator-reviewable before dispatch.

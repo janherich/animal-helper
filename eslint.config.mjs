@@ -4,7 +4,7 @@ import tseslint from "typescript-eslint";
 
 export default defineConfig(
   {
-    ignores: ["**/coverage/**", "**/dist/**", "**/node_modules/**"],
+    ignores: ["**/coverage/**", "**/dist/**", "**/node_modules/**", "**/*.vue"],
   },
   eslint.configs.recommended,
   ...tseslint.configs.strictTypeChecked,

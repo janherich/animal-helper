@@ -1,0 +1,19 @@
+{
+  "name": "@animal-helper/guidance",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Code-owned animal-kind catalog, flow templates, and screen map.",
+  "license": "AGPL-3.0-or-later",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "sync-catalog": "node scripts/build-catalog.mjs",
+    "test": "vitest run",
+    "typecheck": "tsc --project tsconfig.json --noEmit"
+  }
+}

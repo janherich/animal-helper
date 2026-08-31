@@ -1,0 +1,18 @@
+{
+  "name": "@animal-helper/i18n",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Locale dictionaries for Animal Helper.",
+  "license": "AGPL-3.0-or-later",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --project tsconfig.json --noEmit"
+  }
+}

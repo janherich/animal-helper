@@ -56,19 +56,26 @@ export const loadApiEnv = (env: NodeJS.ProcessEnv): ApiEnv => {
     throw new Error("API_PORT must be an integer between 1 and 65535");
   }
 
-  const corsOrigin = env.API_CORS_ORIGIN;
   const host =
     env.API_HOST === undefined || env.API_HOST.length === 0
       ? "127.0.0.1"
       : env.API_HOST;
+
+  const configuredCors = env.API_CORS_ORIGIN;
+  const corsOrigin =
+    configuredCors === undefined
+      ? host === "127.0.0.1"
+        ? "http://127.0.0.1:5173"
+        : undefined
+      : configuredCors.length === 0
+        ? undefined
+        : configuredCors;
 
   return {
     databaseUrl,
     capabilityPepper,
     port,
     host,
-    ...(corsOrigin === undefined || corsOrigin.length === 0
-      ? {}
-      : { corsOrigin }),
+    ...(corsOrigin === undefined ? {} : { corsOrigin }),
   };
 };

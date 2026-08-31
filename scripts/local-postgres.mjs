@@ -34,7 +34,7 @@ const usage = `Usage: node scripts/local-postgres.mjs <start|stop|status> [--wai
 Starts an isolated Postgres 16 cluster in .local/postgres. It does not use
 Supabase and does not touch a system-wide cluster on port 5432.
 
-  npm run dev        start Postgres, migrate, and the HTTP API
+  npm run dev        start Postgres, the HTTP API, and the Vite customer app
   npm run dev:stop   stop the local cluster
 `;
 
@@ -130,6 +130,7 @@ const writeEnvFiles = () => {
     `CAPABILITY_PEPPER=${capabilityPepper}`,
     "API_HOST=127.0.0.1",
     "API_PORT=8787",
+    "API_CORS_ORIGIN=http://127.0.0.1:5173",
     "",
   ].join("\n");
 

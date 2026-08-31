@@ -9,8 +9,23 @@ const required = {
 };
 
 describe("loadApiEnv", () => {
-  it("defaults to loopback port 8787 without CORS", () => {
+  it("defaults to loopback port 8787 and the Vite customer origin", () => {
     expect(loadApiEnv(required)).toEqual({
+      databaseUrl: required.DATABASE_URL,
+      capabilityPepper: required.CAPABILITY_PEPPER,
+      port: 8787,
+      host: "127.0.0.1",
+      corsOrigin: "http://127.0.0.1:5173",
+    });
+  });
+
+  it("disables CORS when API_CORS_ORIGIN is empty", () => {
+    expect(
+      loadApiEnv({
+        ...required,
+        API_CORS_ORIGIN: "",
+      }),
+    ).toEqual({
       databaseUrl: required.DATABASE_URL,
       capabilityPepper: required.CAPABILITY_PEPPER,
       port: 8787,

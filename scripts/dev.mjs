@@ -49,6 +49,13 @@ execFileSync(process.execPath, [postgresScript, "start"], {
 loadEnvFile(path.join(rootDirectory, ".env"));
 loadEnvFile(path.join(rootDirectory, ".local", "postgres", "env"));
 
+const customerDirectory = path.join(rootDirectory, "apps", "customer");
+const viteBin = path.join(customerDirectory, "node_modules", ".bin", "vite");
+
+if (!existsSync(viteBin)) {
+  throw new Error("Vite is not installed. Run pnpm install.");
+}
+
 const api = spawn(
   process.execPath,
   ["--experimental-strip-types", "--import", stripTypesResolve, apiMain],
@@ -58,6 +65,12 @@ const api = spawn(
     stdio: "inherit",
   },
 );
+
+const vite = spawn(viteBin, ["--host", "127.0.0.1", "--port", "5173"], {
+  cwd: customerDirectory,
+  env: { ...process.env, ANIMAL_HELPER_MANAGED: "1" },
+  stdio: "inherit",
+});
 
 let shuttingDown = false;
 
@@ -77,6 +90,10 @@ const shutdown = (exitCode) => {
 
   if (api.exitCode === null) {
     api.kill("SIGTERM");
+  }
+
+  if (vite.exitCode === null) {
+    vite.kill("SIGTERM");
   }
 
   try {
@@ -110,7 +127,18 @@ api.on("exit", (code) => {
   shutdown(code ?? 1);
 });
 
+vite.on("exit", (code) => {
+  if (shuttingDown) {
+    return;
+  }
+
+  console.error(`Vite exited with code ${code ?? "unknown"}.`);
+  shutdown(code ?? 1);
+});
+
 process.on("SIGINT", () => shutdown(0));
 process.on("SIGTERM", () => shutdown(0));
 
-console.log("Press Ctrl+C to stop Postgres and the API.");
+console.log(
+  "Press Ctrl+C to stop Postgres, the API, and the customer Vite app.",
+);

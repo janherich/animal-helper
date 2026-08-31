@@ -59,11 +59,13 @@ packages/
   contracts/      versioned transport schemas
   client/         reporter capability, command queue, and HTTP transport
   event-store/    PostgreSQL append/project/outbox adapter
-  i18n/           locale dictionaries, starting with sk-SK
+  i18n/           locale dictionaries and lookup, starting with sk-SK
+  guidance/       animal-kind catalog, flow templates, and screen map
   jurisdictions/  country-specific routing and form definitions
 supabase/          migrations and Edge Function deployment sources
 docs/
   architecture/   boundaries, decisions, event model, offline synchronisation
+  product/        case-matrix sources and screen mapping
   legal/          GDPR requirements, Slovak legal risks, and launch blockers
   security/       security requirements and threat model
   operations/     costs and operational guidance
@@ -73,6 +75,7 @@ Start with:
 
 - [Architecture overview](docs/architecture/overview.md)
 - [Administered guidance flow](docs/architecture/administered-guidance-flow.md)
+- [Case matrices and screen map](docs/product/case-matrices/README.md)
 - [GDPR and legal-risk briefing](docs/legal/gdpr-and-legal-risks.md)
 - [Delivery plan](docs/roadmap.md)
 - [Security requirements](docs/security/security-requirements.md)
@@ -100,15 +103,14 @@ pnpm check
 If `pnpm` dies with `Cannot find package node:sqlite`, the `node` on `PATH` is
 not 24. Check with `node --version`.
 
-There are intentionally no deployable user interfaces yet. The executable
-foundation is a framework-free domain core, versioned case-command contracts, a
-local PostgreSQL event store, and a loopback HTTP API for reporter commands and
-capability-scoped status.
+The executable foundation is a framework-free domain core, versioned
+case-command contracts, a local PostgreSQL event store, a loopback HTTP API, and
+a Vue customer shell for the injured/stray walk.
 
 Postgres 16 on the machine is enough. Supabase is not required. `npm run dev`
 starts an isolated cluster in `.local/postgres` (port 55432), applies
-migrations, and serves the API on `http://127.0.0.1:8787`. It does not use a
-system-wide server on 5432.
+migrations, serves the API on `http://127.0.0.1:8787`, and serves the customer
+app on `http://127.0.0.1:5173`. It does not use a system-wide server on 5432.
 
 ```sh
 npm run dev
@@ -120,7 +122,7 @@ In another terminal:
 pnpm check
 ```
 
-Stop Postgres and the API with Ctrl+C in the `dev` terminal, or:
+Stop Postgres, the API, and Vite with Ctrl+C in the `dev` terminal, or:
 
 ```sh
 npm run dev:stop
