@@ -20,6 +20,6 @@
   "dependencies": {
     "@animal-helper/contracts": "workspace:*",
     "@animal-helper/domain": "workspace:*",
-    "postgres": "3.4.8"
+    "postgres": "3.4.9"
   }
 }
