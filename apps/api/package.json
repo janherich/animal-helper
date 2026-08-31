@@ -21,7 +21,7 @@
     "@animal-helper/contracts": "workspace:*",
     "@animal-helper/domain": "workspace:*",
     "@animal-helper/event-store": "workspace:*",
-    "postgres": "3.4.8"
+    "postgres": "3.4.9"
   },
   "devDependencies": {
     "@animal-helper/client": "workspace:*"
