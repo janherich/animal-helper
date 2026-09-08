@@ -4,6 +4,7 @@ import { useRouter } from "vue-router";
 
 import { t } from "@animal-helper/i18n";
 
+import { continueWalkTo } from "../navigation.js";
 import { customerSession, rememberSnapshot } from "../runtime.js";
 import {
   CUSTOMER_PATHS,
@@ -30,7 +31,7 @@ const continueWalk = async () => {
   }
 
   rememberSnapshot(result.value);
-  await router.push(CUSTOMER_PATHS.details);
+  await continueWalkTo(router, CUSTOMER_PATHS.location);
 };
 </script>
 

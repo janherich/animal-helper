@@ -3,6 +3,14 @@
     "languageName": "Slovenčina",
     "locale": "sk-SK"
   },
+  "catalog": {
+    "group": {
+      "domestic": "Domáce",
+      "farm": "Hospodárske",
+      "wildlife": "Voľne žijúce",
+      "exotic": "Exotické"
+    }
+  },
   "customer": {
     "appName": "Zvierací ombudsman",
     "startOver": "Začať odznova",
@@ -29,7 +37,26 @@
     "details": {
       "title": "Podrobnosti o zvierati",
       "photoSkipped": "Fotografia sa v tomto prototype preskakuje.",
+      "kind": "Druh zvieraťa",
+      "kindHelp": "Podľa druhu sa sprievodca vetví na ďalšie obrazovky.",
+      "kindPlaceholder": "Vyberte druh",
+      "kindRequired": "Vyberte druh zvieraťa.",
+      "flow": "Tok sprievodcu",
       "continue": "Pokračovať"
+    },
+    "guide": {
+      "title": "Ďalší krok sprievodcu",
+      "help": "Rady podľa druhu zvieraťa. Telefónne čísla doplníme neskôr.",
+      "step": "Krok",
+      "continue": "Pokračovať",
+      "loading": "Načítavam rady…",
+      "empty": "Pre túto obrazovku zatiaľ nie je žiadna rada. Pokračujte ďalej.",
+      "contactKey": "Typ kontaktu (číslo doplníme neskôr)",
+      "polarity": {
+        "do_not": "Nerobte",
+        "do": "Urobte",
+        "info": "Ďalší krok"
+      }
     },
     "contact": {
       "title": "Kontakt a odoslanie",
@@ -43,6 +70,150 @@
     "thanks": {
       "title": "Ďakujeme",
       "status": "Stav hlásenia"
+    }
+  },
+  "backoffice": {
+    "appName": "Zvierací ombudsman — správa",
+    "signOut": "Odhlásiť sa",
+    "nav": {
+      "queue": "Fronta",
+      "guidance": "Matica sprievodcu"
+    },
+    "login": {
+      "title": "Prihlásenie správcu",
+      "help": "Použite prístupový kľúč na tomto zariadení.",
+      "submit": "Prihlásiť sa kľúčom",
+      "waiting": "Čakám na kľúč…",
+      "setupTitle": "Nastavenie prístupového kľúča",
+      "setupHelp": "Tento odkaz je jednorazový. Po dokončení ho môžete zahodiť.",
+      "setupSubmit": "Vytvoriť prístupový kľúč"
+    },
+    "queue": {
+      "title": "Fronta prípadov",
+      "help": "Zobrazuje verejný stav bez súkromných údajov.",
+      "empty": "Vo fronte nie sú žiadne prípady.",
+      "case": "Prípad",
+      "state": "Stav",
+      "updated": "Aktualizované",
+      "draft": "Koncept",
+      "submitted": "Odoslané",
+      "inReview": "V posúdení",
+      "completed": "Dokončené",
+      "expired": "Vypršané"
+    },
+    "guidance": {
+      "title": "Matica sprievodcu",
+      "help": "Katalog druhov ostáva v kóde. Tu zapínate položky, upravujete slovenský text a publikujete ho do sprievodcu. Náhľad používa ten istý výpočet ako verejný endpoint.",
+      "search": "Hľadať druh",
+      "count": "Počet druhov",
+      "empty": "Žiadny druh nevyhovuje filtru.",
+      "stubHelp": "Túlavé riadky sú zatiaľ zástupné. Reporter ide skeletom situácia → poloha → podrobnosti → kontakt.",
+      "missingHelp": "Pre túto kombináciu ešte nie je tok.",
+      "walkTitle": "Obrazovky v matici",
+      "customerWalkTitle": "Prechod v aplikácii",
+      "previewTitle": "Náhľad prechodov",
+      "previewBack": "Späť",
+      "previewContinue": "Ďalej",
+      "previewRestart": "Od začiatku",
+      "step": "Krok",
+      "none": "—",
+      "askConscious": "Opýtať sa na vedomie",
+      "askJuvenile": "Opýtať sa na mláďa",
+      "matrixIds": "Identifikátory v matici",
+      "situation": {
+        "injured": "Zranené",
+        "stray": "Túlavé",
+        "cruelty": "Týranie"
+      },
+      "group": {
+        "all": "Všetky skupiny"
+      },
+      "column": {
+        "kind": "Kľúč",
+        "label": "Názov",
+        "flow": "Tok",
+        "warning": "Varovanie",
+        "primary": "Primárny kontakt",
+        "secondary": "Sekundárny kontakt",
+        "volunteers": "Dobrovoľníci",
+        "content": "Obsah"
+      },
+      "content": {
+        "ready": "Pripravené",
+        "stub": "Zástupka",
+        "missing": "Chýba"
+      },
+      "volunteers": {
+        "yes": "Áno",
+        "no": "Nie"
+      },
+      "status": {
+        "implemented": "Hotové",
+        "collapsed": "Zlúčené",
+        "skipped": "Preskočené",
+        "planned": "Plánované"
+      },
+      "editorTitle": "Kópia a použitie",
+      "editorHelp": "Uloženie zapíše koncept. Publikácia sprístupní text reporterom. Telefónne čísla a odkazy sem nepatria.",
+      "source": "Zdroj",
+      "sourceLabel": {
+        "bundled": "zabudovaný",
+        "draft": "koncept",
+        "published": "publikovaný"
+      },
+      "applies": "Položka platí pre tento druh",
+      "notInFlow": "v tomto toku sa nezobrazí",
+      "contactKey": "Typ kontaktu",
+      "save": "Uložiť koncept",
+      "publish": "Publikovať",
+      "publishDescription": "Popis zmeny",
+      "publishConfirm": "Rozumiem, že sa zmena zobrazí v sprievodcovi.",
+      "previewEmpty": "Na tejto obrazovke nie je žiadna rada — ostane len chróm.",
+      "instruction": {
+        "warning": {
+          "do_not": "Čo nerobiť",
+          "do_before": "Čo urobiť pred ďalším postupom"
+        },
+        "contact": {
+          "primary": "Primárny kontakt",
+          "secondary": "Sekundárny kontakt"
+        },
+        "volunteers": "Dobrovoľníci",
+        "self_help": "Pomôžte sami"
+      },
+      "slot": {
+        "warning": {
+          "do_not": "Text — čo nerobiť",
+          "do_before": "Text — čo urobiť"
+        },
+        "contact": {
+          "primary": {
+            "title": "Nadpis primárneho kontaktu",
+            "body": "Text primárneho kontaktu"
+          },
+          "secondary": {
+            "title": "Nadpis sekundárneho kontaktu",
+            "body": "Text sekundárneho kontaktu"
+          }
+        },
+        "volunteers": {
+          "body": "Text k dobrovoľníkom"
+        },
+        "self_help": {
+          "intro": "Úvod k svojpomoci"
+        }
+      }
+    },
+    "error": {
+      "bootstrap": "Odkaz na nastavenie je neplatný alebo vypršal.",
+      "passkey": "Prihlásenie kľúčom sa nepodarilo dokončiť.",
+      "passkeyUnregistered": "V databáze nie je žiadny prístupový kľúč. Spustite pnpm admin:bootstrap a zaregistrujte nový.",
+      "passkeyOrigin": "Prístupový kľúč v tomto prehliadači funguje len na http://localhost, nie na 127.0.0.1.",
+      "unreachable": "Správcovské rozhranie je teraz nedostupné.",
+      "queue": "Frontu sa nepodarilo načítať.",
+      "guidance": "Maticu sprievodcu sa nepodarilo načítať.",
+      "guidanceConflict": "Koncept sa medzitým zmenil. Obnovili sme ho, upravte znova.",
+      "guidanceInvalid": "Text nie je povolený. Nepoužívajte odkazy, HTML ani telefónne čísla."
     }
   }
 }

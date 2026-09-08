@@ -1,8 +1,8 @@
 # Administered guidance flow
 
-Status: **proposed baseline**
+Status: **implemented for injured copy and applicability**
 
-Last reviewed: 2026-07-30
+Last reviewed: 2026-09-08
 
 The customer PWA will contain a short, fixed-screen guide for a person who finds
 an injured or distressed animal. The guide is not a report workflow or a
@@ -91,14 +91,16 @@ against a pinned jurisdiction-pack version and snapshots the public-safe action
 target into the immutable public projection. A later directory edit cannot
 silently change already published guidance or its content hash.
 
-The exact animal kinds, instruction registry, conflict groups, and fallback copy
-remain product/content work. A first inventory of animal-kind keys, flow
-templates, and W-screen mapping is in `@animal-helper/guidance`, derived from
-the [case matrices](../product/case-matrices/README.md). That inventory is not a
-reviewed publication: stray rows are stubs, and instructional copy stays in the
-matrices until a guidance revision is published. Stable semantic keys—not
-labels—allow wording and translations to change without changing stored
-selections.
+The exact animal kinds, instruction registry, and screen mapping live in
+`@animal-helper/guidance`. Injured copy is imported from the
+[case matrices](../product/case-matrices/README.md) into a bundled fallback and
+the same resolver serves backoffice preview and `GET /guidance`. Administrators
+toggle applicability, edit bounded plain text, and publish an immutable
+revision. Stray rows remain stubs. Cruelty is catalogued, not public. There is
+no generic/unknown-kind row in the matrices, so publication validates catalogued
+injured kinds instead. Jurisdiction-pack phone snapshots, rollback UI, and
+IndexedDB last-known-valid storage are still later work. Stable semantic
+keys—not labels—allow wording to change without changing stored selections.
 
 ## Content governance
 
@@ -124,7 +126,8 @@ Guidance is managed as immutable revisions:
 3. The API validates the fully resolved flow and required review metadata.
 4. The backoffice renders every reachable mobile result and a semantic diff from
    the active revision.
-5. A TOTP-assured administrator confirms publication with a change description.
+5. A passkey-assured administrator confirms publication with a change
+   description.
 6. The API atomically moves the active pointer and records actor, revision IDs,
    content hashes, and timestamp in the audit log.
 
@@ -177,8 +180,8 @@ remain the trust boundary.
 The backoffice is an authenticated editor and preview surface. It never writes
 configuration tables directly. The API enforces:
 
-- individual administrator authentication, TOTP assurance for publish/rollback,
-  CSRF protection, and object-level authorization;
+- individual administrator authentication, passkey assurance for
+  publish/rollback, CSRF protection, and object-level authorization;
 - bounded plain text and references to code-owned keys only;
 - complete matrix resolution, conflict checks, deterministic ordering, safe
   generic guidance, and valid typed actions;
@@ -247,17 +250,15 @@ Possible later additions—only with evidence—include scheduled publication,
 two-person approval, richer bounded dimensions, and privacy-reviewed aggregate
 metrics.
 
-## Product decisions required before implementation
+## Remaining product decisions
 
-A first animal-kind and screen inventory exists; architecture still does not
-choose:
+Injured instruction slots, bundled fallback import, draft/publish, and public
+`GET /guidance` are wired. Still open:
 
-- the reviewed instruction, conflict-group, and fallback registries, or
-  subject-matter sign-off of the imported matrices;
-- which fixed screen/option copy slots administrators may edit;
-- whether guide selections are discarded after display or become erasable case
-  data for triage;
-- the subject-matter review owner, accepted sources, and review-due policy;
-- which typed contact/escalation actions are permitted in the first
-  jurisdiction;
-- whether and how guidance age/offline state is shown during an urgent flow.
+- subject-matter sign-off of the imported matrices, including a review date
+  required in production;
+- a generic/unknown-kind row (the matrices do not have one);
+- whether guide selections become erasable case data for triage;
+- jurisdiction-pack phone snapshots for `call-contact`;
+- rollback UI, IndexedDB last-known-valid storage, and how stale/offline
+  guidance is shown during an urgent flow.

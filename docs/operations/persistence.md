@@ -31,9 +31,14 @@ applies `supabase/migrations/*.sql` through checksummed
 `public.schema_migrations`. Editing an already-applied file fails closed; add a
 new migration instead.
 
-`npm run dev` runs `pnpm db:up`, then the API and the customer Vite app. Ctrl+C
-stops the API and Vite only. Postgres stays up. Stop it with `pnpm db:down` when
-you no longer need it.
+`npm run dev` runs `pnpm db:up`, then the API, the customer Vite app, and the
+backoffice Vite app. Ctrl+C stops the API and Vite only. Postgres stays up. Stop
+it with `pnpm db:down` when you no longer need it.
+
+New `.local/db.env` files also include `ADMIN_ORIGIN=http://localhost:5174`.
+Existing files are never rewritten; the API still defaults to that origin
+locally. Production requires an exact `https` `ADMIN_ORIGIN` or admin routes
+stay disabled.
 
 Worktrees get distinct Compose projects from the checkout path, so two checkouts
 do not share a container or volume.
@@ -61,6 +66,7 @@ strings, or a `.neon` directory.
    DATABASE_MIGRATION_URL=          # neon direct host
    DATABASE_SSL_MODE=verify
    CAPABILITY_PEPPER=               # at least 32 bytes of hex, unique to prod
+   ADMIN_ORIGIN=                    # exact https origin of the admin SPA
    ```
 
 5. Run `DATABASE_ENVIRONMENT=production pnpm db:migrate` as a release step
@@ -81,3 +87,6 @@ restore a production dump onto a laptop or a pull-request database.
 GitHub Actions starts `postgres:16-alpine` as a job service and sets
 `DATABASE_URL` plus `DATABASE_SSL_MODE=disable`. Integration tests apply the
 same migrations. CI does not run Docker Compose or talk to Neon.
+
+Guidance copy uses ordinary versioned tables (`ah.guidance_revisions`, cells,
+copy, and a publication pointer), not the case event stream.

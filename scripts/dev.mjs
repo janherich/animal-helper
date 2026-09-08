@@ -18,12 +18,18 @@ const stripTypesResolve = pathToFileURL(
 await runLocalDatabaseAction("up", { cwd: rootDirectory });
 applyCheckoutLocalEnvironment(rootDirectory, process.env);
 
-const customerDirectory = path.join(rootDirectory, "apps", "customer");
-const viteBin = path.join(customerDirectory, "node_modules", ".bin", "vite");
-
-if (!existsSync(viteBin)) {
-  throw new Error("Vite is not installed. Run pnpm install.");
-}
+const spawnVite = (appName, port, host = "127.0.0.1") => {
+  const appDirectory = path.join(rootDirectory, "apps", appName);
+  const viteBin = path.join(appDirectory, "node_modules", ".bin", "vite");
+  if (!existsSync(viteBin)) {
+    throw new Error("Vite is not installed. Run pnpm install.");
+  }
+  return spawn(viteBin, ["--host", host, "--port", String(port)], {
+    cwd: appDirectory,
+    env: { ...process.env, ANIMAL_HELPER_MANAGED: "1" },
+    stdio: "inherit",
+  });
+};
 
 const api = spawn(
   process.execPath,
@@ -35,11 +41,9 @@ const api = spawn(
   },
 );
 
-const vite = spawn(viteBin, ["--host", "127.0.0.1", "--port", "5173"], {
-  cwd: customerDirectory,
-  env: { ...process.env, ANIMAL_HELPER_MANAGED: "1" },
-  stdio: "inherit",
-});
+const customer = spawnVite("customer", 5173);
+const backoffice = spawnVite("backoffice", 5174, "localhost");
+const children = [api, customer, backoffice];
 
 let shuttingDown = false;
 
@@ -50,12 +54,10 @@ const shutdown = (exitCode) => {
 
   shuttingDown = true;
 
-  if (api.exitCode === null) {
-    api.kill("SIGTERM");
-  }
-
-  if (vite.exitCode === null) {
-    vite.kill("SIGTERM");
+  for (const child of children) {
+    if (child.exitCode === null) {
+      child.kill("SIGTERM");
+    }
   }
 
   console.log(
@@ -73,12 +75,21 @@ api.on("exit", (code) => {
   shutdown(code ?? 1);
 });
 
-vite.on("exit", (code) => {
+customer.on("exit", (code) => {
   if (shuttingDown) {
     return;
   }
 
-  console.error(`Vite exited with code ${code ?? "unknown"}.`);
+  console.error(`Customer Vite exited with code ${code ?? "unknown"}.`);
+  shutdown(code ?? 1);
+});
+
+backoffice.on("exit", (code) => {
+  if (shuttingDown) {
+    return;
+  }
+
+  console.error(`Backoffice Vite exited with code ${code ?? "unknown"}.`);
   shutdown(code ?? 1);
 });
 
@@ -86,5 +97,6 @@ process.on("SIGINT", () => shutdown(0));
 process.on("SIGTERM", () => shutdown(0));
 
 console.log(
-  "Press Ctrl+C to stop the API and the customer Vite app. Postgres stays up.",
+  "Customer: http://127.0.0.1:5173  Backoffice: http://localhost:5174",
 );
+console.log("Press Ctrl+C to stop the API and Vite apps. Postgres stays up.");

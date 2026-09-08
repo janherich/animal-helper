@@ -15,6 +15,7 @@ export const LOCAL_DB_KEYS = new Set([
   "AH_DB_PORT",
   "AH_DB_PROJECT",
   "AH_DB_USER",
+  "ADMIN_ORIGIN",
   "API_CORS_ORIGIN",
   "API_HOST",
   "API_PORT",
@@ -120,10 +121,12 @@ export function createLocalDbEnvironment(
   const user = overrides.AH_DB_USER ?? "animal_helper";
   const password = overrides.AH_DB_PASSWORD ?? random(24).toString("base64url");
   const corsOrigin = overrides.API_CORS_ORIGIN ?? "http://127.0.0.1:5173";
+  const adminOrigin = overrides.ADMIN_ORIGIN ?? "http://localhost:5174";
   const apiPort = validatedPort(overrides.API_PORT ?? "8787", "API_PORT");
   const project = overrides.AH_DB_PROJECT ?? identity.project;
   assertComposeProject(project);
-  assertLocalAppOrigin(corsOrigin);
+  assertLocalAppOrigin(corsOrigin, "API_CORS_ORIGIN");
+  assertLocalAppOrigin(adminOrigin, "ADMIN_ORIGIN");
   const connectionUrl = new URL("postgresql://127.0.0.1");
   connectionUrl.username = user;
   connectionUrl.password = password;
@@ -137,6 +140,7 @@ export function createLocalDbEnvironment(
     AH_DB_PORT: port,
     AH_DB_PROJECT: project,
     AH_DB_USER: user,
+    ADMIN_ORIGIN: adminOrigin,
     API_CORS_ORIGIN: corsOrigin,
     API_HOST: "127.0.0.1",
     API_PORT: apiPort,
@@ -156,13 +160,13 @@ export function assertComposeProject(project) {
   }
 }
 
-/** @param {string} origin */
-function assertLocalAppOrigin(origin) {
+/** @param {string} origin @param {string} name */
+function assertLocalAppOrigin(origin, name) {
   let parsed;
   try {
     parsed = new URL(origin);
   } catch {
-    throw new Error("API_CORS_ORIGIN must be one exact local app origin.");
+    throw new Error(`${name} must be one exact local app origin.`);
   }
   const localHostname =
     parsed.hostname === "127.0.0.1" ||
@@ -173,7 +177,7 @@ function assertLocalAppOrigin(origin) {
     !localHostname ||
     parsed.origin !== origin
   ) {
-    throw new Error("API_CORS_ORIGIN must be one exact HTTP localhost origin.");
+    throw new Error(`${name} must be one exact HTTP localhost origin.`);
   }
 }
 

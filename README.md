@@ -60,7 +60,7 @@ packages/
   client/         reporter capability, command queue, and HTTP transport
   event-store/    PostgreSQL append/project/outbox adapter
   i18n/           locale dictionaries and lookup, starting with sk-SK
-  guidance/       animal-kind catalog, flow templates, and screen map
+  guidance/       animal-kind catalog, instruction slots, and bundled copy
   jurisdictions/  country-specific routing and form definitions
 supabase/          migrations and Edge Function deployment sources
 docs/
@@ -75,6 +75,7 @@ Start with:
 
 - [Architecture overview](docs/architecture/overview.md)
 - [Administered guidance flow](docs/architecture/administered-guidance-flow.md)
+- [Passkey admin authentication](docs/architecture/decisions/0009-passkey-admin-auth.md)
 - [UI cookbook](docs/product/ui-cookbook.md)
 - [Case matrices and screen map](docs/product/case-matrices/README.md)
 - [GDPR and legal-risk briefing](docs/legal/gdpr-and-legal-risks.md)
@@ -112,18 +113,19 @@ a Vue customer shell for the injured/stray walk.
 Local Postgres is Docker Compose (`postgres:16-alpine` on loopback port 55432).
 A running Docker Engine with Compose v2 is required. Homebrew Postgres and the
 Supabase CLI are not. `npm run dev` starts that container, applies migrations,
-serves the API on `http://127.0.0.1:8787`, and serves the customer app on
-`http://127.0.0.1:5173`. Ctrl+C stops the API and Vite only; the database stays
-up.
+serves the API on `http://127.0.0.1:8787`, the customer app on
+`http://127.0.0.1:5173`, and the backoffice on `http://localhost:5174`. Ctrl+C
+stops the API and Vite only; the database stays up.
 
 ```sh
 pnpm db:up
 npm run dev
 ```
 
-In another terminal:
+In another terminal, create an operator and open the private setup file:
 
 ```sh
+pnpm admin:bootstrap -- --email you@example.com --open
 pnpm check
 ```
 

@@ -23,6 +23,12 @@ pnpm db:up
 pnpm check
 ```
 
+The backoffice is `http://localhost:5174` after `npm run dev`. Create a named
+operator with `pnpm admin:bootstrap -- --email you@example.com --open`. If
+Safari offers leftover `localhost` passkeys that never succeed, delete them in
+Passwords and re-run bootstrap with `--reset-passkeys`. Do not commit the
+generated setup HTML or `.local/db.env`.
+
 Keep domain decisions pure and explicit. Validate untrusted input at system
 boundaries, convert it to domain commands, append resulting events atomically,
 and perform external effects through an outbox or equivalent retryable

@@ -7,7 +7,10 @@ import {
   type TransportResponse,
 } from "@animal-helper/client";
 import type { TransportCaseCommand } from "@animal-helper/contracts";
-import { customerImplementedWalk } from "@animal-helper/guidance";
+import {
+  animalKindByKey,
+  customerImplementedWalk,
+} from "@animal-helper/guidance";
 
 import { apiBaseUrl } from "../src/config.js";
 import {
@@ -82,9 +85,19 @@ describe("customer walk", () => {
       condition: { symptoms: [] },
       mediaRecordIds: [],
     });
+    expect(
+      detailsSnapshot("injured", animalKindByKey("domestic_cat")).species,
+    ).toEqual({
+      source: "manual",
+      groupKey: "domestic",
+      categoryKey: "companion",
+      kindKey: "domestic_cat",
+    });
     expect(apiBaseUrl({ VITE_API_BASE_URL: "http://127.0.0.1:8787/" })).toBe(
       "http://127.0.0.1:8787",
     );
+    expect(apiBaseUrl({ DEV: true })).toBe("");
+    expect(apiBaseUrl({})).toBe("http://127.0.0.1:8787");
   });
 
   it("opens a draft once, then attaches location, snapshot, and contact", async () => {

@@ -12,7 +12,7 @@ import type {
   LocationPayloadV1,
 } from "@animal-helper/contracts";
 import { ok, type Result } from "@animal-helper/domain";
-import { customerWalkPath } from "@animal-helper/guidance";
+import { customerWalkPath, type AnimalKind } from "@animal-helper/guidance";
 
 export const CUSTOMER_PATHS = {
   situation: customerWalkPath("situation"),
@@ -31,10 +31,19 @@ export const defaultLocationPayload = (): LocationPayloadV1 => ({
 
 export const detailsSnapshot = (
   situationType: SituationType,
+  kind?: AnimalKind,
 ): FormSnapshotV1 => ({
   schemaVersion: 1,
   situationType,
-  species: { source: "skipped" },
+  species:
+    kind === undefined
+      ? { source: "skipped" }
+      : {
+          source: "manual",
+          groupKey: kind.groupKey,
+          categoryKey: kind.categoryKey,
+          kindKey: kind.key,
+        },
   condition: { symptoms: [] },
   mediaRecordIds: [],
 });
@@ -67,8 +76,9 @@ export const confirmLocation = (
 export const confirmDetails = (
   session: CaseSession,
   situationType: SituationType,
+  kind?: AnimalKind,
 ): Promise<Result<CaseSnapshot, ClientError>> =>
-  session.attachFormSnapshot(detailsSnapshot(situationType));
+  session.attachFormSnapshot(detailsSnapshot(situationType, kind));
 
 export const submitReport = async (
   session: CaseSession,

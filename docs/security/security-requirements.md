@@ -45,9 +45,9 @@ should be referenced from issues and tests.
 
 - **AH-SEC-010 — MUST:** There is no public administrator sign-up. Accounts are
   named and allow-listed; shared accounts are prohibited.
-- **AH-SEC-011 — MUST:** TOTP multi-factor authentication and the expected
-  authentication assurance level are checked server-side on every restricted
-  endpoint.
+- **AH-SEC-011 — MUST:** Passkey authentication with required user verification
+  is checked server-side on every restricted administrator endpoint. There is no
+  password-only or TOTP fallback.
 - **AH-SEC-012 — MUST:** Sessions have short inactivity and bounded absolute
   lifetimes, rotate after authentication, can be centrally revoked, and do not
   use persistent browser local storage for bearer tokens.
@@ -99,10 +99,11 @@ should be referenced from issues and tests.
 - **AH-SEC-025 — MUST:** Sensitive responses use `Cache-Control: no-store`,
   `X-Content-Type-Options: nosniff`, appropriate frame restrictions, a
   restrictive referrer policy, and no search indexing.
-- **AH-SEC-026 — MUST:** Cookie-authenticated endpoints enforce SameSite,
-  origin/referer validation, and anti-CSRF tokens for unsafe methods. If bearer
-  headers are used, tokens remain in memory and equivalent origin controls
-  apply.
+- **AH-SEC-026 — MUST:** Cookie-authenticated endpoints enforce
+  `SameSite=Strict`, an exact allowed `Origin`, and Fetch Metadata (`cross-site`
+  and `same-site` POSTs are rejected). Administrator cookies are first-party to
+  the admin origin; they are not used from the customer PWA. If bearer headers
+  are used, tokens remain in memory and equivalent origin controls apply.
 
 ## Data, privacy, and integrity
 
@@ -188,7 +189,7 @@ should be referenced from issues and tests.
   projection. Clients reject incomplete or incompatible payloads and use a
   last-known-valid or bundled reviewed fallback.
 - **AH-SEC-048 — MUST:** Publish and rollback require an individually
-  authenticated, TOTP-assured administrator, explicit confirmation, immutable
+  authenticated, passkey-assured administrator, explicit confirmation, immutable
   revision/source-review metadata, and an audit record containing old/new
   revision identifiers and content hashes.
 

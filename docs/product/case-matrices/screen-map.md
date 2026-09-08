@@ -1,20 +1,26 @@
 # Screen map: matrices → customer walk
 
-The matrices number screens as W01–W26. The customer PWA currently implements a
-four-step injured/stray skeleton that reuses some of those numbers.
+The matrices number screens as W01–W26. The customer PWA implements the shared
+prefix, then follows the catalogued injured flow with planned-screen
+placeholders.
 
 ## Current PWA (implemented)
 
-| Route        | PWA step  | Matrix screens it stands in for                                 | Client call                        |
-| ------------ | --------- | --------------------------------------------------------------- | ---------------------------------- |
-| `/w01`       | situation | W01 situation type                                              | `openDraft`                        |
-| `/w03`       | location  | W03a GPS / W03b address                                         | `attachLocation`                   |
-| `/w09`       | details   | W04 photo (skipped), W09 condition, W09b other, W11 description | `attachFormSnapshot`               |
-| `/w24`       | contact   | reporter contact + submit — **not** matrix W24 “who helped”     | `attachContact` then `submitDraft` |
-| `/thank-you` | thanks    | post-submit status                                              | public status                      |
+| Route                 | PWA step       | Matrix screens it stands in for                                 | Client call                        |
+| --------------------- | -------------- | --------------------------------------------------------------- | ---------------------------------- |
+| `/w01`                | situation      | W01 situation type                                              | `openDraft`                        |
+| `/w03`                | location       | W03a GPS / W03b address                                         | `attachLocation`                   |
+| `/w09`                | details        | W04 photo (skipped), W09 condition, W09b other, W11 description | `attachFormSnapshot`               |
+| `/w13`–`/w23`, `/w26` | planned + copy | Flow screens after details, before reporter contact             | none (copy from `/guidance`)       |
+| `/w24`                | contact        | reporter contact + submit — **not** matrix W24 “who helped”     | `attachContact` then `submitDraft` |
+| `/thank-you`          | thanks         | post-submit status                                              | public status                      |
 
-Cruelty is catalogued but not selectable. `form_snapshot` v1 still accepts only
-`injured` and `stray`.
+Injured reports pick an animal kind on `/w09`. The resolver in
+`@animal-helper/guidance` then inserts that kind’s planned screens (warnings,
+typed contacts, volunteers, self-help) before `/w24`. Stray still uses the
+four-step skeleton. Matrix W25 stays in the backoffice preview only; the PWA
+submits on `/w24`. Cruelty is catalogued but not selectable. `form_snapshot` v1
+still accepts only `injured` and `stray`.
 
 ## Injured walk (intended)
 
@@ -47,24 +53,24 @@ internal assignment, not a public contact tree.
 
 ## Screen registry
 
-| Key                           | Role                                          | In current PWA                 |
-| ----------------------------- | --------------------------------------------- | ------------------------------ |
-| `w01`                         | Situation type                                | yes, `/w01`                    |
-| `w02`                         | Acute 158 (cruelty)                           | no                             |
-| `w03a` / `w03b`               | Location                                      | collapsed on `/w03`            |
-| `w04`                         | Photo / evidence                              | skipped                        |
-| `w06a` / `w06b`               | Cruelty evidence checkboxes                   | no                             |
-| `w09` / `w09b`                | Condition / other                             | collapsed on `/w09`            |
-| `w11`                         | Free-text description                         | collapsed on `/w09`            |
-| `w13` / `w14`                 | Do-not / do-before-contact                    | no (guidance)                  |
-| `w15` / `w18` / `w19` / `w20` | Typed contacts                                | no                             |
-| `w16` / `w17`                 | Warning variants                              | no                             |
-| `w21`                         | Volunteers                                    | no                             |
-| `w22` / `w23`                 | Self-help                                     | no; long copy still empty      |
-| `w24`                         | Who helped (matrix) vs reporter contact (PWA) | path reused, meaning differs   |
-| `w25a` / `w25b`               | Why help failed                               | no                             |
-| `w26`                         | Volunteer SLA                                 | mentioned in matrix notes only |
-| `thanks`                      | Post-submit                                   | yes, `/thank-you`              |
+| Key                           | Role                                          | In current PWA                     |
+| ----------------------------- | --------------------------------------------- | ---------------------------------- |
+| `w01`                         | Situation type                                | yes, `/w01`                        |
+| `w02`                         | Acute 158 (cruelty)                           | no                                 |
+| `w03a` / `w03b`               | Location                                      | collapsed on `/w03`                |
+| `w04`                         | Photo / evidence                              | skipped                            |
+| `w06a` / `w06b`               | Cruelty evidence checkboxes                   | no                                 |
+| `w09` / `w09b`                | Condition / other                             | collapsed on `/w09`                |
+| `w11`                         | Free-text description                         | collapsed on `/w09`                |
+| `w13` / `w14`                 | Do-not / do-before-contact                    | copy on `/w13`, `/w14`             |
+| `w15` / `w18` / `w19` / `w20` | Typed contacts                                | copy + contact key                 |
+| `w16` / `w17`                 | Warning variants                              | no (not in filled flows)           |
+| `w21`                         | Volunteers                                    | copy on `/w21`                     |
+| `w22` / `w23`                 | Self-help                                     | intro copy on `/w22` where present |
+| `w24`                         | Who helped (matrix) vs reporter contact (PWA) | path reused, meaning differs       |
+| `w25a` / `w25b`               | Why help failed                               | backoffice preview only            |
+| `w26`                         | Volunteer SLA                                 | placeholder `/w26`                 |
+| `thanks`                      | Post-submit                                   | yes, `/thank-you`                  |
 
 ## Open content gaps that block a full walk
 

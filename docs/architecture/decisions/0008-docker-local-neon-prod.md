@@ -42,9 +42,9 @@ production database adapter.
 ## Consequences
 
 Developers need Docker. `pnpm db:up` is the local database lifecycle;
-`npm run dev` starts that container, then the API and customer app. Migrations
-are checksummed in `public.schema_migrations` and applied by Node, not by
-`docker-entrypoint-initdb.d`.
+`npm run dev` starts that container, then the API, customer app, and backoffice.
+Migrations are checksummed in `public.schema_migrations` and applied by Node,
+not by `docker-entrypoint-initdb.d`.
 
 Operators create and region-pin the Neon project by hand, put secrets in the
 host secret store, and run `pnpm db:migrate` against `DATABASE_MIGRATION_URL`

@@ -213,8 +213,11 @@ export const animalKinds = parseCatalog(animalKindsJson);
 
 const kindsByKey = new Map(animalKinds.map((kind) => [kind.key, kind]));
 
+export const findAnimalKind = (key: string): AnimalKind | undefined =>
+  kindsByKey.get(key);
+
 export const animalKindByKey = (key: string): AnimalKind => {
-  const kind = kindsByKey.get(key);
+  const kind = findAnimalKind(key);
   if (kind === undefined) {
     throw new Error(`unknown animal kind: ${key}`);
   }

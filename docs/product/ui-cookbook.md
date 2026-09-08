@@ -28,7 +28,7 @@ Keep the dependency set small. Ephemeral chrome may use Pinia; **case, queue,
 and capability state must not**.
 
 Local app: `npm run dev` from the repository root, then `http://127.0.0.1:5173`.
-The in-memory store resets on reload.
+The backoffice is `http://localhost:5174`. The in-memory store resets on reload.
 
 ## What you own
 
@@ -51,12 +51,13 @@ walk helpers or `CaseSession` methods.
 
 Today the walk wrappers are:
 
-| Route  | Walk helper        | Session method                |
-| ------ | ------------------ | ----------------------------- |
-| `/w01` | `confirmSituation` | `openDraft` (once)            |
-| `/w03` | `confirmLocation`  | `attachLocation`              |
-| `/w09` | `confirmDetails`   | `attachFormSnapshot`          |
-| `/w24` | `submitReport`     | `attachContact` then `submit` |
+| Route                 | Walk helper        | Session method                |
+| --------------------- | ------------------ | ----------------------------- |
+| `/w01`                | `confirmSituation` | `openDraft` (once)            |
+| `/w03`                | `confirmLocation`  | `attachLocation`              |
+| `/w09`                | `confirmDetails`   | `attachFormSnapshot`          |
+| `/w13`–`/w23`, `/w26` | `continueWalkTo`   | none — planned placeholder    |
+| `/w24`                | `submitReport`     | `attachContact` then `submit` |
 
 Pattern:
 
@@ -67,7 +68,7 @@ if (!result.ok) {
   return;
 }
 rememberSnapshot(result.value);
-await router.push(CUSTOMER_PATHS.details);
+await continueWalkTo(router, CUSTOMER_PATHS.location);
 ```
 
 Payloads must satisfy `@animal-helper/contracts` (`FormSnapshotV1`,
@@ -102,9 +103,8 @@ Neither is a raw API from Vue.
 
 Do not hardcode Slovak (or any user-visible string) in a component. Chrome,
 validation, and accessibility text go in `@animal-helper/i18n`. Do/don't copy
-and contact wording will come from a published guidance revision; until then,
-use matrix text only as design reference, not as a second source of truth in
-Vue.
+and contact wording come from `GET /guidance` or the bundled fallback. Do not
+paste matrix cells into Vue as a second source of truth.
 
 Do not put telephone numbers in matrix-driven copy. Typed actions such as
 `call-contact` refer to allow-listed directory keys.
@@ -123,17 +123,21 @@ Quality order is reporter/animal safety, then correctness, then looks.
 
 ## Current walk
 
-Five routes exist. They work. They are not the design.
+Implemented routes plus planned placeholders after an injured animal kind is
+chosen. They work. They are not the design.
 
 | Path         | Stands in for             | Notes                                                        |
 | ------------ | ------------------------- | ------------------------------------------------------------ |
 | `/w01`       | W01                       | Injured / stray only. Cruelty is catalogued, not selectable. |
 | `/w03`       | W03a / W03b               | Collapsed to one address field.                              |
-| `/w09`       | W04 + W09 + W11           | Photo skipped; no species/symptoms yet.                      |
+| `/w09`       | W04 + W09 + W11           | Photo skipped; injured walks pick a catalog kind.            |
+| `/w14`, …    | planned W-screens         | Bundled or published copy on the catalogued screens.         |
 | `/w24`       | reporter contact + submit | **Not** matrix W24 “who helped”.                             |
 | `/thank-you` | thanks                    | Public status chrome.                                        |
 
-`form_snapshot` v1 still accepts only `injured` and `stray`.
+`form_snapshot` v1 still accepts only `injured` and `stray`. The backoffice
+matrix at `http://localhost:5174/guidance` previews the same resolver, including
+matrix-only W25.
 
 ## Start here
 
@@ -157,10 +161,11 @@ Name the frames in Figma with W-keys before engineering splits the route.
 - Cruelty (W02, W06) — snapshot schema rejects it.
 - Live contact directories (W15–W21) — design cards that take a typed action and
   a label; numbers belong in a jurisdiction pack later.
-- W22/W23 self-help — matrix copy is still empty.
+- W22/W23 self-help — intro copy is imported where the matrix has it; numbered
+  steps are still empty.
 - Stray-specific content — rows are stubs.
 - Install/offline PWA chrome beyond the durability line.
-- Event store, capabilities internals, or backoffice administration.
+- Event store, capabilities internals, or guidance rollback.
 
 ## Pull requests
 

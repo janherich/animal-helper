@@ -20,6 +20,7 @@
     "db:reset": "node scripts/local-db.mjs reset",
     "db:status": "node scripts/local-db.mjs status",
     "db:up": "node scripts/local-db.mjs up",
+    "admin:bootstrap": "node scripts/admin-bootstrap.mjs",
     "dev": "node scripts/dev.mjs",
     "dev:status": "node scripts/local-db.mjs status",
     "dev:stop": "node scripts/local-db.mjs down",

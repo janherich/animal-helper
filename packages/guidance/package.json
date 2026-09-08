@@ -2,7 +2,7 @@
   "name": "@animal-helper/guidance",
   "version": "0.0.0",
   "private": true,
-  "description": "Code-owned animal-kind catalog, flow templates, and screen map.",
+  "description": "Code-owned catalog, instruction slots, and resolved injured-guidance copy.",
   "license": "AGPL-3.0-or-later",
   "type": "module",
   "exports": {

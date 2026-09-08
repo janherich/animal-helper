@@ -5,10 +5,10 @@ import {
 } from "node:http";
 
 import { apiError } from "./errors.js";
-import type { ApiHandlerOptions } from "./handler.js";
+import type { ApiHandlerOptions, ApiResponse } from "./handler.js";
 import { createApiHandler } from "./handler.js";
 
-const MAX_BODY_BYTES = 20_480;
+const MAX_BODY_BYTES = 65_536;
 
 const headerValue = (
   value: string | string[] | undefined,
@@ -56,6 +56,10 @@ export const createHttpServer = (options: ApiHandlerOptions) => {
       const url = new URL(request.url ?? "/", "http://127.0.0.1");
       const body = await readBody(request);
       const origin = headerValue(request.headers.origin);
+      const cookie = headerValue(request.headers.cookie);
+      const host = headerValue(request.headers.host);
+      const secFetchSite = headerValue(request.headers["sec-fetch-site"]);
+      const ifNoneMatch = headerValue(request.headers["if-none-match"]);
       const result = body.ok
         ? await handle({
             method: request.method ?? "GET",
@@ -64,6 +68,10 @@ export const createHttpServer = (options: ApiHandlerOptions) => {
             authorization: headerValue(request.headers.authorization),
             body: body.value,
             origin,
+            ...(cookie === undefined ? {} : { cookie }),
+            ...(host === undefined ? {} : { host }),
+            ...(secFetchSite === undefined ? {} : { secFetchSite }),
+            ...(ifNoneMatch === undefined ? {} : { ifNoneMatch }),
           })
         : await handle({
             method: request.method ?? "GET",
@@ -72,13 +80,21 @@ export const createHttpServer = (options: ApiHandlerOptions) => {
             authorization: headerValue(request.headers.authorization),
             body: undefined,
             origin,
-          }).then((parsed) => ({
+            ...(cookie === undefined ? {} : { cookie }),
+            ...(host === undefined ? {} : { host }),
+            ...(secFetchSite === undefined ? {} : { secFetchSite }),
+            ...(ifNoneMatch === undefined ? {} : { ifNoneMatch }),
+          }).then((parsed): ApiResponse => ({
             status: 400,
             headers: parsed.headers,
             body: apiError("INVALID_REQUEST"),
           }));
 
-      response.writeHead(result.status, result.headers);
+      const headers: Record<string, string | string[]> = { ...result.headers };
+      if (result.cookies !== undefined && result.cookies.length > 0) {
+        headers["set-cookie"] = [...result.cookies];
+      }
+      response.writeHead(result.status, headers);
       response.end(
         result.body === null ? undefined : JSON.stringify(result.body),
       );

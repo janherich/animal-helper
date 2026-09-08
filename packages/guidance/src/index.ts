@@ -1,5 +1,49 @@
-export { animalKindByKey, animalKindCount, animalKinds } from "./catalog.js";
+export {
+  canonicalizeGuidanceDocument,
+  guidanceDocumentValue,
+} from "./canonical.js";
+export {
+  animalKindByKey,
+  animalKindCount,
+  animalKinds,
+  findAnimalKind,
+} from "./catalog.js";
+export {
+  assertPublishableDocument,
+  bundledContentHash,
+  bundledGuidanceDocument,
+  bundledPublicGuidance,
+  cellsForKind,
+  itemsForScreen,
+  itemsForScreens,
+  parseGuidanceDocument,
+  parsePublicGuidance,
+  resolveKindItems,
+  resolvePublicGuidance,
+  GuidanceValidationError,
+  type Applicability,
+  type GuidanceAction,
+  type GuidanceCell,
+  type GuidanceDocument,
+  type GuidanceItem,
+  type PublicGuidance,
+  type PublicGuidanceKind,
+} from "./content.js";
+export { copyLooksSafe, guidanceLines } from "./copy.js";
 export { flowFor, flows } from "./flows.js";
+export {
+  customerWalkableSteps,
+  isCustomerWalkablePath,
+  kindsForSituation,
+  matrixWalkableSteps,
+  nextCustomerPath,
+  resolveGuidanceWalk,
+  type CustomerWalkableStatus,
+  type CustomerWalkableStep,
+  type ResolvedGuidanceWalk,
+  type ResolvedWalkReason,
+  type ResolvedWalkStep,
+} from "./resolve.js";
 export {
   CATALOG_KEY_MAX_LENGTH,
   CATALOG_KEY_PATTERN,
@@ -53,3 +97,24 @@ export {
   type ScreenDefinition,
   type ScreenStatus,
 } from "./screens.js";
+export {
+  BUNDLED_REVISION_ID,
+  COPY_MAX_LENGTH,
+  GUIDANCE_FLOW_KEY,
+  GUIDANCE_JURISDICTION,
+  GUIDANCE_LOCALE,
+  GUIDANCE_SCHEMA_VERSION,
+  actionTargetForInstruction,
+  copySlotKeys,
+  guidanceScope,
+  instructionKeys,
+  instructionSlotKeys,
+  instructionSortOrder,
+  isCopySlotKey,
+  isInstructionKey,
+  polarityFor,
+  screenForInstruction,
+  type CopySlotKey,
+  type InstructionKey,
+  type InstructionPolarity,
+} from "./slots.js";

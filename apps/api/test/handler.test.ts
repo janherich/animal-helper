@@ -57,6 +57,28 @@ const commandIds = () => ({
 });
 
 describe("API handler", () => {
+  it("hides admin routes when admin is not configured", async () => {
+    const { handle } = createHarness();
+    const session = await request(handle, {
+      method: "GET",
+      pathname: "/admin/session",
+    });
+    const login = await request(handle, {
+      method: "POST",
+      pathname: "/admin/auth/login/options",
+      origin: "http://127.0.0.1:5174",
+    });
+
+    expect(session).toMatchObject({
+      status: 404,
+      body: { ok: false, error: { code: "NOT_FOUND" } },
+    });
+    expect(login).toMatchObject({
+      status: 404,
+      body: { ok: false, error: { code: "NOT_FOUND" } },
+    });
+  });
+
   it("serves health without a capability", async () => {
     const { handle } = createHarness();
     const response = await request(handle, {
@@ -69,6 +91,38 @@ describe("API handler", () => {
     expect(response.headers["cache-control"]).toBe("no-store");
     expect(response.headers["x-content-type-options"]).toBe("nosniff");
     expect(response.headers["referrer-policy"]).toBe("no-referrer");
+  });
+
+  it("serves bundled public guidance without a capability", async () => {
+    const { handle } = createHarness();
+    const response = await request(handle, {
+      method: "GET",
+      pathname: "/guidance",
+    });
+    const body = response.body as {
+      source: string;
+      kinds: { domestic_cat?: { items: unknown[] } };
+      contentHash: string;
+    };
+
+    expect(response.status).toBe(200);
+    expect(body.source).toBe("bundled");
+    expect(body.kinds.domestic_cat?.items.length).toBeGreaterThan(0);
+    expect(response.headers.etag).toBe(`"${body.contentHash}"`);
+
+    const cached = await request(handle, {
+      method: "GET",
+      pathname: "/guidance",
+      ifNoneMatch: `"${body.contentHash}"`,
+    });
+    expect(cached.status).toBe(304);
+
+    const query = await request(handle, {
+      method: "GET",
+      pathname: "/guidance",
+      search: "?locale=sk-SK",
+    });
+    expect(query.status).toBe(400);
   });
 
   it("creates a draft and returns only public status for the capability", async () => {

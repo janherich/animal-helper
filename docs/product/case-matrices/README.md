@@ -1,17 +1,19 @@
 # Case matrices
 
-Status: **source inventory, not published guidance**
+Status: **source inventory plus bundled injured fallback**
 
 Last imported: 2026-08-31
 
 These spreadsheets are the product case-flow matrices for Slovakia. They are the
-source for code-owned animal-kind keys, flow templates, and screen mapping. They
-are **not** a published guidance revision: cells still contain draft notes,
-missing stray copy, and operational to-dos.
+source for code-owned animal-kind keys, flow templates, screen mapping, and the
+bundled injured-copy fallback. They are **not** a reviewed publication: cells
+still contain draft notes, missing stray copy, and operational to-dos.
+Administrators can edit and publish from that fallback in the backoffice.
 
 Typed keys derived from these files live in `@animal-helper/guidance`. Screen
-IDs map onto the current customer PWA in [screen-map.md](screen-map.md). How to
-implement those screens is the [UI cookbook](../ui-cookbook.md).
+IDs map onto the current customer PWA in [screen-map.md](screen-map.md). The
+backoffice matrix browser previews that resolved walk. How to implement those
+screens is the [UI cookbook](../ui-cookbook.md).
 
 ## Files
 
@@ -24,7 +26,7 @@ Each CSV is sheet 1 of a larger workbook. Other sheets were not exported.
 
 ## How to refresh
 
-Replace the CSVs, then regenerate the catalog:
+Replace the CSVs, then regenerate the catalog and bundled fallback:
 
 ```sh
 node packages/guidance/scripts/build-catalog.mjs
@@ -44,10 +46,11 @@ companion snake, companion lizard, farm bees, wild mouse, and wild rat.
 
 ## Boundaries
 
-Copy, do/don't text, and contact wording stay in these matrices until a reviewed
-guidance revision is published. The catalog stores stable keys, flow assignment,
-and contact _kinds_ — not telephone numbers or advice sentences. Jurisdiction
-directories remain the place for verified contacts.
+Copy, do/don't text, and contact wording are imported into
+`@animal-helper/guidance` as a bundled fallback. The catalog still stores stable
+keys, flow assignment, and contact _kinds_ — not telephone numbers. Publication
+can override copy and applicability without a frontend deploy. Jurisdiction
+directories remain the place for verified phone numbers.
 
 Do not copy a matrix cell into the customer PWA as executable workflow logic.
 See

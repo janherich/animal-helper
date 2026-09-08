@@ -45,6 +45,7 @@ describe("local database environment", () => {
       });
       assert.equal(environment.KEEP_UNRELATED, "yes");
       assert.equal(environment.DATABASE_SSL_MODE, "disable");
+      assert.equal(environment.ADMIN_ORIGIN, "http://localhost:5174");
       assert.equal(
         environment.DATABASE_URL,
         `postgresql://animal_helper:${passwordFrom(Buffer.alloc.bind(Buffer))}@127.0.0.1:5517/animal_helper`,
@@ -87,6 +88,13 @@ describe("local database environment", () => {
           AH_DB_PROJECT: "invalid project\nINJECTED=value",
         }),
       /Compose project name/,
+    );
+    assert.throws(
+      () =>
+        createLocalDbEnvironment("/tmp/animal-helper", {
+          ADMIN_ORIGIN: "https://admin.example",
+        }),
+      /HTTP localhost origin/,
     );
     assert.throws(
       () =>

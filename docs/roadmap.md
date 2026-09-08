@@ -25,7 +25,7 @@ Gate: maintainers accept the foundational ADRs and an operator is identified.
 - [x] prove atomic append/project/outbox behaviour and idempotent retries;
 - [x] expose a local HTTP command/status API on the event store;
 - prove a signed R2 upload, server validation, and orphan cleanup;
-- implement administrator invite/allow-list and mandatory TOTP;
+- [x] implement administrator invite/allow-list and passkey login;
 - [x] Docker local Postgres, checksummed migrations, and Neon production
       connection policy;
 - isolated integration tests already run against CI Postgres;
@@ -40,9 +40,8 @@ with an owner and deadline; no real personal data is used.
 - [x] Vue + Vite customer shell for the injured/stray walk;
 - [x] import injured and cruelty case matrices into a typed species/flow catalog
       and map W-screens onto the current customer skeleton;
+- [x] injured copy slots, bundled fallback, public guidance GET, and publish;
 - integrate approved Figma screens using accessible, responsive components;
-- implement the fixed guidance-flow contract, safe bundled fallback, and
-  validated public revision loading;
 - implement the `sk-SK` dictionary with professional language review;
 - implement IndexedDB draft and command queue;
 - add offline/install/update behaviour and clear durability states;
@@ -58,9 +57,11 @@ are approved.
 
 ## Phase 3 — backoffice and dispatch
 
+- [x] passkey operator login and a read-only case queue without private
+      payloads;
+- [x] guidance matrix editing, preview, and audited publication for injured
+      copy;
 - implement queue/detail projections and audited restricted-data reads;
-- implement guidance matrix editing, mobile preview, validation, publication,
-  rollback, and audit;
 - establish guidance sources, subject-matter review records, compatibility
   policy, and emergency rollback rehearsal;
 - prove preview/public-payload equivalence and old-client schema compatibility

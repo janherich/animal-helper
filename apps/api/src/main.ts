@@ -8,6 +8,7 @@ import {
   parseCapabilityPepper,
 } from "@animal-helper/event-store";
 
+import { loadAdminConfig } from "./admin/config.js";
 import { loadApiEnv, loadLocalEnvFiles } from "./env.js";
 import { createPostgresGateway } from "./gateway.js";
 import { createHttpServer } from "./server.js";
@@ -17,10 +18,13 @@ loadLocalEnvFiles(path.resolve(import.meta.dirname, "../../.."));
 const env = loadApiEnv(process.env);
 assertDatabaseUrlDoesNotOverrideTls(env.databaseUrl);
 const sql = postgres(env.databaseUrl, createSqlOptions(process.env));
+const admin = loadAdminConfig(process.env);
 const server = createHttpServer({
   gateway: createPostgresGateway(sql),
   pepper: parseCapabilityPepper(env.capabilityPepper),
+  sql,
   ...(env.corsOrigin === undefined ? {} : { corsOrigin: env.corsOrigin }),
+  ...(admin === undefined ? {} : { admin: { sql, config: admin } }),
 });
 
 server.on("error", (error) => {

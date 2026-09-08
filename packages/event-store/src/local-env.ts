@@ -10,6 +10,7 @@ export const LOCAL_DB_KEYS = [
   "AH_DB_PORT",
   "AH_DB_PROJECT",
   "AH_DB_USER",
+  "ADMIN_ORIGIN",
   "API_CORS_ORIGIN",
   "API_HOST",
   "API_PORT",

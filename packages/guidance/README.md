@@ -1,8 +1,12 @@
 # Guidance catalog
 
-Code-owned keys for the reporter guide: animal kinds, flow templates, and screen
-IDs. Copy still lives in the product matrices until a reviewed guidance revision
-is published.
+Code-owned keys for the reporter guide: animal kinds, flow templates, screen
+IDs, instruction slots, and the bundled injured-copy fallback.
+
+`resolveGuidanceWalk` turns a situation and animal-kind key into the catalogued
+screen sequence. `resolveKindItems` attaches published or bundled copy to those
+screens. The backoffice editor, public `GET /guidance`, and the customer PWA
+share that resolver.
 
 Source matrices: [docs/product/case-matrices](../../docs/product/case-matrices).
 
@@ -15,5 +19,6 @@ Rules:
 - stray rows are stubs; cruelty is catalogued but not part of `form_snapshot`
   v1;
 - contact fields are typed kinds, not telephone numbers;
-- regenerating the catalog is
+- copy is bounded plain text; URLs, HTML, and phone-like numbers are rejected;
+- regenerating the catalog and fallback is
   `pnpm --filter @animal-helper/guidance sync-catalog`.

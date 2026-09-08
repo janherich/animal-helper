@@ -21,6 +21,8 @@
     "@animal-helper/contracts": "workspace:*",
     "@animal-helper/domain": "workspace:*",
     "@animal-helper/event-store": "workspace:*",
+    "@animal-helper/guidance": "workspace:*",
+    "@simplewebauthn/server": "13.2.2",
     "postgres": "3.4.8"
   },
   "devDependencies": {

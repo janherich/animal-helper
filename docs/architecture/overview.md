@@ -2,7 +2,7 @@
 
 Status: **proposed baseline**
 
-Last reviewed: 2026-09-07
+Last reviewed: 2026-09-08
 
 This document defines technical boundaries, not product screens. Domain
 vocabulary and transitions will be refined with the product team without
@@ -55,7 +55,9 @@ boundary for domain commands.
 
 - `apps/customer` and `apps/backoffice`: Vue 3 + Vite static PWAs on Vercel
   ([ADR 0007](decisions/0007-vue-static-pwas.md)). Local `npm run dev` serves
-  the customer shell at `http://127.0.0.1:5173`.
+  the customer shell at `http://127.0.0.1:5173` and the backoffice at
+  `http://localhost:5174`, which proxies `/admin` to the API
+  ([ADR 0009](decisions/0009-passkey-admin-auth.md)).
 - `apps/api`: loopback Node HTTP API today; a later Edge Function host remains
   an adapter, not a domain dependency.
 - state: ordinary PostgreSQL. Docker Compose locally; Neon in a European region
@@ -146,8 +148,8 @@ would quietly create an identity system.
 
 - no public sign-up;
 - individually named, allow-listed accounts;
-- mandatory TOTP multi-factor authentication before access to case data;
-- server-side assurance-level checks for every privileged endpoint;
+- passkeys with required user verification before access to case data;
+- server-side ceremony and session checks for every privileged endpoint;
 - short idle lifetime, bounded absolute session lifetime, and explicit
   revocation;
 - audit events for authentication, reads of restricted cases, mutations,

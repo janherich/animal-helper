@@ -67,12 +67,32 @@ section {
 }
 
 .durability,
-.error {
+.error,
+.muted {
   margin: 0;
 }
 
 .error {
   color: #8a1f1f;
+}
+
+.muted {
+  color: #4d5b52;
+}
+
+.advice {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.advice.do_not {
+  color: #8a1f1f;
+  font-weight: 600;
+}
+
+.advice ul {
+  margin: 0;
+  padding-left: 1.25rem;
 }
 
 label,
@@ -86,7 +106,8 @@ fieldset {
 
 input[type="text"],
 input[type="tel"],
-input[type="email"] {
+input[type="email"],
+select {
   padding: 0.6rem 0.7rem;
   font: inherit;
 }

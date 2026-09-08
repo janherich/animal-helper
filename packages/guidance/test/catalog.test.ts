@@ -114,6 +114,7 @@ describe("flow and screen map", () => {
       "w11",
     ]);
     expect(screens.w24.customerPath).toBe("/w24");
+    expect(screens.w14.customerPath).toBe("/w14");
     expect(screens.w02.status).toBe("planned");
   });
 });

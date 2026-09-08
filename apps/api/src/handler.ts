@@ -1,3 +1,9 @@
+import type { Sql } from "postgres";
+
+import {
+  handleAdminRequest,
+  type AdminHandlerOptions,
+} from "./admin/handle.js";
 import {
   parseCapabilityHeader,
   requestHasForbiddenQuery,
@@ -5,6 +11,7 @@ import {
 import { apiError, statusForError } from "./errors.js";
 import type { ApiGateway } from "./gateway.js";
 import { handleCommand } from "./handle-command.js";
+import { handlePublicGuidance } from "./handle-guidance.js";
 import { handleStatus } from "./handle-status.js";
 
 export type ApiRequest = Readonly<{
@@ -14,12 +21,17 @@ export type ApiRequest = Readonly<{
   authorization: string | undefined;
   body: unknown;
   origin: string | undefined;
+  cookie?: string;
+  host?: string;
+  secFetchSite?: string;
+  ifNoneMatch?: string;
 }>;
 
 export type ApiResponse = Readonly<{
   status: number;
   headers: Readonly<Record<string, string>>;
   body: unknown;
+  cookies?: readonly string[];
 }>;
 
 export type ApiHandlerOptions = Readonly<{
@@ -27,6 +39,8 @@ export type ApiHandlerOptions = Readonly<{
   pepper: Buffer;
   now?: () => Date;
   corsOrigin?: string;
+  admin?: AdminHandlerOptions;
+  sql?: Sql;
 }>;
 
 const securityHeaders = {
@@ -84,6 +98,21 @@ export const createApiHandler = (options: ApiHandlerOptions) => {
 
     if (request.method === "GET" && request.pathname === "/health") {
       return withHeaders(200, { ok: true }, corsOrigin);
+    }
+
+    if (request.pathname === "/guidance") {
+      return handlePublicGuidance(
+        request,
+        options.sql ?? options.admin?.sql,
+        corsOrigin,
+      );
+    }
+
+    if (
+      options.admin !== undefined &&
+      (request.pathname === "/admin" || request.pathname.startsWith("/admin/"))
+    ) {
+      return handleAdminRequest(request, options.admin, now());
     }
 
     if (
