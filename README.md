@@ -28,9 +28,9 @@ resources and jurisdiction rules are separate packages.
 flowchart LR
   Customer["Customer PWA<br/>Vercel static hosting"]
   Admin["Backoffice PWA<br/>Vercel static hosting"]
-  API["Command API<br/>command and query boundary"]
+  API["Command API<br/>Vercel Functions"]
   DB[("PostgreSQL<br/>Neon in production")]
-  Media[("Private R2 bucket<br/>EU jurisdiction")]
+  Media[("Private Vercel Blob<br/>fra1")]
   Mail["Email provider"]
   Bodies["Authorities / volunteers"]
 
@@ -43,9 +43,10 @@ flowchart LR
   Mail --> Bodies
 ```
 
-Vercel receives only static application assets. Sensitive case traffic goes
-directly to the API and private object storage. This is both a privacy boundary
-and a portability choice.
+Vercel Pro hosts the static PWAs, command API, private Blob store, and job
+queues. PostgreSQL stays on Neon. Large media uses signed Blob uploads, not
+function bodies. Provider SDKs stay in adapters so the same API can still run
+locally.
 
 ## Repository map
 
@@ -84,6 +85,7 @@ Start with:
 - [Threat model](docs/security/threat-model.md)
 - [Cost model](docs/operations/cost-model.md)
 - [Persistence](docs/operations/persistence.md)
+- [OZ production vendor handoff](docs/operations/oz-deployment-handoff.md)
 - [Entire checkpoint workflow](docs/operations/entire.md)
 
 ## Local development

@@ -49,8 +49,8 @@ flowchart TB
   Internet((Untrusted internet))
   Device["Reporter device<br/>local capability + draft"]
   AdminDevice["Admin device<br/>authenticated session"]
-  Static["Static PWA host<br/>public code only"]
-  API["Trusted API boundary"]
+  Static["Static PWA host<br/>Vercel"]
+  API["Trusted API boundary<br/>Vercel Functions"]
   DB[("Restricted PostgreSQL")]
   Object[("Restricted media store")]
   Email["Email processor"]
@@ -81,7 +81,7 @@ content.
 | T03 | Person with email/shared-device access steals the capability                                            | High          | minimal email, no case content after submit, local purge control, device-safety warning                                             | High; inherent to bearer access |
 | T04 | Offline retry creates duplicate cases, duplicate transitions, or duplicate emails                       | High          | stable command IDs/content hashes, expected versions, unique constraints, transactional outbox/provider idempotency                 | Low                             |
 | T05 | Race between devices overwrites newer draft/state                                                       | High          | optimistic stream version; explicit conflict response/reconciliation; no last-write-wins                                            | Low                             |
-| T06 | Flood of reports/media/email exhausts quota, money, or volunteers                                       | High          | hard per-case/type/global caps, staged upload expiry, layered rate limits, Turnstile escalation, spend alerts/circuit breakers      | Medium                          |
+| T06 | Flood of reports/media/email exhausts quota, money, or volunteers                                       | High          | hard per-case/type/global caps, staged upload expiry, layered rate limits, spend alerts/circuit breakers                            | Medium                          |
 | T07 | Uploaded file executes script, exploits parser, or causes decompression/resource exhaustion             | Critical      | format allow-list, magic-byte/size/duration checks, no SVG/HTML/archive, quarantine/scanning, derived previews, attachment download | Medium                          |
 | T08 | Stored text executes in backoffice and steals admin session/data                                        | Critical      | text-only rendering, no rich HTML, CSP/Trusted Types where supported, output encoding, short/revocable session                      | Low                             |
 | T09 | SQL/command/template injection changes or exfiltrates data                                              | Critical      | strict schemas, parameterised operations, no shell/template evaluation, restricted database role, adversarial tests                 | Low                             |
@@ -103,7 +103,7 @@ content.
 | T25 | Email bounce/forwarding exposes a status link to another person                                         | High          | user confirms address, minimal content, capability scope becomes status-only after submit, tracking disabled                        | Medium                          |
 | T26 | Attacker uploads unlawful content or fabricates reports to harm a person                                | High          | terms/reporting notice, bounded uploads, administrator quarantine/triage, audit, escalation and deletion procedure                  | Medium                          |
 | T27 | IP/risk controls create a new tracking dataset or block vulnerable reporters                            | High          | coarse/short-lived signals, no behavioural advertising, accessible fallback, monitor false positives, never require account         | Medium                          |
-| T28 | Free-text or attachments are sent to a generative AI/analytics service unintentionally                  | Critical      | no AI/analytics processing of case data, provider allow-list, egress review, static-only Vercel boundary                            | Low                             |
+| T28 | Free-text or attachments are sent to a generative AI/analytics service unintentionally                  | Critical      | no AI/analytics processing of case data, disable Vercel AI products, provider allow-list, egress review                             | Low                             |
 | T29 | Compromised or mistaken administrator publishes unsafe, contradictory, or misleading animal guidance    | Critical      | fixed schema, bounded typed actions, whole-flow validation, provenance/review record, exhaustive preview/diff, MFA, audit, rollback | Medium                          |
 | T30 | Offline or old PWA receives stale/incompatible guidance or loses all useful guidance                    | High          | schema-version publication pointers, last-known-valid revision, bundled reviewed fallback, compatibility window, rejection signal   | Medium                          |
 

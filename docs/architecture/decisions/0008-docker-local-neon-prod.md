@@ -36,8 +36,8 @@ environment that cannot silently migrate a hosted database.
 - This repository does not provision Neon projects, store console credentials,
   or copy production data into local or preview databases.
 
-Supabase remains a possible future host for Edge Functions. It is not the
-production database adapter.
+Supabase remains unused. Production HTTP adapters are Vercel Functions
+([ADR 0004](../../architecture/decisions/0004-hosting-boundaries.md)).
 
 ## Consequences
 

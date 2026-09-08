@@ -1,33 +1,59 @@
-# ADR 0004: Static edge hosting and portable managed data services
+# ADR 0004: Vercel Pro runtime with portable Neon and adapters
 
-- Status: Accepted
+- Status: Accepted (amended 2026-09-08)
 - Date: 2026-07-29
+- Amendment: 2026-09-08
 
 ## Context
 
-The project needs minimal operations and cost. It also handles sensitive
-reports, and the likely future transfer from a personal GitHub account to an
-organisation may affect free-plan eligibility.
+The project needs minimal operations and cost. It handles sensitive reports, and
+the operator is an organisation (not a personal Hobby account). The neighbouring
+Frames project already runs Vue static apps plus Node HTTP adapters on Vercel,
+with Neon as a separately hosted PostgreSQL service.
+
+The original 2026-07-29 decision kept Vercel static-only so report bodies would
+not transit Vercel functions, and named Cloudflare R2 for private media. That
+split added vendors (R2, a separate API host) without a technical need: the
+command API is already a portable composition root, and Vercel Pro provides
+functions, private Blob stores in `fra1`, and Queues.
 
 ## Decision
 
-Host only static PWA assets on Vercel. Send report data directly to the command
-API and signed uploads directly to a private Cloudflare R2 bucket. Use
-PostgreSQL as the durable system of record (Docker locally, Neon in production;
-[ADR 0008](0008-docker-local-neon-prod.md)). Put email behind a provider
-adapter.
+Run production on an **organisation Vercel Pro** team in Frankfurt (`fra1`),
+with **Neon** as the system of record in a matching EU region
+(`aws-eu-central-1` preferred).
 
-No domain code depends on Vercel request/runtime APIs, Neon-specific SQL,
-Supabase client-side table access, R2-specific object URLs, or a particular
-email payload. A future Edge Function host is an adapter around the same
-composition root.
+- `apps/customer` and `apps/backoffice` remain Vue static PWAs (ADR 0007).
+- `apps/api` is deployed as Vercel Functions (same handler as the local Node
+  HTTP server; no Vercel APIs in the domain layer).
+- Media uses a **private Vercel Blob** store created in `fra1`. Clients upload
+  through short-lived signed URLs; objects stay private. The region cannot be
+  changed later.
+- Asynchronous work (email outbox, purge, orphan cleanup) uses **Vercel
+  Queues** (and cron where a schedule is enough). Do not require an always-on
+  VM. Queues is a Vercel public-beta product; confirm DPA coverage at purchase.
+- Email stays behind a provider adapter (Brevo in the operator handoff).
+- PostgreSQL remains ordinary Postgres (ADR 0008). Do not use Vercel Postgres
+  as a second store.
+
+No domain code depends on Vercel request types, Blob URLs, Queue payloads,
+Neon-specific SQL, or a particular email provider. Each is an adapter around
+the same composition root.
+
+Disable Vercel AI / model-training products on this team. Case data may transit
+Functions, Blob, and Queues only as a documented processor under the operator
+DPA.
 
 ## Consequences
 
-Sensitive payloads avoid the static host, and each provider can be replaced.
-There are three operational vendors. CORS, service credentials, DPAs, regions,
-quotas, and incident status must be managed explicitly.
+The operator bill of materials is Vercel Pro, Neon, Brevo, and a domain — the
+same shape as Frames. Cloudflare R2, Turnstile, and a separate API host (for
+example Fly.io) are not required for v1. Bot challenge can stay rate limits and
+spend caps until evidence requires another vendor.
 
-Before launch, confirm that the repository owner and deployment arrangement
-remain eligible for Vercel Hobby. If not, budget for Pro or move static hosting
-to another provider without changing application architecture.
+Counsel must treat Vercel as a processor of report content and media, not
+merely a static CDN. Function payload size still cannot carry large videos:
+signed Blob uploads remain mandatory.
+
+Hobby is not used. Pro spend management and regional Blob/function placement
+are part of launch, not optional extras.

@@ -149,8 +149,8 @@ should be referenced from issues and tests.
   network signal, and global provider budget. Use a privacy-preserving bot
   challenge when risk thresholds are exceeded, not as the sole control.
 - **AH-SEC-038 — MUST:** Quotas and spend alerts cover API invocations, database
-  size, object storage/operations, email, and static hosting. Failure degrades
-  to a clear queued/offline state, not silent data loss.
+  size, object storage/operations, email, functions, queues, and static hosting.
+  Failure degrades to a clear queued/offline state, not silent data loss.
 - **AH-SEC-039 — MUST:** Outbox, deletion, upload-cleanup, and projection
   failures are retried with bounded backoff and alerted after a defined age.
 - **AH-SEC-040 — SHOULD:** Maintain and test encrypted backups with a documented

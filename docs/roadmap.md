@@ -24,7 +24,7 @@ Gate: maintainers accept the foundational ADRs and an operator is identified.
       migrations;
 - [x] prove atomic append/project/outbox behaviour and idempotent retries;
 - [x] expose a local HTTP command/status API on the event store;
-- prove a signed R2 upload, server validation, and orphan cleanup;
+- prove a signed Vercel Blob upload, server validation, and orphan cleanup;
 - [x] implement administrator invite/allow-list and passkey login;
 - [x] Docker local Postgres, checksummed migrations, and Neon production
       connection policy;
@@ -69,7 +69,7 @@ are approved.
 - add Slovak authority directory and routing data from authoritative sources;
 - implement versioned form snapshots and administrator review;
 - add transactional email dispatch, SPF/DKIM/DMARC, retry, and delivery
-  visibility;
+  visibility via the outbox and Vercel Queues;
 - implement case completion and verified private-data purge;
 - rehearse account revocation, provider outage, and misdirected-email incidents.
 

@@ -9,8 +9,8 @@ The customer and backoffice applications are screen walkers over a durable,
 event-sourced case process. Screens come from approved Figma work; writes are
 already versioned commands and private-record payloads. The implementing
 colleague is proficient in Vue. Volunteer maintainability ranks above cost and
-performance. ADR 0004 already requires static assets on the public host and
-direct API/object-store traffic for report data.
+performance. ADR 0004 keeps the public UI as static PWA assets; report writes go to the
+command API and object store, not through a meta-framework server renderer.
 
 A meta-framework (Nuxt, Next) would pull server rendering and host-runtime
 coupling that this architecture does not need. Two different UI frameworks would
@@ -48,6 +48,6 @@ replacing the command client is not a UI rewrite. Day-to-day screen rules are in
 the [UI cookbook](../../product/ui-cookbook.md).
 
 The main risk is later pressure to adopt Nuxt for convenience. That requires a
-new ADR and would have to preserve the static-host and capability-fragment
+new ADR and would have to preserve the static PWA shell and capability-fragment
 boundaries. A large component library is acceptable only if it does not embed
 arbitrary HTML or weaken CSP.

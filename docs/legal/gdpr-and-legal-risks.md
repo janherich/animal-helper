@@ -2,7 +2,7 @@
 
 Status: **working legal brief; Slovak legal review required before real data**
 
-Last reviewed: 2026-07-30
+Last reviewed: 2026-09-08
 
 This document applies the GDPR and selected Slovak laws to Animal Helper's
 current architecture: an accountless customer PWA, an authenticated backoffice,
@@ -202,8 +202,7 @@ For every authority or volunteer organisation:
   instructions for Animal Helper's purpose, not merely because a contract calls
   it a processor.
 
-Neon, Cloudflare/R2/Turnstile, Vercel, a later Edge Function host if any, the
-email provider, monitoring, support, and any other vendor need a
+Neon, Vercel (Functions, private Blob, Queues), and the email provider need a
 data-flow-specific role assessment. For processors, complete Article 28
 agreements, verify sufficient guarantees, identify all subprocessors, establish
 breach/deletion/audit terms, and prevent providers from reusing case data for
@@ -353,7 +352,7 @@ Create a terminal-storage register covering:
 - service worker/Cache API assets and offline shell;
 - IndexedDB guidance, draft, media, command queue, capability, and status;
 - administrator authentication/security cookies;
-- Turnstile or other bot-protection storage/scripts;
+- bot-protection storage/scripts if a challenge vendor is added later;
 - error monitoring, analytics, and embedded third-party resources.
 
 Document the purpose, provider, key/entry, lifetime, personal-data status,
@@ -490,7 +489,7 @@ notice or promise service levels/confidentiality the operator cannot deliver.
 - [ ] Retention schedule, legal holds, rights workflow, and breach plan tested.
 - [ ] Processor/subprocessor DPAs, transfer mechanisms, regions, and deletion
       evidence approved.
-- [ ] Terminal-storage/cookie/Turnstile assessment completed.
+- [ ] Terminal-storage/cookie/bot-protection assessment completed.
 - [ ] Terms, media license, false-report, unlawful-content, and emergency-scope
       wording approved.
 - [ ] Child-use assumptions and subject-matter-reviewed guidance approved.

@@ -77,6 +77,9 @@ strings, or a `.neon` directory.
    admitting real reports. Free-plan history is short; Launch adds a longer
    restore window. See the [cost model](cost-model.md).
 
+Media is a private Vercel Blob store in `fra1`, not this database. Blob tokens
+stay in the Vercel project; they are not committed.
+
 Production connections require `DATABASE_SSL_MODE=verify`. Repair the
 certificate chain instead of disabling verification. `require` and `disable` are
 rejected when `DATABASE_ENVIRONMENT=production`.

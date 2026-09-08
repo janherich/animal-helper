@@ -58,19 +58,20 @@ boundary for domain commands.
   the customer shell at `http://127.0.0.1:5173` and the backoffice at
   `http://localhost:5174`, which proxies `/admin` to the API
   ([ADR 0009](decisions/0009-passkey-admin-auth.md)).
-- `apps/api`: loopback Node HTTP API today; a later Edge Function host remains
-  an adapter, not a domain dependency.
+- `apps/api`: loopback Node HTTP API today; production uses the same handler as
+  Vercel Functions on an organisation Pro team in `fra1`
+  ([ADR 0004](decisions/0004-hosting-boundaries.md)).
 - state: ordinary PostgreSQL. Docker Compose locally; Neon in a European region
-  in production ([ADR 0008](decisions/0008-docker-local-neon-prod.md)). SQL
-  files stay under `supabase/migrations` so a future Edge host can reuse them.
-- media: private Cloudflare R2 bucket with an EU data-jurisdiction restriction.
-- bot challenge: Cloudflare Turnstile, enforced server-side when risk rules
-  require it.
-- email: a provider adapter, initially evaluated against Resend.
+  in production ([ADR 0008](decisions/0008-docker-local-neon-prod.md)).
+- media: private Vercel Blob store in `fra1`; clients use short-lived signed
+  uploads, not function request bodies.
+- jobs: Vercel Queues (and cron) for outbox, purge, and orphan cleanup.
+- bot challenge: rate limits and spend caps in v1; an extra bot vendor only if
+  abuse evidence requires it.
+- email: a provider adapter (Brevo in the operator handoff).
 
-Sensitive report requests do not transit Vercel application functions. The PWAs
-call the API directly, and upload media only through narrowly scoped,
-short-lived signed URLs. Provider choices are adapters, not domain dependencies.
+The PWAs call the command API; large media never transits a function body.
+Provider SDKs stay in adapters, not the domain.
 
 ## Functional command path
 
