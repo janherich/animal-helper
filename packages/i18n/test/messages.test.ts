@@ -15,6 +15,8 @@ describe("sk-SK customer shell copy", () => {
       "Čo nerobiť",
     );
     expect(t("customer.guide.empty")).toContain("rada");
+    expect(t("customer.situation.title")).toBe("Čo sa stalo?");
+    expect(t("customer.chrome.logo")).toBe("LOGO");
     expect(() => t("customer.unknown")).toThrow(/Missing locale key/);
   });
 });

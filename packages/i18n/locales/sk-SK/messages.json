@@ -24,25 +24,74 @@
       "needs_attention": "Vyžaduje pozornosť"
     },
     "situation": {
-      "title": "Čo ste našli?",
-      "injured": "Zranené zviera",
-      "stray": "Túlavé zviera",
-      "continue": "Pokračovať"
+      "title": "Čo sa stalo?",
+      "help": "Vyberte, o akú situáciu ide. Spolu sa pozrieme na to, ako pomôcť.",
+      "injured": "Zviera je zranené",
+      "stray": "Zviera je zatúlané",
+      "dead": "Nález mŕtveho zvieraťa",
+      "cruelty": "Týranie/zanedbávanie zvieraťa",
+      "other": "Iné",
+      "anonymous": "🔒 Hlásenie môžete podať plne anonymne.",
+      "unavailable": "Tento typ hlásenia ešte nie je v aplikácii.",
+      "continue": "Pokračovať",
+      "draftTitle": "Rozpracovaný prípad",
+      "draftStep": "Krok {current} zo {total}",
+      "draftResolved": "Vybavené",
+      "draftSummarySeparator": " • ",
+      "summary": {
+        "injured": "Zranené zviera",
+        "stray": "Zatúlané zviera"
+      }
     },
     "location": {
       "title": "Kde sa zviera nachádza?",
-      "address": "Adresa",
+      "help": "Zadajte adresu alebo vyberte lokalitu na mape.",
+      "addressLabel": "Tu zadáte adresu",
+      "addressPlaceholder": "Mesto, PSČ, ulica..",
+      "mapLabel": "Tu označíte polohu priamo na mape",
+      "mapHint": "Ťuknutím označíte polohu",
+      "back": "← Späť",
       "confirm": "Potvrdiť polohu"
     },
+    "photo": {
+      "title": "Pridajte fotografiu alebo video",
+      "help": "Fotografia alebo video pomôžu určiť druh zvieraťa a potrebné kroky.",
+      "uploadLead": "Nahrajte fotografiu, video alebo odfoťte zviera.",
+      "gallery": "Vybrať z galérie",
+      "camera": "Otvoriť fotoaparát",
+      "limit": "Maximálna veľkosť fotografie alebo videa je 50 MB",
+      "back": "← Späť",
+      "skip": "Nemám fotografiu"
+    },
     "details": {
-      "title": "Podrobnosti o zvierati",
-      "photoSkipped": "Fotografia sa v tomto prototype preskakuje.",
+      "title": "Doplňte podrobnosti",
+      "help": "Skontrolujte druh zvieraťa a označte, čo ste si všimli.",
       "kind": "Druh zvieraťa",
-      "kindHelp": "Podľa druhu sa sprievodca vetví na ďalšie obrazovky.",
-      "kindPlaceholder": "Vyberte druh",
+      "kindEmpty": "Zatiaľ nevybrané",
       "kindRequired": "Vyberte druh zvieraťa.",
-      "flow": "Tok sprievodcu",
-      "continue": "Pokračovať"
+      "edit": "Upraviť",
+      "situation": "Detail situácie",
+      "symptoms": "Čo je zvieraťu?",
+      "symptom": {
+        "bleeding": "Krváca",
+        "hit": "Zrazené",
+        "poison_suspected": "Podozrenie na otravu",
+        "vomiting": "Zvracia",
+        "foam": "Pena okolo papule",
+        "unknown": "Neviem",
+        "other": "Iné"
+      },
+      "otherPlaceholder": "Stručne opíšte iné zranenie alebo stav zvieraťa",
+      "otherRequired": "Stručne opíšte iné zranenie alebo stav zvieraťa.",
+      "conscious": "Je zviera pri vedomí?",
+      "juvenile": "Ide o mláďa?",
+      "ternary": {
+        "yes": "Áno",
+        "no": "Nie",
+        "unknown": "Neviem"
+      },
+      "back": "← Späť",
+      "continue": "Zobraziť možnosti pomoci"
     },
     "guide": {
       "title": "Ďalší krok sprievodcu",
@@ -70,6 +119,33 @@
     "thanks": {
       "title": "Ďakujeme",
       "status": "Stav hlásenia"
+    },
+    "chrome": {
+      "logo": "LOGO",
+      "menu": "Menu",
+      "paw": "🐾",
+      "brand": "Zverolinka",
+      "tagline": "Prvý kontakt pri záchrane zvierat.",
+      "faq": "Časté otázky",
+      "faqCatch": "Ako bezpečne odchytiť zranené zviera?",
+      "faqCost": "Kto platí ošetrenie voľne žijúceho zvieraťa?",
+      "faqBird": "Čo robiť, ak nájdem vypadnuté vtáča?",
+      "faqAll": "Prejsť na všetky FAQs",
+      "faqAllUrl": "https://www.zverolinka.sk",
+      "contact": "Kontakt",
+      "orgName": "Zverolinka o.z.",
+      "address": "Račianska 62, 821 08 Bratislava",
+      "email": "info@zverolinka.sk",
+      "websiteLabel": "www.zverolinka.sk",
+      "websiteUrl": "https://www.zverolinka.sk",
+      "legal": "Právne informácie",
+      "legalGdpr": "Ochrana osobných údajov (GDPR)",
+      "legalTerms": "Podmienky používania platformy",
+      "legalCookies": "Cookies nastavenia",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "tiktok": "TikTok",
+      "copyright": "© 2026 Zverolinka. Všetky práva vyhradené."
     }
   },
   "backoffice": {

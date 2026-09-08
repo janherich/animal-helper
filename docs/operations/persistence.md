@@ -20,10 +20,12 @@ pnpm db:migrate  # apply pending SQL without restarting Compose
 
 `pnpm db:up` writes `.local/db.env` once (mode `0600`) with a random password,
 loopback port `55432`, Compose project `ah-<checkout>-<hash>`,
-`DATABASE_SSL_MODE=disable`, and the well-known local `CAPABILITY_PEPPER`.
+`DATABASE_SSL_MODE=disable`, the well-known local `CAPABILITY_PEPPER`, and
+`DATABASE_TEST_URL` pointing at a sibling `animal_helper_test` database.
 Existing files are never rewritten. Local database commands override ambient
 `DATABASE_URL` / `DATABASE_MIGRATION_URL` so they cannot migrate a hosted
-database by accident.
+database by accident. `pnpm db:up` and `pnpm db:migrate` also create and migrate
+that test database. Integration tests that drop schema run only there.
 
 The Compose file binds `127.0.0.1` only, uses a named volume, and waits for
 `pg_isready`. It does not mount SQL under `/docker-entrypoint-initdb.d`. Node
@@ -85,8 +87,9 @@ restore a production dump onto a laptop or a pull-request database.
 ## CI
 
 GitHub Actions starts `postgres:16-alpine` as a job service and sets
-`DATABASE_URL` plus `DATABASE_SSL_MODE=disable`. Integration tests apply the
-same migrations. CI does not run Docker Compose or talk to Neon.
+`DATABASE_URL`, `DATABASE_TEST_URL`, and `DATABASE_SSL_MODE=disable`.
+Integration tests create the sibling `animal_helper_test` database if needed,
+then apply migrations there. CI does not run Docker Compose or talk to Neon.
 
 Guidance copy uses ordinary versioned tables (`ah.guidance_revisions`, cells,
 copy, and a publication pointer), not the case event stream.

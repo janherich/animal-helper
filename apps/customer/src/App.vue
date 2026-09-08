@@ -1,13 +1,20 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 
 import { t } from "@animal-helper/i18n";
 
-import { resetCustomerRuntime, snapshotState } from "./runtime.js";
-import { CUSTOMER_PATHS } from "./walk.js";
+import AppHeader from "./components/AppHeader.vue";
+import { snapshotState } from "./runtime.js";
 
-const router = useRouter();
+const route = useRoute();
+const isDesigned = computed(
+  () =>
+    route.name === "situation" ||
+    route.name === "location" ||
+    route.name === "photo" ||
+    route.name === "details",
+);
 
 const durabilityLabel = computed(() => {
   const value = snapshotState.value;
@@ -15,69 +22,87 @@ const durabilityLabel = computed(() => {
     ? undefined
     : t(`customer.durability.${value.durability}`);
 });
-
-const startOver = async () => {
-  await resetCustomerRuntime();
-  await router.push(CUSTOMER_PATHS.situation);
-};
 </script>
 
 <template>
-  <div class="shell">
-    <header>
-      <p>{{ t("customer.appName") }}</p>
-      <p v-if="durabilityLabel" class="durability">{{ durabilityLabel }}</p>
-    </header>
+  <div class="app" :class="{ walk: !isDesigned }">
+    <AppHeader />
+    <p v-if="durabilityLabel && !isDesigned" class="durability">
+      {{ durabilityLabel }}
+    </p>
     <main>
       <router-view />
     </main>
-    <footer>
-      <button type="button" @click="startOver">
-        {{ t("customer.startOver") }}
-      </button>
-    </footer>
   </div>
 </template>
 
 <style>
 :root {
-  color: #122017;
-  font-family: system-ui, sans-serif;
+  --color-white: #ffffff;
+  --color-divider: #e2e5e6;
+  --color-accent: #3c64b1;
+  --color-muted: #6c7476;
+  --color-body: #373f41;
+  --color-footer: #f4f5f4;
+  --color-social: #e9ebef;
+  --font-sans: Inter, system-ui, sans-serif;
+  --font-logo: Lato, Inter, system-ui, sans-serif;
+  --font-button: Mulish, Inter, system-ui, sans-serif;
+  color: var(--color-body);
+  font-family: var(--font-sans);
   line-height: 1.5;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  background: #f4f1ea;
+  background: var(--color-white);
 }
 
-.shell {
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.app {
   box-sizing: border-box;
-  max-width: 36rem;
+  max-width: 402px;
   min-height: 100vh;
   margin: 0 auto;
-  padding: 1.25rem;
+  background: var(--color-white);
 }
 
-header,
-form,
-section {
+.walk main {
+  padding: 1.25rem 16px 2rem;
+}
+
+.walk form,
+.walk section {
   display: grid;
   gap: 0.75rem;
 }
 
 .durability,
-.error,
 .muted {
+  margin: 0 16px;
+  color: var(--color-muted);
+}
+
+.walk .durability {
+  margin: 0.75rem 16px 0;
+}
+
+.walk .error,
+.walk .muted {
   margin: 0;
 }
 
 .error {
   color: #8a1f1f;
-}
-
-.muted {
-  color: #4d5b52;
 }
 
 .advice {
@@ -95,8 +120,8 @@ section {
   padding-left: 1.25rem;
 }
 
-label,
-fieldset {
+.walk label,
+.walk fieldset {
   display: grid;
   gap: 0.35rem;
   border: 0;
@@ -104,21 +129,17 @@ fieldset {
   margin: 0;
 }
 
-input[type="text"],
-input[type="tel"],
-input[type="email"],
-select {
+.walk input[type="text"],
+.walk input[type="tel"],
+.walk input[type="email"],
+.walk select {
   padding: 0.6rem 0.7rem;
   font: inherit;
 }
 
-button {
+.walk button {
   justify-self: start;
   padding: 0.65rem 0.9rem;
   font: inherit;
-}
-
-footer {
-  margin-top: 2rem;
 }
 </style>

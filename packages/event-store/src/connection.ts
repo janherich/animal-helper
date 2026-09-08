@@ -79,6 +79,67 @@ export const resolveMigrationUrl = (env: NodeJS.ProcessEnv): string => {
   return resolveDatabaseUrl(env);
 };
 
+const SQL_DATABASE_NAME = /^[a-z][a-z0-9_]*$/u;
+
+export const assertSqlDatabaseName = (databaseName: string): void => {
+  if (!SQL_DATABASE_NAME.test(databaseName)) {
+    throw new Error("Database name must be a lowercase SQL identifier");
+  }
+};
+
+export const readDatabaseName = (
+  connectionString: string,
+  name: string = "DATABASE_URL",
+): string => {
+  assertDatabaseUrlDoesNotOverrideTls(connectionString, name);
+  let databaseUrl: URL;
+  try {
+    databaseUrl = new URL(connectionString);
+  } catch {
+    throw new Error(`${name} must be a PostgreSQL URL`);
+  }
+
+  const database = decodeURIComponent(
+    databaseUrl.pathname.replace(/^\/+/u, ""),
+  ).replace(/\/+$/u, "");
+  if (database.length === 0 || database.includes("/")) {
+    throw new Error(`${name} must point at one database`);
+  }
+  if (!SQL_DATABASE_NAME.test(database)) {
+    throw new Error(`${name} database name must be a lowercase SQL identifier`);
+  }
+  return database;
+};
+
+export const replaceDatabaseName = (
+  connectionString: string,
+  databaseName: string,
+  name: string = "DATABASE_URL",
+): string => {
+  assertSqlDatabaseName(databaseName);
+  readDatabaseName(connectionString, name);
+  const databaseUrl = new URL(connectionString);
+  databaseUrl.pathname = `/${databaseName}`;
+  return databaseUrl.toString();
+};
+
+export const databaseTarget = (
+  connectionString: string,
+  name: string = "DATABASE_URL",
+): { host: string; port: string; database: string } => {
+  const databaseUrl = new URL(connectionString);
+  return {
+    host: databaseUrl.hostname,
+    port: databaseUrl.port === "" ? "5432" : databaseUrl.port,
+    database: readDatabaseName(connectionString, name),
+  };
+};
+
+export const isLoopbackHostname = (hostname: string): boolean =>
+  hostname === "127.0.0.1" ||
+  hostname === "localhost" ||
+  hostname.endsWith(".localhost");
+
 export const createSqlOptions = (
   env: NodeJS.ProcessEnv,
   overrides: { max?: number } = {},

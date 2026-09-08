@@ -6,6 +6,7 @@ import {
   applyCheckoutLocalEnvironment,
   ensureLocalDbEnvironment,
   loadLocalDbEnvironment,
+  resolveIntegrationDatabaseUrl,
 } from "./local-db-env.mjs";
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
@@ -16,6 +17,13 @@ const migrateCli = path.join(
   "event-store",
   "src",
   "migrate-cli.ts",
+);
+const ensureIntegrationCli = path.join(
+  repositoryRoot,
+  "packages",
+  "event-store",
+  "src",
+  "ensure-integration-database-cli.ts",
 );
 const stripTypesResolve = pathToFileURL(
   path.join(scriptDirectory, "strip-types-resolve.mjs"),
@@ -42,6 +50,34 @@ export async function runDatabaseMigrations(options = {}) {
     process.execPath,
     ["--experimental-strip-types", "--import", stripTypesResolve, migrateCli],
     { cwd, environment },
+  );
+
+  const testUrl = resolveIntegrationDatabaseUrl(environment);
+  if (testUrl === undefined) {
+    return;
+  }
+
+  await run(
+    process.execPath,
+    [
+      "--experimental-strip-types",
+      "--import",
+      stripTypesResolve,
+      ensureIntegrationCli,
+    ],
+    { cwd, environment },
+  );
+  await run(
+    process.execPath,
+    ["--experimental-strip-types", "--import", stripTypesResolve, migrateCli],
+    {
+      cwd,
+      environment: {
+        ...environment,
+        DATABASE_URL: testUrl,
+        DATABASE_MIGRATION_URL: testUrl,
+      },
+    },
   );
 }
 

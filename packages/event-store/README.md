@@ -13,7 +13,8 @@ npm run dev
 pnpm --filter @animal-helper/event-store test
 ```
 
-`pnpm db:up` starts Docker Postgres and applies checksummed migrations.
-`npm run dev` does that, then starts the HTTP API. Local credentials live in
-`.local/db.env`. Production uses Neon; see
+`pnpm db:up` starts Docker Postgres and applies checksummed migrations to the
+application database and to a sibling `animal_helper_test` database used by
+integration tests. `npm run dev` does that, then starts the HTTP API. Local
+credentials live in `.local/db.env`. Production uses Neon; see
 [Persistence](../../docs/operations/persistence.md).

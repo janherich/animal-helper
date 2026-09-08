@@ -6,8 +6,10 @@ import ContactScreen from "./screens/ContactScreen.vue";
 import DetailsScreen from "./screens/DetailsScreen.vue";
 import GuideScreen from "./screens/GuideScreen.vue";
 import LocationScreen from "./screens/LocationScreen.vue";
+import PhotoScreen from "./screens/PhotoScreen.vue";
 import SituationScreen from "./screens/SituationScreen.vue";
 import ThankYouScreen from "./screens/ThankYouScreen.vue";
+import { PHOTO_PATH } from "./photo.js";
 import {
   currentKindKey,
   currentSituationType,
@@ -27,6 +29,11 @@ export const router = createRouter({
       path: CUSTOMER_PATHS.location,
       name: "location",
       component: LocationScreen,
+    },
+    {
+      path: PHOTO_PATH,
+      name: "photo",
+      component: PhotoScreen,
     },
     {
       path: CUSTOMER_PATHS.details,

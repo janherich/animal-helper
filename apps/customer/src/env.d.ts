@@ -7,6 +7,16 @@ declare module "*.vue" {
   export default component;
 }
 
+declare module "*.svg" {
+  const src: string;
+  export default src;
+}
+
+declare module "*.png" {
+  const src: string;
+  export default src;
+}
+
 /* Vite augments these names by interface merging. */
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 interface ImportMetaEnv {

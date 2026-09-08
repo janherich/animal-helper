@@ -8,8 +8,10 @@ import {
   applyCheckoutLocalEnvironment,
   checkoutIdentity,
   createLocalDbEnvironment,
+  deriveIntegrationDatabaseUrl,
   ensureLocalDbEnvironment,
   loadLocalDbEnvironment,
+  resolveIntegrationDatabaseUrl,
 } from "./local-db-env.mjs";
 
 const passwordFrom = (random) => random(24).toString("base64url");
@@ -49,6 +51,10 @@ describe("local database environment", () => {
       assert.equal(
         environment.DATABASE_URL,
         `postgresql://animal_helper:${passwordFrom(Buffer.alloc.bind(Buffer))}@127.0.0.1:5517/animal_helper`,
+      );
+      assert.equal(
+        environment.DATABASE_TEST_URL,
+        `postgresql://animal_helper:${passwordFrom(Buffer.alloc.bind(Buffer))}@127.0.0.1:5517/animal_helper_test`,
       );
       assert.equal(
         environment.DATABASE_MIGRATION_URL,
@@ -118,5 +124,49 @@ describe("local database environment", () => {
     } finally {
       await rm(directory, { recursive: true, force: true });
     }
+  });
+
+  it("derives a sibling integration database and refuses the app database", () => {
+    const appUrl =
+      "postgresql://animal_helper:local@127.0.0.1:55432/animal_helper";
+    assert.equal(
+      deriveIntegrationDatabaseUrl(appUrl),
+      "postgresql://animal_helper:local@127.0.0.1:55432/animal_helper_test",
+    );
+    assert.equal(
+      resolveIntegrationDatabaseUrl({ DATABASE_URL: appUrl }),
+      "postgresql://animal_helper:local@127.0.0.1:55432/animal_helper_test",
+    );
+    assert.equal(
+      resolveIntegrationDatabaseUrl({
+        DATABASE_ENVIRONMENT: "production",
+        DATABASE_URL: appUrl,
+      }),
+      undefined,
+    );
+    assert.equal(
+      resolveIntegrationDatabaseUrl({
+        DATABASE_URL:
+          "postgresql://animal_helper:local@neon.example/animal_helper",
+      }),
+      undefined,
+    );
+    assert.throws(
+      () =>
+        resolveIntegrationDatabaseUrl({
+          DATABASE_URL: appUrl,
+          DATABASE_TEST_URL: appUrl,
+        }),
+      /must end with _test/,
+    );
+    const testUrl = deriveIntegrationDatabaseUrl(appUrl);
+    assert.throws(
+      () =>
+        resolveIntegrationDatabaseUrl({
+          DATABASE_URL: testUrl,
+          DATABASE_TEST_URL: testUrl,
+        }),
+      /different database/,
+    );
   });
 });

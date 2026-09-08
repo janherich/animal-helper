@@ -3,6 +3,9 @@ import { describe, expect, it } from "vitest";
 import {
   assertDatabaseUrlDoesNotOverrideTls,
   createSqlOptions,
+  isLoopbackHostname,
+  readDatabaseName,
+  replaceDatabaseName,
   resolveDatabaseUrl,
   resolveMigrationUrl,
   resolveSslMode,
@@ -69,5 +72,22 @@ describe("database connection policy", () => {
     expect(verified.max).toBe(1);
     expect(verified.ssl).toEqual({ rejectUnauthorized: true });
     expect(typeof verified.onnotice).toBe("function");
+  });
+
+  it("reads and replaces a lowercase database name", () => {
+    expect(readDatabaseName(localUrl)).toBe("animal_helper");
+    expect(replaceDatabaseName(localUrl, "animal_helper_test")).toBe(
+      "postgresql://animal_helper:secret@127.0.0.1:55432/animal_helper_test",
+    );
+    expect(() =>
+      readDatabaseName("postgresql://127.0.0.1/AnimalHelper"),
+    ).toThrow(/lowercase SQL identifier/);
+  });
+
+  it("treats only loopback hosts as local Postgres", () => {
+    expect(isLoopbackHostname("127.0.0.1")).toBe(true);
+    expect(isLoopbackHostname("localhost")).toBe(true);
+    expect(isLoopbackHostname("admin.localhost")).toBe(true);
+    expect(isLoopbackHostname("neon.example")).toBe(false);
   });
 });

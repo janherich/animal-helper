@@ -47,6 +47,7 @@ jobs:
       - name: Verify
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/animal_helper
+          DATABASE_TEST_URL: postgres://postgres:postgres@localhost:5432/animal_helper_test
           DATABASE_SSL_MODE: disable
           CAPABILITY_PEPPER: 00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff
         run: pnpm check

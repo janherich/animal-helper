@@ -24,6 +24,7 @@ export const LOCAL_DB_KEYS = new Set([
   "DATABASE_MIGRATION_URL",
   "DATABASE_POOL_SIZE",
   "DATABASE_SSL_MODE",
+  "DATABASE_TEST_URL",
   "DATABASE_URL",
 ]);
 
@@ -132,6 +133,7 @@ export function createLocalDbEnvironment(
   connectionUrl.password = password;
   connectionUrl.port = port;
   connectionUrl.pathname = `/${database}`;
+  const appUrl = connectionUrl.toString();
 
   return {
     AH_DB_IMAGE: overrides.AH_DB_IMAGE ?? "postgres:16-alpine",
@@ -146,11 +148,106 @@ export function createLocalDbEnvironment(
     API_PORT: apiPort,
     CAPABILITY_PEPPER: overrides.CAPABILITY_PEPPER ?? LOCAL_CAPABILITY_PEPPER,
     DATABASE_ENVIRONMENT: "local",
-    DATABASE_MIGRATION_URL: connectionUrl.toString(),
+    DATABASE_MIGRATION_URL: appUrl,
     DATABASE_POOL_SIZE: overrides.DATABASE_POOL_SIZE ?? "8",
     DATABASE_SSL_MODE: "disable",
-    DATABASE_URL: connectionUrl.toString(),
+    DATABASE_TEST_URL: deriveIntegrationDatabaseUrl(appUrl),
+    DATABASE_URL: appUrl,
   };
+}
+
+const SQL_DATABASE_NAME = /^[a-z][a-z0-9_]*$/;
+const INTEGRATION_DATABASE_SUFFIX = "_test";
+
+/** @param {string} connectionString @param {string} [name] */
+export function readDatabaseName(connectionString, name = "DATABASE_URL") {
+  let databaseUrl;
+  try {
+    databaseUrl = new URL(connectionString);
+  } catch {
+    throw new Error(`${name} must be a PostgreSQL URL`);
+  }
+  if (
+    databaseUrl.protocol !== "postgres:" &&
+    databaseUrl.protocol !== "postgresql:"
+  ) {
+    throw new Error(`${name} must use the postgres or postgresql scheme`);
+  }
+  const database = decodeURIComponent(
+    databaseUrl.pathname.replace(/^\/+/, ""),
+  ).replace(/\/+$/, "");
+  if (database.length === 0 || database.includes("/")) {
+    throw new Error(`${name} must point at one database`);
+  }
+  if (!SQL_DATABASE_NAME.test(database)) {
+    throw new Error(`${name} database name must be a lowercase SQL identifier`);
+  }
+  return database;
+}
+
+/** @param {string} connectionString */
+export function deriveIntegrationDatabaseUrl(connectionString) {
+  const database = readDatabaseName(connectionString, "DATABASE_URL");
+  if (database.endsWith(INTEGRATION_DATABASE_SUFFIX)) {
+    throw new Error(
+      "DATABASE_URL already points at the integration test database",
+    );
+  }
+  const databaseUrl = new URL(connectionString);
+  databaseUrl.pathname = `/${database}${INTEGRATION_DATABASE_SUFFIX}`;
+  return databaseUrl.toString();
+}
+
+/**
+ * @param {NodeJS.ProcessEnv | Record<string, string | undefined>} env
+ * @returns {string | undefined}
+ */
+export function resolveIntegrationDatabaseUrl(env) {
+  if (env.DATABASE_ENVIRONMENT === "production") {
+    return undefined;
+  }
+  const primary = env.DATABASE_URL?.trim();
+  if (primary === undefined || primary.length === 0) {
+    return undefined;
+  }
+  const configured = env.DATABASE_TEST_URL?.trim();
+  const testUrl =
+    configured === undefined || configured.length === 0
+      ? deriveIntegrationDatabaseUrl(primary)
+      : configured;
+  const testDatabase = readDatabaseName(testUrl, "DATABASE_TEST_URL");
+  if (!testDatabase.endsWith(INTEGRATION_DATABASE_SUFFIX)) {
+    throw new Error("DATABASE_TEST_URL database name must end with _test");
+  }
+  const appDatabase = readDatabaseName(primary, "DATABASE_URL");
+  const appUrl = new URL(primary);
+  if (
+    appUrl.hostname !== "127.0.0.1" &&
+    appUrl.hostname !== "localhost" &&
+    !appUrl.hostname.endsWith(".localhost")
+  ) {
+    return undefined;
+  }
+  const integrationUrl = new URL(testUrl);
+  if (
+    integrationUrl.hostname !== "127.0.0.1" &&
+    integrationUrl.hostname !== "localhost" &&
+    !integrationUrl.hostname.endsWith(".localhost")
+  ) {
+    throw new Error("DATABASE_TEST_URL must be loopback Postgres");
+  }
+  const appPort = appUrl.port === "" ? "5432" : appUrl.port;
+  const testPort = integrationUrl.port === "" ? "5432" : integrationUrl.port;
+  if (
+    appUrl.hostname === integrationUrl.hostname &&
+    appPort === testPort &&
+    appDatabase === testDatabase
+  ) {
+    throw new Error(
+      "DATABASE_TEST_URL must be a different database than DATABASE_URL",
+    );
+  }
+  return testUrl;
 }
 
 /** @param {string} project */

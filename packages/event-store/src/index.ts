@@ -33,13 +33,24 @@ export {
 } from "./migrations.js";
 export {
   assertDatabaseUrlDoesNotOverrideTls,
+  assertSqlDatabaseName,
   createSqlOptions,
+  databaseTarget,
+  isLoopbackHostname,
+  readDatabaseName,
+  replaceDatabaseName,
   resolveDatabaseUrl,
   resolveMigrationUrl,
   resolveSslMode,
   type DatabaseSslMode,
   type SqlClientOptions,
 } from "./connection.js";
+export {
+  deriveIntegrationDatabaseUrl,
+  ensureIntegrationDatabase,
+  INTEGRATION_DATABASE_SUFFIX,
+  resolveIntegrationDatabaseUrl,
+} from "./integration-database.js";
 export {
   getPublicStatus,
   projectCase,

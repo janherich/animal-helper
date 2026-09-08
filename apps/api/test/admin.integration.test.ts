@@ -8,7 +8,10 @@ import {
   createSqlOptions,
   defaultMigrationsDirectory,
   deleteOperatorAccount,
+  ensureIntegrationDatabase,
   parseCapabilityPepper,
+  readDatabaseName,
+  resolveIntegrationDatabaseUrl,
 } from "@animal-helper/event-store";
 import postgres, { type Sql } from "postgres";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
@@ -24,7 +27,7 @@ applyCheckoutLocalEnvironment(
   process.env,
 );
 
-const databaseUrl = process.env.DATABASE_URL;
+const databaseUrl = resolveIntegrationDatabaseUrl(process.env);
 const pepper = parseCapabilityPepper(
   process.env.CAPABILITY_PEPPER ??
     "00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff",
@@ -67,9 +70,14 @@ describe.skipIf(databaseUrl === undefined)(
 
     beforeAll(async () => {
       if (databaseUrl === undefined) {
-        throw new Error("DATABASE_URL is required");
+        throw new Error("DATABASE_TEST_URL is required");
       }
-      sql = postgres(databaseUrl, createSqlOptions(process.env, { max: 1 }));
+      const integrationUrl = await ensureIntegrationDatabase(process.env);
+      if (integrationUrl === undefined) {
+        throw new Error("DATABASE_TEST_URL is required");
+      }
+      sql = postgres(integrationUrl, createSqlOptions(process.env, { max: 1 }));
+      expect(readDatabaseName(integrationUrl)).toMatch(/_test$/u);
       handle = createApiHandler({
         gateway: createMemoryGateway(),
         pepper,
