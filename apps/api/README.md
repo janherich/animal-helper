@@ -15,9 +15,10 @@ capabilities, command bodies, or `Authorization` headers.
 
 ## Local endpoints
 
-`npm run dev` starts isolated Postgres, this process on `http://127.0.0.1:8787`,
+`npm run dev` starts Docker Postgres, this process on `http://127.0.0.1:8787`,
 and the customer Vite app on `http://127.0.0.1:5173`. Loopback API processes
-default CORS to that exact origin.
+default CORS to that exact origin. Ctrl+C does not stop Postgres; use
+`pnpm db:down`.
 
 | Method | Path        | Auth                                    | Purpose                        |
 | ------ | ----------- | --------------------------------------- | ------------------------------ |

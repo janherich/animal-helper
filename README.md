@@ -28,8 +28,8 @@ resources and jurisdiction rules are separate packages.
 flowchart LR
   Customer["Customer PWA<br/>Vercel static hosting"]
   Admin["Backoffice PWA<br/>Vercel static hosting"]
-  API["Supabase Edge API<br/>command and query boundary"]
-  DB[("PostgreSQL<br/>events + projections")]
+  API["Command API<br/>command and query boundary"]
+  DB[("PostgreSQL<br/>Neon in production")]
   Media[("Private R2 bucket<br/>EU jurisdiction")]
   Mail["Email provider"]
   Bodies["Authorities / volunteers"]
@@ -53,7 +53,7 @@ and a portability choice.
 apps/
   customer/       anonymous, offline-capable Vue PWA
   backoffice/     authenticated Vue administration PWA
-  api/            Supabase Edge Function/API composition root
+  api/            HTTP command/status composition root
 packages/
   domain/         pure domain types, event evolution, and invariants
   contracts/      versioned transport schemas
@@ -82,6 +82,7 @@ Start with:
 - [Security requirements](docs/security/security-requirements.md)
 - [Threat model](docs/security/threat-model.md)
 - [Cost model](docs/operations/cost-model.md)
+- [Persistence](docs/operations/persistence.md)
 - [Entire checkpoint workflow](docs/operations/entire.md)
 
 ## Local development
@@ -108,12 +109,15 @@ The executable foundation is a framework-free domain core, versioned
 case-command contracts, a local PostgreSQL event store, a loopback HTTP API, and
 a Vue customer shell for the injured/stray walk.
 
-Postgres 16 on the machine is enough. Supabase is not required. `npm run dev`
-starts an isolated cluster in `.local/postgres` (port 55432), applies
-migrations, serves the API on `http://127.0.0.1:8787`, and serves the customer
-app on `http://127.0.0.1:5173`. It does not use a system-wide server on 5432.
+Local Postgres is Docker Compose (`postgres:16-alpine` on loopback port 55432).
+A running Docker Engine with Compose v2 is required. Homebrew Postgres and the
+Supabase CLI are not. `npm run dev` starts that container, applies migrations,
+serves the API on `http://127.0.0.1:8787`, and serves the customer app on
+`http://127.0.0.1:5173`. Ctrl+C stops the API and Vite only; the database stays
+up.
 
 ```sh
+pnpm db:up
 npm run dev
 ```
 
@@ -123,11 +127,15 @@ In another terminal:
 pnpm check
 ```
 
-Stop Postgres, the API, and Vite with Ctrl+C in the `dev` terminal, or:
+Stop the API and Vite with Ctrl+C. Stop the database when you no longer need it:
 
 ```sh
-npm run dev:stop
+pnpm db:down
 ```
+
+Production uses Neon in a European region. See
+[Persistence](docs/operations/persistence.md) and
+[ADR 0008](docs/architecture/decisions/0008-docker-local-neon-prod.md).
 
 ## Licence
 

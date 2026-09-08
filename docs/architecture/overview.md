@@ -2,7 +2,7 @@
 
 Status: **proposed baseline**
 
-Last reviewed: 2026-08-25
+Last reviewed: 2026-09-07
 
 This document defines technical boundaries, not product screens. Domain
 vocabulary and transitions will be refined with the product team without
@@ -56,8 +56,11 @@ boundary for domain commands.
 - `apps/customer` and `apps/backoffice`: Vue 3 + Vite static PWAs on Vercel
   ([ADR 0007](decisions/0007-vue-static-pwas.md)). Local `npm run dev` serves
   the customer shell at `http://127.0.0.1:5173`.
-- `apps/api` / `supabase/functions`: Supabase Edge Functions (TypeScript/Deno).
-- state: Supabase PostgreSQL in a selected European region where available.
+- `apps/api`: loopback Node HTTP API today; a later Edge Function host remains
+  an adapter, not a domain dependency.
+- state: ordinary PostgreSQL. Docker Compose locally; Neon in a European region
+  in production ([ADR 0008](decisions/0008-docker-local-neon-prod.md)). SQL
+  files stay under `supabase/migrations` so a future Edge host can reuse them.
 - media: private Cloudflare R2 bucket with an EU data-jurisdiction restriction.
 - bot challenge: Cloudflare Turnstile, enforced server-side when risk rules
   require it.
@@ -116,8 +119,8 @@ One database transaction appends events, updates synchronous projections, and
 enqueues required effects. A unique `command_id` makes offline retries
 idempotent; `(stream_id, stream_version)` provides optimistic concurrency.
 
-See [Domain events](domain-events.md) and
-[Data lifecycle](data-and-retention.md), and the
+See [Domain events](domain-events.md), [Data lifecycle](data-and-retention.md),
+[Persistence](../operations/persistence.md), and the
 [administered guidance flow](administered-guidance-flow.md).
 
 ## Anonymous capability access

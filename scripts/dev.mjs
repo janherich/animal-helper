@@ -1,53 +1,22 @@
-import { execFileSync, spawn } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { spawn } from "node:child_process";
+import { existsSync } from "node:fs";
 import path from "node:path";
-import { pathToFileURL, fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
+
+import { applyCheckoutLocalEnvironment } from "./local-db-env.mjs";
+import { runLocalDatabaseAction } from "./local-db.mjs";
 
 const rootDirectory = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
-);
-const postgresScript = path.join(
-  rootDirectory,
-  "scripts",
-  "local-postgres.mjs",
 );
 const apiMain = path.join(rootDirectory, "apps", "api", "src", "main.ts");
 const stripTypesResolve = pathToFileURL(
   path.join(rootDirectory, "scripts", "strip-types-resolve.mjs"),
 ).href;
 
-const loadEnvFile = (filePath) => {
-  if (!existsSync(filePath)) {
-    return;
-  }
-
-  for (const line of readFileSync(filePath, "utf8").split("\n")) {
-    const trimmed = line.trim();
-    if (trimmed === "" || trimmed.startsWith("#")) {
-      continue;
-    }
-
-    const separator = trimmed.indexOf("=");
-    if (separator === -1) {
-      continue;
-    }
-
-    const key = trimmed.slice(0, separator);
-    const value = trimmed.slice(separator + 1);
-
-    if (process.env[key] === undefined) {
-      process.env[key] = value;
-    }
-  }
-};
-
-execFileSync(process.execPath, [postgresScript, "start"], {
-  stdio: "inherit",
-});
-
-loadEnvFile(path.join(rootDirectory, ".env"));
-loadEnvFile(path.join(rootDirectory, ".local", "postgres", "env"));
+await runLocalDatabaseAction("up", { cwd: rootDirectory });
+applyCheckoutLocalEnvironment(rootDirectory, process.env);
 
 const customerDirectory = path.join(rootDirectory, "apps", "customer");
 const viteBin = path.join(customerDirectory, "node_modules", ".bin", "vite");
@@ -74,19 +43,12 @@ const vite = spawn(viteBin, ["--host", "127.0.0.1", "--port", "5173"], {
 
 let shuttingDown = false;
 
-const stopPostgres = () => {
-  execFileSync(process.execPath, [postgresScript, "stop"], {
-    stdio: "inherit",
-  });
-};
-
 const shutdown = (exitCode) => {
   if (shuttingDown) {
     return;
   }
 
   shuttingDown = true;
-  clearInterval(postgresCheck);
 
   if (api.exitCode === null) {
     api.kill("SIGTERM");
@@ -96,27 +58,11 @@ const shutdown = (exitCode) => {
     vite.kill("SIGTERM");
   }
 
-  try {
-    stopPostgres();
-  } catch (error) {
-    console.error(error);
-  }
-
+  console.log(
+    "Postgres stays running. Stop it with pnpm db:down when you no longer need it.",
+  );
   process.exit(exitCode);
 };
-
-const postgresCheck = setInterval(() => {
-  try {
-    execFileSync(process.execPath, [postgresScript, "status"], {
-      stdio: "ignore",
-    });
-  } catch {
-    console.error(
-      "Local Postgres stopped unexpectedly. See .local/postgres/postgres.log.",
-    );
-    shutdown(1);
-  }
-}, 2000);
 
 api.on("exit", (code) => {
   if (shuttingDown) {
@@ -140,5 +86,5 @@ process.on("SIGINT", () => shutdown(0));
 process.on("SIGTERM", () => shutdown(0));
 
 console.log(
-  "Press Ctrl+C to stop Postgres, the API, and the customer Vite app.",
+  "Press Ctrl+C to stop the API and the customer Vite app. Postgres stays up.",
 );

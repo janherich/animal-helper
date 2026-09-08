@@ -202,11 +202,12 @@ For every authority or volunteer organisation:
   instructions for Animal Helper's purpose, not merely because a contract calls
   it a processor.
 
-Supabase, Cloudflare/R2/Turnstile, Vercel, the email provider, monitoring,
-support, and any other vendor need a data-flow-specific role assessment. For
-processors, complete Article 28 agreements, verify sufficient guarantees,
-identify all subprocessors, establish breach/deletion/audit terms, and prevent
-providers from reusing case data for their own analytics or AI training.
+Neon, Cloudflare/R2/Turnstile, Vercel, a later Edge Function host if any, the
+email provider, monitoring, support, and any other vendor need a
+data-flow-specific role assessment. For processors, complete Article 28
+agreements, verify sufficient guarantees, identify all subprocessors, establish
+breach/deletion/audit terms, and prevent providers from reusing case data for
+their own analytics or AI training.
 
 An EU storage region does not prove that all access stays in the EEA. Map
 support, telemetry, subprocessors, remote administration, and onward transfers.

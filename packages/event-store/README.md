@@ -13,5 +13,7 @@ npm run dev
 pnpm --filter @animal-helper/event-store test
 ```
 
-`npm run dev` starts the isolated cluster and the HTTP API, and writes
-`DATABASE_URL` to `.env` (if missing) and `.local/postgres/env`.
+`pnpm db:up` starts Docker Postgres and applies checksummed migrations.
+`npm run dev` does that, then starts the HTTP API. Local credentials live in
+`.local/db.env`. Production uses Neon; see
+[Persistence](../../docs/operations/persistence.md).

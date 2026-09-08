@@ -21,9 +21,10 @@ the [case-matrix screen map](../../docs/product/case-matrices/screen-map.md):
 helped”. Species, do/don't, and typed contacts are not rendered yet; keys live
 in `@animal-helper/guidance`.
 
-`npm run dev` from the repository root starts isolated Postgres, the API on
+`npm run dev` from the repository root starts Docker Postgres, the API on
 `http://127.0.0.1:8787`, and this Vite app on `http://127.0.0.1:5173`. The local
-API allows that exact origin. The in-memory store resets on reload.
+API allows that exact origin. The in-memory store resets on reload. Ctrl+C does
+not stop Postgres; use `pnpm db:down`.
 
 Its remaining technical responsibilities are:
 

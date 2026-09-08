@@ -20,7 +20,26 @@ export {
   parseCapabilityPepper,
   sha256Buffer,
 } from "./hash.js";
-export { applyMigrations, defaultMigrationsDirectory } from "./migrations.js";
+export {
+  applyCheckoutLocalEnvironment,
+  LOCAL_DB_ENV_RELATIVE,
+  LOCAL_DB_KEYS,
+  parseEnvironment,
+} from "./local-env.js";
+export {
+  applyMigrations,
+  defaultMigrationsDirectory,
+  migrationChecksum,
+} from "./migrations.js";
+export {
+  assertDatabaseUrlDoesNotOverrideTls,
+  createSqlOptions,
+  resolveDatabaseUrl,
+  resolveMigrationUrl,
+  resolveSslMode,
+  type DatabaseSslMode,
+  type SqlClientOptions,
+} from "./connection.js";
 export {
   getPublicStatus,
   projectCase,

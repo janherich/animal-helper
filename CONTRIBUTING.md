@@ -13,10 +13,13 @@ Thank you for helping Animal Helper.
 
 ## Development
 
-Use Node.js 24 LTS and the exact pnpm version declared in `package.json`.
+Use Node.js 24 LTS, the exact pnpm version declared in `package.json`, and a
+running Docker Engine with Compose v2. See
+[Persistence](docs/operations/persistence.md).
 
 ```sh
 pnpm install
+pnpm db:up
 pnpm check
 ```
 

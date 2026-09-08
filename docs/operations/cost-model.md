@@ -2,7 +2,7 @@
 
 Status: **planning estimate**
 
-Prices checked: 2026-07-29
+Prices checked: 2026-09-07
 
 Currency: USD unless stated otherwise; taxes and exchange rates excluded
 
@@ -11,22 +11,24 @@ are a pilot constraint, not an availability or backup guarantee.
 
 ## Provider assumptions
 
-| Service                              | Free/pilot allowance used by this plan                                                             | Paid trigger                                                                                      |
-| ------------------------------------ | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| GitHub public repository and Actions | standard hosted runners are free for public repositories                                           | private-repo minutes/storage or paid governance                                                   |
-| Vercel                               | Hobby is $0 for personal, non-commercial use                                                       | Pro is $20/month; confirm eligibility when an organisation owns/deploys the project               |
-| Supabase                             | Free: 500 MB database, 50,000 MAU, 1 GB storage, 500,000 Edge Function calls; no automatic backups | Pro: $25/month, 8 GB database, 100 GB storage, 7-day daily backups; Edge includes 2 million calls |
-| Cloudflare R2 Standard               | 10 GB-month storage, 1 million Class A and 10 million Class B operations monthly; egress free      | $0.015/GB-month above free storage plus operation overage                                         |
-| Resend                               | 3,000 emails/month and 100/day                                                                     | Pro: $20/month for 50,000 emails                                                                  |
-| Domain                               | no meaningful free assumption                                                                      | roughly EUR 10–25/year depending on registrar/TLD                                                 |
+| Service                              | Free/pilot allowance used by this plan                                                        | Paid trigger                                                                          |
+| ------------------------------------ | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| GitHub public repository and Actions | standard hosted runners are free for public repositories                                      | private-repo minutes/storage or paid governance                                       |
+| Vercel                               | Hobby is $0 for personal, non-commercial use                                                  | Pro is $20/month; confirm eligibility when an organisation owns/deploys the project   |
+| Neon PostgreSQL                      | Free: 0.5 GB storage, 100 CU-hours/project, 6-hour restore, scale-to-zero; no SLA             | Launch: usage-based compute/storage, 7-day restore; Scale adds SLA/compliance options |
+| Supabase (optional later Edge host)  | Free: 500,000 Edge Function calls; database is not used when Neon is the store                | Pro if an Edge host is later required and exceeds the free function allowance         |
+| Cloudflare R2 Standard               | 10 GB-month storage, 1 million Class A and 10 million Class B operations monthly; egress free | $0.015/GB-month above free storage plus operation overage                             |
+| Resend                               | 3,000 emails/month and 100/day                                                                | Pro: $20/month for 50,000 emails                                                      |
+| Domain                               | no meaningful free assumption                                                                 | roughly EUR 10–25/year depending on registrar/TLD                                     |
 
 Sources:
 
 - [Vercel pricing](https://vercel.com/pricing) and
   [Vercel terms](https://vercel.com/legal/terms)
-- [Supabase pricing](https://supabase.com/pricing),
-  [Edge Function pricing](https://supabase.com/docs/guides/functions/pricing),
-  and [runtime limits](https://supabase.com/docs/guides/functions/limits)
+- [Neon plans](https://neon.com/docs/introduction/plans) and
+  [Neon regions](https://neon.com/docs/introduction/regions)
+- [Supabase pricing](https://supabase.com/pricing) (Edge Functions only if that
+  adapter is adopted later)
 - [Cloudflare R2 pricing](https://developers.cloudflare.com/r2/pricing/)
 - [Resend pricing](https://resend.com/docs/knowledge-base/what-is-resend-pricing)
 - [GitHub Actions billing](https://docs.github.com/en/billing/concepts/product-billing/github-actions)
@@ -51,9 +53,8 @@ rounding add overhead. Lifecycle rules must remove staging objects and closed
 cases.
 
 At 50 cases/day and ten API calls per case, intake generates about 15,000
-function calls/month before backoffice activity—well below the free function
-allowance. The database, not function calls, is the more likely Supabase
-free-tier constraint.
+requests/month before backoffice activity. The database size and restore window,
+not request count, are the more likely Neon free-tier constraints.
 
 At two messages per case, the expected scenario uses about 1,800 emails/month
 and 60/day. The stress scenario reaches the Resend daily free cap exactly before
@@ -61,17 +62,20 @@ administrator/account messages, retries, or extra recipients.
 
 ## Monthly operating scenarios
 
-| Scenario                              | Vercel | Supabase |               R2 | Email |  Estimated monthly total |
-| ------------------------------------- | -----: | -------: | ---------------: | ----: | -----------------------: |
-| Development / synthetic pilot         |     $0 |       $0 |               $0 |    $0 |           $0 plus domain |
-| Public pilot accepting no-backup risk |     $0 |       $0 |       usually $0 |    $0 |           $0 plus domain |
-| Recommended durable baseline          |     $0 |      $25 |       usually $0 |    $0 |    about $25 plus domain |
-| Organisation needs Vercel Pro         |    $20 |      $25 |       usually $0 |    $0 |    about $45 plus domain |
-| Paid email also required              |    $20 |      $25 | usually under $1 |   $20 | about $65–66 plus domain |
+| Scenario                             | Vercel |         Neon |               R2 | Email | Estimated monthly total     |
+| ------------------------------------ | -----: | -----------: | ---------------: | ----: | --------------------------- |
+| Development / synthetic pilot        |     $0 |           $0 |               $0 |    $0 | $0 plus domain              |
+| Public pilot accepting short restore |     $0 |           $0 |       usually $0 |    $0 | $0 plus domain              |
+| Recommended durable baseline         |     $0 | Launch usage |       usually $0 |    $0 | Neon Launch plus domain     |
+| Organisation needs Vercel Pro        |    $20 | Launch usage |       usually $0 |    $0 | Vercel Pro plus Neon Launch |
+| Paid email also required             |    $20 | Launch usage | usually under $1 |   $20 | plus Resend Pro             |
 
-The recommended baseline buys database backups and headroom. It does not buy a
-service-level agreement for the whole multi-provider system or eliminate the
-need to test restores.
+Local development uses Docker and does not need a hosted database. The
+recommended production baseline buys a longer Neon restore window and paid
+compute/storage. It does not buy a service-level agreement for the whole
+multi-provider system or eliminate the need to test restores. Re-check Neon
+CU-hour and storage rates before approving a budget; always-on compute is the
+usual paid driver.
 
 ## Important commercial/privacy constraints
 
@@ -83,9 +87,9 @@ need to test restores.
   public static application code/assets there; case payloads and media go
   directly to other processors. Legal review of every provider remains
   necessary.
-- Supabase Free advertises no automatic backups and may pause sufficiently
-  inactive projects. Daily use reduces pause likelihood but does not mitigate
-  deletion/corruption risk.
+- Neon Free advertises a 6-hour restore window, 0.5 GB storage, and scale-to
+  zero. Daily use reduces cold starts but does not replace a tested restore.
+  Create the project in an EU region; the region cannot be changed later.
 - Free allowances can change or be withdrawn. Provider exit must be practical:
   standards-based static assets, PostgreSQL migrations/export, S3-compatible
   objects, and an email adapter.
@@ -110,7 +114,7 @@ Before admitting real data:
 
 Move from the all-free configuration when any of these occurs:
 
-- the pilot cannot tolerate permanent database loss;
+- the pilot cannot tolerate a 6-hour restore window;
 - database use approaches 400 MB;
 - stored media approaches 8 GB or lifecycle deletion is not reliable;
 - email approaches 80 messages/day or 2,400/month;

@@ -2,7 +2,11 @@ import path from "node:path";
 
 import postgres from "postgres";
 
-import { parseCapabilityPepper } from "@animal-helper/event-store";
+import {
+  assertDatabaseUrlDoesNotOverrideTls,
+  createSqlOptions,
+  parseCapabilityPepper,
+} from "@animal-helper/event-store";
 
 import { loadApiEnv, loadLocalEnvFiles } from "./env.js";
 import { createPostgresGateway } from "./gateway.js";
@@ -11,7 +15,8 @@ import { createHttpServer } from "./server.js";
 loadLocalEnvFiles(path.resolve(import.meta.dirname, "../../.."));
 
 const env = loadApiEnv(process.env);
-const sql = postgres(env.databaseUrl, { max: 8, onnotice: () => undefined });
+assertDatabaseUrlDoesNotOverrideTls(env.databaseUrl);
+const sql = postgres(env.databaseUrl, createSqlOptions(process.env));
 const server = createHttpServer({
   gateway: createPostgresGateway(sql),
   pepper: parseCapabilityPepper(env.capabilityPepper),

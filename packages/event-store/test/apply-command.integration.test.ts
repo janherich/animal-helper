@@ -1,6 +1,9 @@
 import "./load-local-env.js";
 
 import { randomBytes, randomUUID } from "node:crypto";
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import path from "node:path";
 
 import {
   parseCaseCommand,
@@ -15,6 +18,7 @@ import postgres, { type Sql } from "postgres";
 import {
   applyCommand,
   applyMigrations,
+  createSqlOptions,
   defaultMigrationsDirectory,
   getPublicStatus,
   hashCapability,
@@ -85,8 +89,9 @@ describe.skipIf(!databaseUrl)("event-store integration", () => {
       throw new Error("DATABASE_URL is required");
     }
 
-    sql = postgres(databaseUrl, { max: 1, onnotice: () => undefined });
+    sql = postgres(databaseUrl, createSqlOptions(process.env, { max: 1 }));
     await sql`drop schema if exists ah cascade`;
+    await sql`drop table if exists public.schema_migrations`;
     await applyMigrations(sql, defaultMigrationsDirectory);
   });
 
@@ -389,5 +394,36 @@ describe.skipIf(!databaseUrl)("event-store integration", () => {
         )
       `,
     ).rejects.toThrow(/append-only/);
+  });
+
+  it("is safe to apply the same migrations more than once", async () => {
+    await applyMigrations(sql, defaultMigrationsDirectory);
+    await applyMigrations(sql, defaultMigrationsDirectory);
+  });
+
+  it("rejects an edited applied migration", async () => {
+    const directory = await mkdtemp(path.join(tmpdir(), "ah-mig-"));
+    const table = `mig_${randomBytes(6).toString("hex")}`;
+    const filename = "20260101000000_once.sql";
+    try {
+      await writeFile(
+        path.join(directory, filename),
+        `create table public.${table} (id integer);\n`,
+        "utf8",
+      );
+      await applyMigrations(sql, directory);
+      await writeFile(
+        path.join(directory, filename),
+        `create table public.${table} (id integer, extra integer);\n`,
+        "utf8",
+      );
+      await expect(applyMigrations(sql, directory)).rejects.toThrow(
+        /has changed/,
+      );
+    } finally {
+      await sql.unsafe(`drop table if exists public.${table}`);
+      await sql`delete from public.schema_migrations where filename = ${filename}`;
+      await rm(directory, { recursive: true, force: true });
+    }
   });
 });

@@ -1,0 +1,23 @@
+services:
+  db:
+    image: ${AH_DB_IMAGE}
+    environment:
+      POSTGRES_DB: ${AH_DB_NAME}
+      POSTGRES_USER: ${AH_DB_USER}
+      POSTGRES_PASSWORD: ${AH_DB_PASSWORD}
+    ports:
+      - "127.0.0.1:${AH_DB_PORT}:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"
+      interval: 1s
+      timeout: 3s
+      retries: 30
+      start_period: 3s
+    stop_grace_period: 10s
+
+volumes:
+  db-data:

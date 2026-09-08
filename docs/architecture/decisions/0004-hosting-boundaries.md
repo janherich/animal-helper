@@ -11,13 +11,16 @@ organisation may affect free-plan eligibility.
 
 ## Decision
 
-Host only static PWA assets on Vercel. Send report data directly to a
-Supabase-hosted Edge API and signed uploads directly to a private Cloudflare R2
-bucket. Use PostgreSQL as the durable system of record. Put email behind a
-provider adapter.
+Host only static PWA assets on Vercel. Send report data directly to the command
+API and signed uploads directly to a private Cloudflare R2 bucket. Use
+PostgreSQL as the durable system of record (Docker locally, Neon in production;
+[ADR 0008](0008-docker-local-neon-prod.md)). Put email behind a provider
+adapter.
 
-No domain code depends on Vercel request/runtime APIs, Supabase client-side
-table access, R2-specific object URLs, or a particular email payload.
+No domain code depends on Vercel request/runtime APIs, Neon-specific SQL,
+Supabase client-side table access, R2-specific object URLs, or a particular
+email payload. A future Edge Function host is an adapter around the same
+composition root.
 
 ## Consequences
 

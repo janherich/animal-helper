@@ -78,9 +78,10 @@ Removing a secret from Git or redeploying without rotation is insufficient.
 
 ## Data recovery
 
-The free Supabase tier has no automatic backups. If used for a pilot, the
-operator must explicitly accept that accidental deletion/corruption may be
-unrecoverable. Before broader production:
+Neon Free keeps a short restore window (hours, not days) and may scale to zero.
+If used for a pilot, the operator must explicitly accept that older accidental
+deletion/corruption may be unrecoverable. Launch adds a longer restore window.
+Before broader production:
 
 - choose backup frequency and recovery objectives;
 - encrypt backups separately from provider credentials;

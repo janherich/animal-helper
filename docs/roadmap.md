@@ -26,7 +26,9 @@ Gate: maintainers accept the foundational ADRs and an operator is identified.
 - [x] expose a local HTTP command/status API on the event store;
 - prove a signed R2 upload, server validation, and orphan cleanup;
 - implement administrator invite/allow-list and mandatory TOTP;
-- add local Supabase development and isolated integration tests;
+- [x] Docker local Postgres, checksummed migrations, and Neon production
+      connection policy;
+- isolated integration tests already run against CI Postgres;
 - exercise projection rebuild and private-data purge.
 
 Gate: threat-model controls AH-SEC-001 through AH-SEC-019 are tested or tracked

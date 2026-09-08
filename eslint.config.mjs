@@ -34,6 +34,8 @@ export default defineConfig(
     files: ["**/*.mjs"],
     languageOptions: {
       globals: {
+        Buffer: "readonly",
+        URL: "readonly",
         console: "readonly",
         process: "readonly",
         setInterval: "readonly",

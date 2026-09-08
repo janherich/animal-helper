@@ -1,16 +1,15 @@
 # Database migrations
 
-SQL migrations live here so they can later deploy to Supabase. Local development
-does not need the Supabase CLI: `npm run dev` starts an isolated Postgres 16
-cluster and applies these files.
+SQL migrations live here as ordinary PostgreSQL. Local development applies them
+to Docker Compose Postgres. Production applies them to Neon. A future Edge host
+can reuse the same files; the Supabase CLI is not required.
 
 Do not link a developer machine to a hosted project by default. Generated dumps,
 real data, service-role keys, and `.env` files are never committed.
 
-Default local database URL:
+`pnpm db:up` generates `.local/db.env` (gitignored) and applies these files
+through checksummed `public.schema_migrations`. Do not edit an applied file; add
+a new migration.
 
-```text
-postgres://postgres@127.0.0.1:55432/animal_helper
-```
-
-CI applies the same migrations to an isolated Postgres service.
+CI applies the same migrations to an isolated `postgres:16-alpine` service. See
+[Persistence](../docs/operations/persistence.md).
