@@ -319,4 +319,3 @@ h1 {
   opacity: 0.7;
 }
 </style>
-

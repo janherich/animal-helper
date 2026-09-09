@@ -7,17 +7,17 @@ Prices checked: 2026-09-08
 Currency: USD unless stated otherwise; taxes and exchange rates excluded
 
 The architecture is intended to keep a small, organisation-owned vendor set.
-Free tiers (especially Neon restore) are a pilot constraint, not an
-availability or backup guarantee.
+Free tiers (especially Neon restore) are a pilot constraint, not an availability
+or backup guarantee.
 
 ## Provider assumptions
 
 | Service                              | Free/pilot allowance used by this plan                                                        | Paid trigger                                                                          |
 | ------------------------------------ | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
 | GitHub public repository and Actions | standard hosted runners are free for public repositories                                      | private-repo minutes/storage or paid governance                                       |
-| Vercel Pro                           | Organisation team: static PWAs, Functions (`fra1`), private Blob, Queues (~$20/month + usage) | Spend alerts; do not use Hobby                                                    |
+| Vercel Pro                           | Organisation team: static PWAs, Functions (`fra1`), private Blob, Queues (~$20/month + usage) | Spend alerts; do not use Hobby                                                        |
 | Neon PostgreSQL                      | Free: 0.5 GB storage, 100 CU-hours/project, 6-hour restore, scale-to-zero; no SLA             | Launch: usage-based compute/storage, 7-day restore; Scale adds SLA/compliance options |
-| Email adapter (Brevo)                | Transactional plan covering a few thousand messages/month                                     | Paid plan if volume or a dedicated IP is required                                 |
+| Email adapter (Brevo)                | Transactional plan covering a few thousand messages/month                                     | Paid plan if volume or a dedicated IP is required                                     |
 | Domain                               | no meaningful free assumption                                                                 | roughly EUR 10–25/year depending on registrar/TLD                                     |
 
 Sources:
@@ -62,12 +62,12 @@ and retries.
 
 ## Monthly operating scenarios
 
-| Scenario                             |        Vercel |         Neon | Email | Estimated monthly total     |
-| ------------------------------------ | ------------: | -----------: | ----: | --------------------------- |
-| Development / synthetic (local only) |            $0 |           $0 |    $0 | $0                          |
-| Public pilot on Pro, short Neon restore |         $20+ |           $0 |    $0 | Vercel Pro plus domain      |
-| Recommended durable baseline         |          $20+ | Launch usage |    $0 | Vercel Pro plus Neon Launch |
-| Paid email also required             |          $20+ | Launch usage |   $20 | plus Brevo paid plan        |
+| Scenario                                | Vercel |         Neon | Email | Estimated monthly total     |
+| --------------------------------------- | -----: | -----------: | ----: | --------------------------- |
+| Development / synthetic (local only)    |     $0 |           $0 |    $0 | $0                          |
+| Public pilot on Pro, short Neon restore |   $20+ |           $0 |    $0 | Vercel Pro plus domain      |
+| Recommended durable baseline            |   $20+ | Launch usage |    $0 | Vercel Pro plus Neon Launch |
+| Paid email also required                |   $20+ | Launch usage |   $20 | plus Brevo paid plan        |
 
 Local development uses Docker and does not need a hosted database. The
 recommended production baseline buys a longer Neon restore window and paid
@@ -83,17 +83,17 @@ usual paid driver.
 - Vercel Functions, Blob, and Queues process report metadata and media. Accept
   the DPA, pin Functions and the Blob store to `fra1`, disable AI/training
   products, and treat Vercel as a processor in the RoPA.
-- Large files use signed Blob uploads. Function payload limits are not an
-  upload path.
+- Large files use signed Blob uploads. Function payload limits are not an upload
+  path.
 - Neon Free advertises a 6-hour restore window, 0.5 GB storage, and scale-to
   zero. Daily use reduces cold starts but does not replace a tested restore.
   Create the project in an EU region; the region cannot be changed later.
 - Blob store region also cannot be changed after creation.
 - Vercel Queues is a public-beta product; re-check availability, regional
   pricing, and DPA coverage before relying on it for purge/outbox.
-- Free allowances can change or be withdrawn. Provider exit must stay
-  practical: static assets, PostgreSQL migrations/export, Blob/S3-compatible
-  objects, and an email adapter.
+- Free allowances can change or be withdrawn. Provider exit must stay practical:
+  static assets, PostgreSQL migrations/export, Blob/S3-compatible objects, and
+  an email adapter.
 
 ## Cost controls
 

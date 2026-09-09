@@ -9,8 +9,9 @@ The customer and backoffice applications are screen walkers over a durable,
 event-sourced case process. Screens come from approved Figma work; writes are
 already versioned commands and private-record payloads. The implementing
 colleague is proficient in Vue. Volunteer maintainability ranks above cost and
-performance. ADR 0004 keeps the public UI as static PWA assets; report writes go to the
-command API and object store, not through a meta-framework server renderer.
+performance. ADR 0004 keeps the public UI as static PWA assets; report writes go
+to the command API and object store, not through a meta-framework server
+renderer.
 
 A meta-framework (Nuxt, Next) would pull server rendering and host-runtime
 coupling that this architecture does not need. Two different UI frameworks would

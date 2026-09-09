@@ -29,16 +29,16 @@ with **Neon** as the system of record in a matching EU region
 - Media uses a **private Vercel Blob** store created in `fra1`. Clients upload
   through short-lived signed URLs; objects stay private. The region cannot be
   changed later.
-- Asynchronous work (email outbox, purge, orphan cleanup) uses **Vercel
-  Queues** (and cron where a schedule is enough). Do not require an always-on
-  VM. Queues is a Vercel public-beta product; confirm DPA coverage at purchase.
+- Asynchronous work (email outbox, purge, orphan cleanup) uses **Vercel Queues**
+  (and cron where a schedule is enough). Do not require an always-on VM. Queues
+  is a Vercel public-beta product; confirm DPA coverage at purchase.
 - Email stays behind a provider adapter (Brevo in the operator handoff).
-- PostgreSQL remains ordinary Postgres (ADR 0008). Do not use Vercel Postgres
-  as a second store.
+- PostgreSQL remains ordinary Postgres (ADR 0008). Do not use Vercel Postgres as
+  a second store.
 
 No domain code depends on Vercel request types, Blob URLs, Queue payloads,
-Neon-specific SQL, or a particular email provider. Each is an adapter around
-the same composition root.
+Neon-specific SQL, or a particular email provider. Each is an adapter around the
+same composition root.
 
 Disable Vercel AI / model-training products on this team. Case data may transit
 Functions, Blob, and Queues only as a documented processor under the operator
@@ -51,9 +51,9 @@ same shape as Frames. Cloudflare R2, Turnstile, and a separate API host (for
 example Fly.io) are not required for v1. Bot challenge can stay rate limits and
 spend caps until evidence requires another vendor.
 
-Counsel must treat Vercel as a processor of report content and media, not
-merely a static CDN. Function payload size still cannot carry large videos:
-signed Blob uploads remain mandatory.
+Counsel must treat Vercel as a processor of report content and media, not merely
+a static CDN. Function payload size still cannot carry large videos: signed Blob
+uploads remain mandatory.
 
-Hobby is not used. Pro spend management and regional Blob/function placement
-are part of launch, not optional extras.
+Hobby is not used. Pro spend management and regional Blob/function placement are
+part of launch, not optional extras.
