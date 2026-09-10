@@ -23,7 +23,7 @@
     "@animal-helper/event-store": "workspace:*",
     "@animal-helper/guidance": "workspace:*",
     "@simplewebauthn/server": "13.2.2",
-    "postgres": "3.4.8"
+    "postgres": "3.4.9"
   },
   "devDependencies": {
     "@animal-helper/client": "workspace:*"
