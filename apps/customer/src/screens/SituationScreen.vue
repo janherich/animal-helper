@@ -2,6 +2,7 @@
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
+import { resumeWalkView } from "@animal-helper/guidance";
 import { t } from "@animal-helper/i18n";
 
 import SiteFooter from "../components/SiteFooter.vue";
@@ -9,7 +10,10 @@ import { continueWalkTo } from "../navigation.js";
 import {
   currentKindKey,
   currentSituationType,
+  currentWalkFacts,
   customerSession,
+  loadPublicGuidance,
+  patchWalkFacts,
   rememberSnapshot,
   resetCustomerRuntime,
   setSituationType,
@@ -17,7 +21,6 @@ import {
 } from "../runtime.js";
 import {
   draftProgressRatio,
-  draftResumeFromPath,
   draftSummary,
   formatDraftStep,
   isWalkableSituation,
@@ -50,20 +53,16 @@ const chooseSituation = async (key: SituationChoiceKey) => {
   }
 
   rememberSnapshot(result.value);
+  patchWalkFacts({ hasDraft: true });
   await continueWalkTo(router, CUSTOMER_PATHS.situation);
 };
 
 const resumeDraft = async () => {
   pending.value = true;
   error.value = undefined;
-  const continued = await continueWalkTo(
-    router,
-    draftResumeFromPath(kindKey.value),
-  );
+  const view = resumeWalkView(currentWalkFacts(), await loadPublicGuidance());
+  await router.push(view.path);
   pending.value = false;
-  if (!continued) {
-    error.value = t("customer.error");
-  }
 };
 
 const resetAndStay = async () => {

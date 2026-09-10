@@ -103,6 +103,7 @@ describe("flow and screen map", () => {
     expect(customerWalkOrder.map((step) => step.path)).toEqual([
       "/w01",
       "/w03",
+      "/w04",
       "/w09",
       "/w24",
       "/thank-you",

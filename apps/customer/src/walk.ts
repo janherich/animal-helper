@@ -19,6 +19,7 @@ import { detailsCondition, type DetailsConditionInput } from "./details.js";
 export const CUSTOMER_PATHS = {
   situation: customerWalkPath("situation"),
   location: customerWalkPath("location"),
+  photo: customerWalkPath("photo"),
   details: customerWalkPath("details"),
   contact: customerWalkPath("contact"),
   thanks: customerWalkPath("thanks"),

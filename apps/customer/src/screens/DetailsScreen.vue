@@ -27,6 +27,7 @@ import {
   currentKindKey,
   currentSituationType,
   customerSession,
+  patchWalkFacts,
   rememberSnapshot,
   setKindKey,
 } from "../runtime.js";
@@ -108,6 +109,11 @@ const continueWalk = async () => {
   }
 
   rememberSnapshot(result.value);
+  patchWalkFacts({
+    hasFormSnapshot: true,
+    situationType,
+    ...(kind === undefined ? {} : { kindKey: kind.key }),
+  });
   const continued = await continueWalkTo(router, CUSTOMER_PATHS.details);
   if (!continued) {
     error.value = t("customer.error");

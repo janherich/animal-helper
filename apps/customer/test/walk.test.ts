@@ -67,6 +67,7 @@ describe("customer walk", () => {
     expect(CUSTOMER_PATHS).toEqual({
       situation: customerImplementedWalk.situation.path,
       location: customerImplementedWalk.location.path,
+      photo: customerImplementedWalk.photo.path,
       details: customerImplementedWalk.details.path,
       contact: customerImplementedWalk.contact.path,
       thanks: customerImplementedWalk.thanks.path,
@@ -74,6 +75,7 @@ describe("customer walk", () => {
     expect(CUSTOMER_PATHS).toEqual({
       situation: "/w01",
       location: "/w03",
+      photo: "/w04",
       details: "/w09",
       contact: "/w24",
       thanks: "/thank-you",

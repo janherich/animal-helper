@@ -45,6 +45,12 @@ export {
   type ResolvedWalkStep,
 } from "./resolve.js";
 export {
+  resumeWalkView,
+  walkViewAfterPath,
+  walkViewForPath,
+  type WalkFacts,
+} from "./walk-view.js";
+export {
   CATALOG_KEY_MAX_LENGTH,
   CATALOG_KEY_PATTERN,
   authorityKeys,

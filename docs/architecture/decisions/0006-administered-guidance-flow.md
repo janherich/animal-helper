@@ -43,7 +43,9 @@ and a case can refer to the exact revision used. The finite client contract
 keeps rendering, accessibility, offline behaviour, and testing manageable.
 Content authors cannot add a genuinely new screen or branch without a product
 and application release. That is intentional: schema changes require a reviewed
-compatibility update rather than an unbounded configuration feature.
+compatibility update rather than an unbounded configuration feature. The PWA
+learns the next screen from a local walk-view document (optionally echoed on
+command accept), not from an online-only workflow engine.
 
 Public content needs its own cache/update and rollback handling, and the
 backoffice must validate the full resolved matrix rather than only individual

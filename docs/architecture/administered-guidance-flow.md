@@ -2,13 +2,22 @@
 
 Status: **implemented for injured copy and applicability**
 
-Last reviewed: 2026-09-08
+Last reviewed: 2026-09-10
 
 The customer PWA will contain a short, fixed-screen guide for a person who finds
 an injured or distressed animal. The guide is not a report workflow or a
 general-purpose form builder. Its topology is an application contract; the
 backoffice administers localized copy and an animal-specific decision matrix
 within that contract.
+
+After each local command (or a local continue, such as skipping photo), the PWA
+resolves a **walk view**: which screen to show, the data needed to render it,
+allowed command kinds, and optional field errors. That document is produced on
+the device from the catalog, the last valid guidance revision (or bundled
+fallback), and walk facts already on the device. The HTTP command reply may
+optionally echo the same `walkView`; it is not required to continue offline. Vue
+maps `screen` to a layout. Administrators still cannot add a new screen type
+without an app release.
 
 ## Product and technical boundary
 

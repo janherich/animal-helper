@@ -116,6 +116,7 @@ export type ScreenKey = (typeof screenKeys)[number];
 export const customerWalkSteps = [
   "situation",
   "location",
+  "photo",
   "details",
   "contact",
   "thanks",

@@ -54,6 +54,36 @@ const implementedSkeleton = (): CustomerWalkableStep[] =>
     status: "implemented",
   }));
 
+const prefixUntilDetails = (): CustomerWalkableStep[] => {
+  const detailsPath = customerWalkPath("details");
+  const skeleton = implementedSkeleton();
+  const index = skeleton.findIndex((step) => step.path === detailsPath);
+  return index === -1 ? skeleton : skeleton.slice(0, index + 1);
+};
+
+const withPhotoStep = (
+  steps: readonly CustomerWalkableStep[],
+): CustomerWalkableStep[] => {
+  const locationPath = customerWalkPath("location");
+  const photo = {
+    path: customerImplementedWalk.photo.path,
+    screenKeys: customerImplementedWalk.photo.matrixScreens,
+    status: "implemented" as const,
+  };
+  if (steps.some((step) => step.path === photo.path)) {
+    return [...steps];
+  }
+
+  const walkable: CustomerWalkableStep[] = [];
+  for (const step of steps) {
+    walkable.push(step);
+    if (step.path === locationPath) {
+      walkable.push(photo);
+    }
+  }
+  return walkable;
+};
+
 const stepsForFlow = (flowKey: FlowKey): readonly ResolvedWalkStep[] =>
   flowFor(flowKey).screens.map((screenKey) => {
     const screen = screens[screenKey];
@@ -187,15 +217,15 @@ export const customerWalkableSteps = (
   }
 
   if (situation !== "injured") {
-    return implementedSkeleton().slice(0, 1);
+    return prefixUntilDetails().slice(0, 1);
   }
 
   const resolved = resolveGuidanceWalk(situation, kindKey);
   if (resolved.reason !== "ready") {
-    return implementedSkeleton().slice(0, 3);
+    return prefixUntilDetails();
   }
 
-  return withThanks(collapseWalkableSteps(resolved.steps));
+  return withThanks(withPhotoStep(collapseWalkableSteps(resolved.steps)));
 };
 
 export const matrixWalkableSteps = (

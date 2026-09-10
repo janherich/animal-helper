@@ -5,6 +5,7 @@ import {
   parseCaseCommand,
   parseCommandAcceptedBody,
   parsePublicCaseStatusBody,
+  situationWalkViewFixture,
   syntheticAttachContactCommand,
   syntheticAttachLocationCommand,
   syntheticAttachPrivateDataCommand,
@@ -115,5 +116,16 @@ describe("case command contracts", () => {
         },
       }).success,
     ).toBe(false);
+    expect(
+      parseCommandAcceptedBody({
+        ok: true,
+        value: {
+          outcome: "applied",
+          committedVersion: 1,
+          publicState: "draft",
+          walkView: situationWalkViewFixture,
+        },
+      }).success,
+    ).toBe(true);
   });
 });

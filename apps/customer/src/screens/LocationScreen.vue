@@ -10,8 +10,12 @@ import mapImage from "../assets/location/map.png";
 import pinIcon from "../assets/location/pin.svg";
 import WalkProgress from "../components/WalkProgress.vue";
 import { LOCATION_WALK_STEP } from "../location.js";
-import { PHOTO_PATH } from "../photo.js";
-import { customerSession, rememberSnapshot } from "../runtime.js";
+import { continueWalkTo } from "../navigation.js";
+import {
+  customerSession,
+  patchWalkFacts,
+  rememberSnapshot,
+} from "../runtime.js";
 import {
   CUSTOMER_PATHS,
   confirmLocation,
@@ -40,7 +44,11 @@ const continueWalk = async () => {
   }
 
   rememberSnapshot(result.value);
-  await router.push(PHOTO_PATH);
+  patchWalkFacts({ hasLocation: true });
+  const continued = await continueWalkTo(router, CUSTOMER_PATHS.location);
+  if (!continued) {
+    error.value = t("customer.error");
+  }
 };
 </script>
 

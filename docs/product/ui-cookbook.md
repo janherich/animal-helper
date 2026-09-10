@@ -2,11 +2,15 @@
 
 Status: **working guide for customer PWA contributors**
 
-Last reviewed: 2026-08-31
+Last reviewed: 2026-09-10
 
 This is the frontend contract. Visual design lives in Figma; sequence and keys
 live in the case matrices and `@animal-helper/guidance`. Vue screens stay thin
-over `@animal-helper/client`.
+over `@animal-helper/client`. After a successful command (or skipping photo),
+navigate with `continueWalkTo` / `resumeWalkView` — those return a walk-view
+document. Do not hardcode the next route. The HTTP command ack may include
+optional `walkView`; the PWA must keep walking from the local resolver when that
+field is absent.
 
 Read this before drawing or implementing a customer screen. Depth sits in:
 
@@ -55,8 +59,9 @@ Today the walk wrappers are:
 | --------------------- | ------------------ | ----------------------------- |
 | `/w01`                | `confirmSituation` | `openDraft` (once)            |
 | `/w03`                | `confirmLocation`  | `attachLocation`              |
+| `/w04`                | `continueWalkTo`   | none — local continue         |
 | `/w09`                | `confirmDetails`   | `attachFormSnapshot`          |
-| `/w13`–`/w23`, `/w26` | `continueWalkTo`   | none — planned placeholder    |
+| `/w13`–`/w23`, `/w26` | `continueWalkTo`   | none — copy from walk view    |
 | `/w24`                | `submitReport`     | `attachContact` then `submit` |
 
 Pattern:
@@ -68,8 +73,13 @@ if (!result.ok) {
   return;
 }
 rememberSnapshot(result.value);
+patchWalkFacts({ hasLocation: true });
 await continueWalkTo(router, CUSTOMER_PATHS.location);
 ```
+
+`continueWalkTo` reads `walkViewAfterPath` (local catalog + guidance). Do not
+`router.push` a neighbour path. Screen fixtures live in `walkViewFixtures`
+(`@animal-helper/contracts`).
 
 Payloads must satisfy `@animal-helper/contracts` (`FormSnapshotV1`,
 `LocationPayloadV1`, `ContactPayloadV1`). Field names, lengths, and enums are
@@ -98,6 +108,8 @@ Neither is a raw API from Vue.
 - **Figma** is visual: type, spacing, components, states.
 - **Matrices** are sequence: [screen map](case-matrices/screen-map.md). A frame
   that is not a W-key is a product change, not a styling change.
+- **Walk view** is the reusable render contract: `screen`, `path`, `props`,
+  `allowedCommands`, `fieldErrors`. Prepare pages against that schema.
 - **Catalog keys** (`domestic_cat`, `sop_rescue`, `injured_companion`) are what
   the app stores and switches on. Labels can change; keys cannot.
 

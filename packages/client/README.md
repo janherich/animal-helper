@@ -34,5 +34,10 @@ Durability labels: `device_only`, `queued`, `acknowledged`, `received`,
 capability from a URL fragment is status-only until the API exposes a stream
 version.
 
+Command HTTP replies still acknowledge persistence. The next screen is a
+separate walk-view document resolved locally in `@animal-helper/guidance` (and
+optionally echoed as `walkView` on `CommandAccepted`). Vue must not treat a
+missing HTTP `walkView` as a blocked walk.
+
 `VERSION_CONFLICT` is not retried by bumping `expectedVersion`. That would
 change the command body after a possible accept.

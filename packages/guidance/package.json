@@ -15,5 +15,8 @@
     "sync-catalog": "node scripts/build-catalog.mjs",
     "test": "vitest run",
     "typecheck": "tsc --project tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@animal-helper/contracts": "workspace:*"
   }
 }

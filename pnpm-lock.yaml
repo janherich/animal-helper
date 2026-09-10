@@ -157,7 +157,11 @@ importers:
         specifier: 3.4.8
         version: 3.4.8
 
-  packages/guidance: {}
+  packages/guidance:
+    dependencies:
+      "@animal-helper/contracts":
+        specifier: workspace:*
+        version: link:../contracts
 
   packages/i18n: {}
 

@@ -202,6 +202,11 @@ export const customerImplementedWalk: Record<
     path: "/w03",
     matrixScreens: ["w03a", "w03b"],
   },
+  photo: {
+    step: "photo",
+    path: "/w04",
+    matrixScreens: ["w04"],
+  },
   details: {
     step: "details",
     path: "/w09",

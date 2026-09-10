@@ -8,6 +8,7 @@ import cameraIcon from "../assets/photo/camera.png";
 import WalkProgress from "../components/WalkProgress.vue";
 import { continueWalkTo } from "../navigation.js";
 import { PHOTO_WALK_STEP } from "../photo.js";
+import { patchWalkFacts } from "../runtime.js";
 import { CUSTOMER_PATHS } from "../walk.js";
 
 const router = useRouter();
@@ -21,7 +22,8 @@ const goBack = async () => {
 const skipPhoto = async () => {
   pending.value = true;
   error.value = undefined;
-  const continued = await continueWalkTo(router, CUSTOMER_PATHS.location);
+  patchWalkFacts({ photoDone: true });
+  const continued = await continueWalkTo(router, CUSTOMER_PATHS.photo);
   pending.value = false;
   if (!continued) {
     error.value = t("customer.error");

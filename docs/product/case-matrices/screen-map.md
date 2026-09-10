@@ -6,14 +6,15 @@ placeholders.
 
 ## Current PWA (implemented)
 
-| Route                 | PWA step       | Matrix screens it stands in for                                 | Client call                        |
-| --------------------- | -------------- | --------------------------------------------------------------- | ---------------------------------- |
-| `/w01`                | situation      | W01 situation type                                              | `openDraft`                        |
-| `/w03`                | location       | W03a GPS / W03b address                                         | `attachLocation`                   |
-| `/w09`                | details        | W04 photo (skipped), W09 condition, W09b other, W11 description | `attachFormSnapshot`               |
-| `/w13`–`/w23`, `/w26` | planned + copy | Flow screens after details, before reporter contact             | none (copy from `/guidance`)       |
-| `/w24`                | contact        | reporter contact + submit — **not** matrix W24 “who helped”     | `attachContact` then `submitDraft` |
-| `/thank-you`          | thanks         | post-submit status                                              | public status                      |
+| Route                 | PWA step       | Matrix screens it stands in for                             | Client call                        |
+| --------------------- | -------------- | ----------------------------------------------------------- | ---------------------------------- |
+| `/w01`                | situation      | W01 situation type                                          | `openDraft`                        |
+| `/w03`                | location       | W03a GPS / W03b address                                     | `attachLocation`                   |
+| `/w04`                | photo          | W04 photo (optional skip; not a case command yet)           | local `continue`                   |
+| `/w09`                | details        | W09 condition, W09b other, W11 description                  | `attachFormSnapshot`               |
+| `/w13`–`/w23`, `/w26` | planned + copy | Flow screens after details, before reporter contact         | none (copy from `/guidance`)       |
+| `/w24`                | contact        | reporter contact + submit — **not** matrix W24 “who helped” | `attachContact` then `submitDraft` |
+| `/thank-you`          | thanks         | post-submit status                                          | public status                      |
 
 Injured reports pick an animal kind on `/w09`. The resolver in
 `@animal-helper/guidance` then inserts that kind’s planned screens (warnings,
@@ -58,7 +59,7 @@ internal assignment, not a public contact tree.
 | `w01`                         | Situation type                                | yes, `/w01`                        |
 | `w02`                         | Acute 158 (cruelty)                           | no                                 |
 | `w03a` / `w03b`               | Location                                      | collapsed on `/w03`                |
-| `w04`                         | Photo / evidence                              | skipped                            |
+| `w04`                         | Photo / evidence                              | yes, `/w04` (optional skip)        |
 | `w06a` / `w06b`               | Cruelty evidence checkboxes                   | no                                 |
 | `w09` / `w09b`                | Condition / other                             | collapsed on `/w09`                |
 | `w11`                         | Free-text description                         | collapsed on `/w09`                |

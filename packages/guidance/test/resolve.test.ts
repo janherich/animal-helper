@@ -52,6 +52,7 @@ describe("guidance walk resolver", () => {
     ).toEqual([
       "/w01",
       "/w03",
+      "/w04",
       "/w09",
       "/w14",
       "/w15",
@@ -64,12 +65,13 @@ describe("guidance walk resolver", () => {
     ]);
     expect(
       customerWalkableSteps("injured", "exotic_tiger").map((step) => step.path),
-    ).toEqual(["/w01", "/w03", "/w09", "/w20", "/w24", "/thank-you"]);
+    ).toEqual(["/w01", "/w03", "/w04", "/w09", "/w20", "/w24", "/thank-you"]);
     expect(
       customerWalkableSteps("injured", "wild_mole").map((step) => step.path),
     ).toEqual([
       "/w01",
       "/w03",
+      "/w04",
       "/w09",
       "/w14",
       "/w21",
@@ -77,6 +79,8 @@ describe("guidance walk resolver", () => {
       "/w24",
       "/thank-you",
     ]);
+    expect(nextCustomerPath("/w03", "injured", "domestic_cat")).toBe("/w04");
+    expect(nextCustomerPath("/w04", "injured", "domestic_cat")).toBe("/w09");
     expect(nextCustomerPath("/w09", "injured", "domestic_cat")).toBe("/w14");
     expect(nextCustomerPath("/w23", "injured", "domestic_cat")).toBe("/w24");
     expect(nextCustomerPath("/w09", "injured", "exotic_tiger")).toBe("/w20");
@@ -84,7 +88,7 @@ describe("guidance walk resolver", () => {
     expect(nextCustomerPath("/w09", "injured", undefined)).toBeUndefined();
     expect(
       customerWalkableSteps("injured", undefined).map((step) => step.path),
-    ).toEqual(["/w01", "/w03", "/w09"]);
+    ).toEqual(["/w01", "/w03", "/w04", "/w09"]);
   });
 
   it("keeps the matrix preview on intended screens, including post-contact W25", () => {

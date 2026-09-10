@@ -3,19 +3,25 @@ import {
   bundledPublicGuidance,
   parsePublicGuidance,
   type PublicGuidance,
+  type WalkFacts,
 } from "@animal-helper/guidance";
 import { shallowRef } from "vue";
 
 import { apiBaseUrl } from "./config.js";
 import { createCustomerSession, type SituationType } from "./walk.js";
 
-type WalkState = {
-  situationType: SituationType;
-  kindKey?: string;
-};
+const initialWalkFacts = (): WalkFacts => ({
+  situationType: "injured",
+  hasDraft: false,
+  hasLocation: false,
+  photoDone: false,
+  hasFormSnapshot: false,
+  hasContact: false,
+  submitted: false,
+});
 
 let session: CaseSession | undefined;
-let walkState: WalkState = { situationType: "injured" };
+let walkState: WalkFacts = initialWalkFacts();
 let guidancePromise: Promise<PublicGuidance> | undefined;
 
 export const snapshotState = shallowRef<CaseSnapshot | undefined>();
@@ -25,21 +31,44 @@ export const customerSession = (): CaseSession => {
   return session;
 };
 
+export const currentWalkFacts = (): WalkFacts => walkState;
+
 export const currentSituationType = (): SituationType =>
   walkState.situationType;
 
 export const currentKindKey = (): string | undefined => walkState.kindKey;
 
+export const patchWalkFacts = (patch: Partial<WalkFacts>): WalkFacts => {
+  walkState = { ...walkState, ...patch };
+  return walkState;
+};
+
+const withoutKindKey = (facts: WalkFacts): WalkFacts => ({
+  situationType: facts.situationType,
+  hasDraft: facts.hasDraft,
+  hasLocation: facts.hasLocation,
+  photoDone: facts.photoDone,
+  hasFormSnapshot: facts.hasFormSnapshot,
+  hasContact: facts.hasContact,
+  submitted: facts.submitted,
+  ...(facts.publicState === undefined
+    ? {}
+    : { publicState: facts.publicState }),
+  ...(facts.fieldErrors === undefined
+    ? {}
+    : { fieldErrors: facts.fieldErrors }),
+});
+
 export const setSituationType = (situationType: SituationType): void => {
-  walkState = { situationType };
+  walkState = { ...withoutKindKey(walkState), situationType };
 };
 
 export const setKindKey = (kindKey: string | undefined): void => {
   if (kindKey === undefined) {
-    walkState = { situationType: walkState.situationType };
+    walkState = withoutKindKey(walkState);
     return;
   }
-  walkState = { situationType: walkState.situationType, kindKey };
+  walkState = { ...walkState, kindKey };
 };
 
 export const currentSnapshot = (): CaseSnapshot | undefined =>
@@ -79,5 +108,6 @@ export const resetCustomerRuntime = async (): Promise<void> => {
 
   session = undefined;
   snapshotState.value = undefined;
-  walkState = { situationType: "injured" };
+  walkState = initialWalkFacts();
+  guidancePromise = undefined;
 };

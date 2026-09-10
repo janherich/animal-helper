@@ -11,6 +11,7 @@ import {
   mediaRefPayloadV1Schema,
   textPayloadSchema,
 } from "./private-payloads.js";
+import { walkViewSchema } from "./walk-view.js";
 
 const commandEnvelope = {
   schemaVersion: z.literal(1),
@@ -155,6 +156,7 @@ export const commandAcceptedSchema = z.strictObject({
   outcome: z.enum(["applied", "duplicate"]),
   committedVersion: z.int().nonnegative(),
   publicState: z.enum(["draft", "received", "closed"]),
+  walkView: walkViewSchema.optional(),
 });
 
 export type CommandAccepted = z.infer<typeof commandAcceptedSchema>;

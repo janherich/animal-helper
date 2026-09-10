@@ -6,7 +6,11 @@ import type { ContactPayloadV1 } from "@animal-helper/contracts";
 import { t } from "@animal-helper/i18n";
 
 import { continueWalkTo } from "../navigation.js";
-import { customerSession, rememberSnapshot } from "../runtime.js";
+import {
+  customerSession,
+  patchWalkFacts,
+  rememberSnapshot,
+} from "../runtime.js";
 import { CUSTOMER_PATHS, submitReport } from "../walk.js";
 
 const router = useRouter();
@@ -38,6 +42,13 @@ const continueWalk = async () => {
   }
 
   rememberSnapshot(result.value);
+  patchWalkFacts({
+    hasContact: true,
+    submitted: true,
+    ...(result.value.publicState === undefined
+      ? {}
+      : { publicState: result.value.publicState }),
+  });
   await continueWalkTo(router, CUSTOMER_PATHS.contact);
 };
 </script>
