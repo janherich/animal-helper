@@ -1,0 +1,206 @@
+{
+  "fileKey": "Y6LY2VRpRoxNKNJEQACH6Y",
+  "sectionId": "2366:23784",
+  "icons": [
+    {
+      "name": "menu",
+      "nodeId": "2120:14015"
+    },
+    {
+      "name": "chevron-down",
+      "nodeId": "1593:19399"
+    },
+    {
+      "name": "chevron-up",
+      "nodeId": "1593:19398"
+    },
+    {
+      "name": "back",
+      "nodeId": "2331:21892"
+    },
+    {
+      "name": "search",
+      "nodeId": "1682:4236"
+    },
+    {
+      "name": "edit",
+      "nodeId": "1652:9225"
+    },
+    {
+      "name": "close",
+      "nodeId": "2120:13945"
+    },
+    {
+      "name": "add",
+      "nodeId": "2127:15822"
+    },
+    {
+      "name": "delete",
+      "nodeId": "2127:15886"
+    },
+    {
+      "name": "restore",
+      "nodeId": "2128:16002"
+    },
+    {
+      "name": "save",
+      "nodeId": "2385:30373"
+    },
+    {
+      "name": "copy",
+      "nodeId": "2332:22550"
+    },
+    {
+      "name": "phone",
+      "nodeId": "2333:22602"
+    },
+    {
+      "name": "email",
+      "nodeId": "1593:19587"
+    },
+    {
+      "name": "web",
+      "nodeId": "1593:19586"
+    },
+    {
+      "name": "place",
+      "nodeId": "1593:19588"
+    },
+    {
+      "name": "place-on-map",
+      "nodeId": "2379:24063"
+    },
+    {
+      "name": "navigation",
+      "nodeId": "1712:5105"
+    },
+    {
+      "name": "home",
+      "nodeId": "3040:11730"
+    },
+    {
+      "name": "info",
+      "nodeId": "1593:19766"
+    },
+    {
+      "name": "attention",
+      "nodeId": "1593:19767"
+    },
+    {
+      "name": "warning",
+      "nodeId": "2129:17080"
+    },
+    {
+      "name": "important",
+      "nodeId": "2331:22419"
+    },
+    {
+      "name": "time",
+      "nodeId": "2120:13914"
+    },
+    {
+      "name": "filter",
+      "nodeId": "2120:13911"
+    },
+    {
+      "name": "calendar",
+      "nodeId": "2120:13942"
+    },
+    {
+      "name": "add-picture",
+      "nodeId": "2120:13941"
+    },
+    {
+      "name": "location",
+      "nodeId": "2120:13940"
+    },
+    {
+      "name": "upload",
+      "nodeId": "2382:24393"
+    },
+    {
+      "name": "eye",
+      "nodeId": "2120:13944"
+    },
+    {
+      "name": "eye-off",
+      "nodeId": "2120:13943"
+    },
+    {
+      "name": "locate",
+      "nodeId": "2127:15232"
+    },
+    {
+      "name": "compass",
+      "nodeId": "2127:15354"
+    },
+    {
+      "name": "zoom-in",
+      "nodeId": "2796:11183"
+    },
+    {
+      "name": "zoom-out",
+      "nodeId": "2796:11220"
+    },
+    {
+      "name": "injured-animal",
+      "nodeId": "2331:21768"
+    },
+    {
+      "name": "stray-animal",
+      "nodeId": "2331:21765"
+    },
+    {
+      "name": "dead-animal",
+      "nodeId": "2331:21764"
+    },
+    {
+      "name": "animal-cruelty",
+      "nodeId": "2331:21767"
+    },
+    {
+      "name": "other-cases",
+      "nodeId": "2331:21766"
+    },
+    {
+      "name": "facebook",
+      "nodeId": "1593:19451"
+    },
+    {
+      "name": "instagram",
+      "nodeId": "1593:19450"
+    },
+    {
+      "name": "tiktok",
+      "nodeId": "1593:19449"
+    },
+    {
+      "name": "linkedin",
+      "nodeId": "2331:22464"
+    },
+    {
+      "name": "my-cases",
+      "nodeId": "2120:13750"
+    },
+    {
+      "name": "faq",
+      "nodeId": "2120:13749"
+    },
+    {
+      "name": "volunteer",
+      "nodeId": "2120:13747"
+    },
+    {
+      "name": "donation",
+      "nodeId": "2120:13748"
+    },
+    {
+      "name": "about",
+      "nodeId": "2120:13768"
+    },
+    {
+      "name": "first-aid",
+      "nodeId": "2337:22676"
+    }
+  ]
+}

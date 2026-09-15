@@ -1,37 +1,32 @@
-import vue from "@vitejs/plugin-vue";
-import { defineConfig } from "vitest/config";
-
-const apiProxy = {
-  "/commands": {
-    target: "http://127.0.0.1:8787",
-    changeOrigin: false,
-  },
-  "/status": {
-    target: "http://127.0.0.1:8787",
-    changeOrigin: false,
-  },
-  "/guidance": {
-    target: "http://127.0.0.1:8787",
-    changeOrigin: false,
-  },
-} as const;
+import tailwindcss from '@tailwindcss/vite'
+import vue from '@vitejs/plugin-vue'
+import { fileURLToPath, URL } from 'node:url'
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons-ng'
+import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    tailwindcss(),
+    createSvgIconsPlugin({
+      iconDirs: [fileURLToPath(new URL('./src/assets/icons', import.meta.url))],
+      symbolId: 'icon-[name]',
+      htmlMode: 'inline',
+      failOnError: true,
+      strokeOverride: false,
+      bakerOptions: { optimize: false }
+    })
+  ],
+  resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
   test: {
-    environment: "node",
-    include: ["test/**/*.test.ts"],
+    environment: 'jsdom',
+    include: ['src/**/__tests__/**/*.spec.ts'],
+    coverage: {
+      provider: 'v8',
+      include: ['src/**/*.{ts,vue}'],
+      exclude: ['src/**/__tests__/**', 'src/**/*.d.ts']
+    }
   },
-  server: {
-    host: "127.0.0.1",
-    port: 5173,
-    strictPort: true,
-    proxy: apiProxy,
-  },
-  preview: {
-    host: "127.0.0.1",
-    port: 4173,
-    strictPort: true,
-    proxy: apiProxy,
-  },
-});
+  server: { host: '127.0.0.1', port: 5173, strictPort: true },
+  preview: { host: '127.0.0.1', port: 4173, strictPort: true }
+})

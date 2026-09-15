@@ -1,1 +1,8 @@
 docs/product/case-matrices/source/*.csv
+apps/customer-backup/
+**/dist/
+apps/customer/src/assets/icons/*.svg
+**/test-results/
+**/playwright-report/
+apps/customer/coverage/
+apps/customer/.eslintcache
