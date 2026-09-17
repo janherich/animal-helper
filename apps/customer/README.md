@@ -122,8 +122,9 @@ The four social icons use the blue Figma variants, with their white background p
 
 `base-icon` takes `name: string` (SVG filename without extension) and optional `label`. It defaults to a decorative 24px
 icon. For meaningful standalone icons, provide a label; for icon-only buttons, label the button instead. Override size
-with `size-*`. Original colors are preserved; `text-*` does not recolor the set. Unknown names render no icon; verify
-names against the source files.
+with `size-*`. The 54 monochrome icons use `currentColor`, so `text-*` sets their color. Only `place-on-map` preserves
+its multiple original colors; brand logos remain separate with their original colors. Unknown names render no icon; verify names
+against the source files.
 
 ## App shell
 
@@ -135,12 +136,41 @@ modal dialog with keyboard focus cycling, Escape/backdrop dismissal and focus re
 independently on short screens. Device status bars in the designs are not reproduced in the web app.
 
 Sources: splash `2121:14081`, home `2120:13017`, drawer `2120:13345` in the Figma file linked above. Logo exports:
-yellow `2121:14082`, orange `1589:12316`. SVG geometry is preserved without hand editing.
+yellow `2121:14082`, orange `1589:12316`. Original logo paths are preserved. An SVG mask and a small eyelid path
+animate a 420ms blink: once on the splash, every 30 seconds on the orange logo. Reduced motion disables blinking.
+Screen content fades out over 100ms and enters over 250ms with an 8px upward movement, while the header stays fixed
+in size. Reduced motion disables these transitions. Full-width white content blocks have rounded corners only above
+the content's 640px maximum width; at or below that width they meet the viewport with square corners.
 
-Home currently contains a clearly marked placeholder, not a working reporting flow. Home and My cases both lead to Home
-temporarily. FAQ, volunteering and donation are disabled; social actions display an unavailable notice until their
-destinations are agreed. The splash is not an API loading indicator. Screen identifiers and transitions must be
-reconciled with the backend contract before integration.
+Home now renders a typed local fixture from `src/app/pages/fixtures/home.ts`, passed as route props to W01 at `/`.
+`home-view.ts` is a temporary frontend presentation model, not the shared API contract. All homepage copy, choice
+labels, accordion content and allowed action IDs come from this object; the component does no translation. CTA clicks
+emit an action ID and show a fixture notice, without network requests or navigation to unimplemented steps. Accordion
+bodies are explicitly labelled sample copy, not approved legal or contact information. Social actions are disabled.
+Before server integration, reconcile this model with the existing shared WalkView schema (currently only two
+situations), implement a validated adapter and server-backed navigation guards. No generic form engine is introduced.
+
+In development, `/?fixture=draft` selects the W01 draft-card fixture (Figma `2120:13168`). Plain `/` has no draft. The
+optional `props.draft` supplies the summary, progress and actions. Resume opens the fixture location step; Complete only
+shows a preview notice. Neither changes a real report. Production ignores the preview query parameter.
+
+### Location preview
+
+The five homepage choices and draft Resume open `/w03` with an in-memory fixture session. The step hides the hamburger
+and homepage footer, renders Back and progress from its fixture, and permits entry only after the preview session is
+prepared. Reload/direct entry returns Home; this is a preview guard, not backend authorization. All five choices share
+this temporary transition, which is not a specification of the eventual server flow.
+
+The map is the Figma illustration from `2127:15214`, clearly marked as a mock. Clicking it selects the named fixture
+location, not coordinates corresponding to the clicked pixel. Search filters three local samples with accent-insensitive
+matching. Device geolocation runs only on explicit request; denial/timeouts are handled, and no coordinates are sent to
+Google or the API. Confirm stores the selection only in memory and shows a notice because the next screen is not
+implemented. No Google credentials or B2B keys are reused. B2B's `vue3-google-map` and `@googlemaps/js-api-loader` can
+be integrated once project credentials are available; neither unused dependency is installed in this preview.
+
+Home and My cases both lead to Home temporarily. FAQ, volunteering and donation are disabled; social actions display an
+unavailable notice until their destinations are agreed. The splash is not an API loading indicator. Screen identifiers
+and transitions must be reconciled with the backend contract before integration.
 
 ## Scrollbar behavior
 
@@ -151,6 +181,6 @@ work and destroys its instance on unmount.
 
 Use `OverlayScrollbarsComponent` directly for internal areas. Shared cancellation defaults apply there too; keep
 `overflow-auto` on the bounded root so it remains scrollable when initialization is cancelled. No `base-scroll-area`
-wrapper exists. Router navigation restores saved scroll on history traversal and otherwise starts at the top.
-The drawer has rounded right corners only and shares the header logo position. Its opening animation lasts 300ms;
-the backdrop fades in over 150ms. Both animations are disabled when reduced motion is requested.
+wrapper exists. Router navigation restores saved scroll on history traversal and otherwise starts at the top. The drawer
+has square corners and shares the header logo position. Its opening animation lasts 300ms; the backdrop fades in over
+150ms. Both animations are disabled when reduced motion is requested.

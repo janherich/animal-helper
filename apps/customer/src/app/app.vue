@@ -2,12 +2,26 @@
 import { usePreferredReducedMotion, useScrollLock } from '@vueuse/core'
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-vue'
 import { nextTick, onMounted, onUnmounted, ref } from 'vue'
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
+import { homeDraftFixture, homeFixture } from './pages/fixtures/home'
+import { beginPreview } from './preview-flow'
 import logoOrange from '@/assets/brand/logo-orange.svg'
 import logoYellow from '@/assets/brand/logo-yellow.svg'
 import { usePageScrollbars } from '@/plugins/overlay-scrollbars'
 
 usePageScrollbars()
+const route = useRoute()
+const router = useRouter()
+function handlePageAction(id: string) {
+  if (route.name !== 'W01') return
+  const view = import.meta.env.DEV && route.query.fixture === 'draft' ? homeDraftFixture : homeFixture
+  if (!view.allowedActions.includes(id)) return
+  const situation = view.props.situations.find(item => item.action === id)
+  if (situation || id === 'draft-resume') {
+    beginPreview(situation?.id ?? 'injured', id === 'draft-resume')
+    void router.push({ name: 'W03' })
+  }
+}
 const reducedMotion = usePreferredReducedMotion()
 const starting = ref(true)
 const menu = ref<HTMLDialogElement>()
@@ -91,9 +105,9 @@ onUnmounted(() => {
       href="#main-content"
     ) Preskočiť na obsah
     header.customer-app__header(
-      class="relative z-10 bg-surface px-4 pt-[max(16px,env(safe-area-inset-top))] pb-5 shadow-[0_2px_8px_rgb(37_42_49/8%)]"
+      class="relative z-10 bg-surface px-[15px] pt-[max(16px,env(safe-area-inset-top))] pb-5 shadow-[0_2px_8px_rgb(37_42_49/8%)]"
     )
-      .customer-app__header-row(class="flex min-h-10 items-center justify-between")
+      .customer-app__header-row(class="flex min-h-11 items-center justify-between")
         RouterLink(
           to="/",
           aria-label="Zverolinka – domov"
@@ -106,8 +120,9 @@ onUnmounted(() => {
             class="h-10 w-[62px]"
           )
         button.customer-app__menu-trigger(
+          v-if="route.meta.showMenu !== false",
           ref="menuTrigger",
-          class="-mr-2 flex size-11 cursor-pointer items-center justify-center rounded-lg hover:bg-canvas",
+          class="flex size-11 cursor-pointer items-center justify-center rounded-lg hover:bg-canvas",
           type="button",
           aria-label="Otvoriť menu",
           aria-haspopup="dialog",
@@ -117,25 +132,18 @@ onUnmounted(() => {
         )
           base-icon(name="menu")
     main#main-content.customer-app__main(
-      class="mx-auto w-full max-w-[640px] flex-1",
+      class="mx-auto flex w-full max-w-[640px] flex-1 flex-col",
       tabindex="-1"
     )
-      RouterView
-    footer.customer-app__footer(class="px-4 pt-6 pb-[max(24px,env(safe-area-inset-bottom))] text-center")
-      .customer-app__socials(class="mb-4 flex justify-center gap-2")
-        button(
-          v-for="social in socials",
-          :key="social.icon",
-          class="flex size-11 cursor-pointer items-center justify-center rounded-lg hover:bg-primary-light",
-          type="button",
-          :aria-label="social.name",
-          @click="showUnavailable(social.name)"
+      RouterView(v-slot="{ Component }")
+        Transition(
+          name="screen",
+          mode="out-in"
         )
-          base-icon(
-            :name="social.icon",
-            class="size-7"
+          component(
+            :is="Component",
+            @action="handlePageAction"
           )
-      p(class="text-small text-primary") © 2026 Zverolinka. Všetky práva vyhradené.
     p.customer-app__notice(
       class="px-5 text-body text-primary empty:hidden",
       role="status",
@@ -149,11 +157,9 @@ onUnmounted(() => {
     @keydown="onMenuKeydown",
     @close="onMenuClosed"
   )
-    .customer-app__drawer(
-      class="flex h-full w-[calc(100%-48px)] max-w-[324px] flex-col overflow-hidden rounded-r-[32px] bg-surface"
-    )
+    .customer-app__drawer(class="flex h-full w-[calc(100%-48px)] max-w-[324px] flex-col overflow-hidden bg-surface")
       .customer-app__drawer-header(
-        class="flex shrink-0 items-center justify-between border-b border-primary-light px-4 pt-[max(16px,env(safe-area-inset-top))] pb-5"
+        class="flex shrink-0 items-center justify-between border-b border-primary-light px-[15px] pt-[max(16px,env(safe-area-inset-top))] pb-5"
       )
         img(
           :src="logoOrange",
@@ -163,7 +169,7 @@ onUnmounted(() => {
           class="h-10 w-[62px]"
         )
         button(
-          class="-mr-2 flex size-11 cursor-pointer items-center justify-center rounded-lg hover:bg-canvas",
+          class="-mr-2 flex size-11 cursor-pointer items-center justify-center rounded-lg text-primary hover:bg-canvas",
           type="button",
           aria-label="Zatvoriť menu",
           autofocus,
@@ -199,7 +205,7 @@ onUnmounted(() => {
               base-icon(:name="item.icon")
               span {{ item.label }}
       .customer-app__drawer-footer(
-        class="flex shrink-0 justify-center gap-2 border-t border-primary-light bg-canvas px-4 pt-3 pb-[max(16px,env(safe-area-inset-bottom))]"
+        class="flex shrink-0 justify-center gap-2 border-t border-primary-light bg-canvas px-4 pt-3 pb-[max(16px,env(safe-area-inset-bottom))] text-primary"
       )
         button(
           v-for="social in socials",
@@ -233,6 +239,22 @@ onUnmounted(() => {
   background: rgb(37 42 49 / 80%);
 }
 @media (prefers-reduced-motion: no-preference) {
+  .screen-enter-active {
+    transition:
+      opacity 250ms ease-out,
+      transform 250ms ease-out;
+  }
+  .screen-leave-active {
+    transition: opacity 100ms ease-out;
+    pointer-events: none;
+  }
+  .screen-enter-from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  .screen-leave-to {
+    opacity: 0;
+  }
   .customer-app__menu[open] .customer-app__drawer {
     animation: drawer-enter 300ms cubic-bezier(0.22, 1, 0.36, 1);
   }

@@ -2,6 +2,11 @@
   "fileKey": "Y6LY2VRpRoxNKNJEQACH6Y",
   "sectionId": "2366:23784",
   "icons": [
+    { "name": "notice-info", "nodeId": "2331:22388" },
+    { "name": "help-injured", "nodeId": "2331:21783" },
+    { "name": "help-stray", "nodeId": "I2606:9600;2331:22195" },
+    { "name": "help-dead", "nodeId": "I2606:9601;2331:22195" },
+    { "name": "help-cruelty", "nodeId": "I2606:9602;2331:22195" },
     {
       "name": "menu",
       "nodeId": "2120:14015"
@@ -16,7 +21,7 @@
     },
     {
       "name": "back",
-      "nodeId": "2331:21892"
+      "nodeId": "2331:21893"
     },
     {
       "name": "search",

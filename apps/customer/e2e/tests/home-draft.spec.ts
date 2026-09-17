@@ -1,0 +1,20 @@
+import { expect, test } from '@playwright/test'
+
+test('previews the draft card without changing a real case', async ({ page }, testInfo) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.setViewportSize({ width: 402, height: 874 })
+  await page.goto('/?fixture=draft')
+  await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '35')
+  await expect(page.getByText('Dolné Orešany')).toBeVisible()
+  await page.screenshot({ path: testInfo.outputPath('home-draft.png'), fullPage: true })
+  await page.getByRole('button', { name: 'Pokračovať', exact: true }).click()
+  await expect(page).toHaveURL(/\/w03$/)
+  await page.getByRole('button', { name: 'Späť', exact: true }).click()
+  await expect(page).toHaveURL(/fixture=draft/)
+  await page.getByRole('button', { name: 'Vybavené', exact: true }).click()
+  await expect(page.getByRole('progressbar')).toBeVisible()
+  await page.setViewportSize({ width: 320, height: 568 })
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(320)
+  await page.goto('/')
+  await expect(page.getByRole('progressbar')).toHaveCount(0)
+})
