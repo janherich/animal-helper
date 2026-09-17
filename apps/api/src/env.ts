@@ -38,7 +38,7 @@ export const loadApiEnv = (env: NodeJS.ProcessEnv): ApiEnv => {
   const corsOrigin =
     configuredCors === undefined
       ? host === "127.0.0.1"
-        ? "http://127.0.0.1:5173"
+        ? "http://localhost:5173"
         : undefined
       : configuredCors.length === 0
         ? undefined

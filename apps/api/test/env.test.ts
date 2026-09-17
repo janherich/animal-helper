@@ -15,7 +15,7 @@ describe("loadApiEnv", () => {
       capabilityPepper: required.CAPABILITY_PEPPER,
       port: 8787,
       host: "127.0.0.1",
-      corsOrigin: "http://127.0.0.1:5173",
+      corsOrigin: "http://localhost:5173",
     });
   });
 

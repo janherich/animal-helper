@@ -10,7 +10,7 @@ pnpm install
 pnpm --filter @animal-helper/customer dev
 ```
 
-Open http://127.0.0.1:5173. Root `pnpm dev` also starts this app alongside the existing API, backoffice and database
+Open http://localhost:5173. Root `pnpm dev` also starts this app alongside the existing API, backoffice and database
 setup.
 
 ```sh
@@ -96,8 +96,21 @@ from code correctness.
 
 ## Tailwind and icons
 
-Tailwind includes Preflight and its default theme. No legacy CSS, external fonts or Figma tokens are copied over.
-Styling uses utility classes first.
+Tailwind includes Preflight and its default utilities, extended by `src/assets/css/theme.css`. The Figma foundations use
+self-hosted Roboto (Latin and Latin Extended, including Slovak), semantic colors (`bg-canvas`, `text-ink`, `bg-primary`,
+`border-line`), typography (`text-heading-1`, `text-body`, `text-body-strong`, `text-button`, `text-small`),
+`rounded-control`, `shadow-brand` and `bg-primary-gradient` / `bg-accent-gradient`. Typography utilities include line
+height and font weight. No remote font requests are made.
+
+Source: [UI Kit Style Guide](https://www.figma.com/design/Y6LY2VRpRoxNKNJEQACH6Y/?node-id=2692-16570). The explicit
+typography swatches take precedence over conflicting instances: Header 01 is 20/24px here (some components use 20/28px);
+body text is Roboto 14/20px (one instance reports Inter). Heading/button tracking is -1%, not -1px. Radius is 16px. The
+gradient swatch shadow is kept as `shadow-brand`; individual component effects can differ. Default Tailwind spacing and
+breakpoints remain unchanged because no global replacement scale has been established. Pale/muted colors are not
+intended as accessible body text.
+
+Implement screens in place first. Extract shared or screen-specific components when actual reuse or complexity justifies
+it; the theme does not prescribe a component library. Styling uses utility classes first.
 
 The 50 original SVGs from the previous Figma export live in `src/assets/icons`. Their source-node mapping is recorded in
 `src/assets/icons/manifest.json`. `vite-plugin-svg-icons-ng` generates symbols with IDs `icon-[name]` and injects them
@@ -105,12 +118,31 @@ into HTML. Add or edit an SVG and Vite updates it automatically; no icon build c
 needed. SVG optimization is disabled to preserve geometry and colors; the baker still rewrites local IDs and references.
 Only trusted, reviewed SVGs belong here; this pipeline is not an upload sanitizer.
 
+The four social icons use the blue Figma variants, with their white background paths removed by design agreement.
+
 `base-icon` takes `name: string` (SVG filename without extension) and optional `label`. It defaults to a decorative 24px
 icon. For meaningful standalone icons, provide a label; for icon-only buttons, label the button instead. Override size
 with `size-*`. Original colors are preserved; `text-*` does not recolor the set. Unknown names render no icon; verify
 names against the source files.
 
-## Scrollbars
+## App shell
+
+The shell, header and splash fill the viewport. Main content is fluid up to 640px and centered on desktop; this width is
+a provisional responsive adaptation, not a desktop Figma specification. The drawer opens at the left viewport edge and
+remains at most 324px wide, leaving room for dismissal on small screens. The shell includes original Figma logo exports,
+a brief branding splash (skipped with reduced motion), header, left drawer and social footer. The drawer uses a native
+modal dialog with keyboard focus cycling, Escape/backdrop dismissal and focus restoration. Its navigation scrolls
+independently on short screens. Device status bars in the designs are not reproduced in the web app.
+
+Sources: splash `2121:14081`, home `2120:13017`, drawer `2120:13345` in the Figma file linked above. Logo exports:
+yellow `2121:14082`, orange `1589:12316`. SVG geometry is preserved without hand editing.
+
+Home currently contains a clearly marked placeholder, not a working reporting flow. Home and My cases both lead to Home
+temporarily. FAQ, volunteering and donation are disabled; social actions display an unavailable notice until their
+destinations are agreed. The splash is not an API loading indicator. Screen identifiers and transitions must be
+reconciled with the backend contract before integration.
+
+## Scrollbar behavior
 
 `attachPlugins()` configures shared defaults before mounting. The root app uses deferred body initialization and
 `autoHide: scroll`. Initialization is cancelled when native overlay scrollbars exist or when body initialization would
@@ -120,3 +152,5 @@ work and destroys its instance on unmount.
 Use `OverlayScrollbarsComponent` directly for internal areas. Shared cancellation defaults apply there too; keep
 `overflow-auto` on the bounded root so it remains scrollable when initialization is cancelled. No `base-scroll-area`
 wrapper exists. Router navigation restores saved scroll on history traversal and otherwise starts at the top.
+The drawer has rounded right corners only and shares the header logo position. Its opening animation lasts 300ms;
+the backdrop fades in over 150ms. Both animations are disabled when reduced motion is requested.

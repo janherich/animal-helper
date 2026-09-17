@@ -16,7 +16,7 @@ capabilities, command bodies, or `Authorization` headers.
 ## Local endpoints
 
 `npm run dev` starts Docker Postgres, this process on `http://127.0.0.1:8787`,
-the customer Vite app on `http://127.0.0.1:5173`, and the backoffice on
+the customer Vite app on `http://localhost:5173`, and the backoffice on
 `http://localhost:5174`. Loopback API processes default CORS to the customer
 origin only. Admin routes are cookie-authenticated on the backoffice origin
 ([ADR 0009](../../docs/architecture/decisions/0009-passkey-admin-auth.md)).

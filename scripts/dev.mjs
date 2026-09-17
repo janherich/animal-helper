@@ -41,7 +41,7 @@ const api = spawn(
   },
 );
 
-const customer = spawnVite("customer", 5173);
+const customer = spawnVite("customer", 5173, "localhost");
 const backoffice = spawnVite("backoffice", 5174, "localhost");
 const children = [api, customer, backoffice];
 
@@ -97,6 +97,6 @@ process.on("SIGINT", () => shutdown(0));
 process.on("SIGTERM", () => shutdown(0));
 
 console.log(
-  "Customer: http://127.0.0.1:5173  Backoffice: http://localhost:5174",
+  "Customer: http://localhost:5173  Backoffice: http://localhost:5174",
 );
 console.log("Press Ctrl+C to stop the API and Vite apps. Postgres stays up.");

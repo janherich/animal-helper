@@ -98,6 +98,8 @@ export default defineConfig(
         rules: {
           "@typescript-eslint/consistent-type-definitions": ["error", "type"],
           "@typescript-eslint/consistent-type-imports": "error",
+          // TypeScript checks names (including DOM types) in customer TS and Vue files.
+          "no-undef": "off",
           "@typescript-eslint/array-type": "error",
           "@typescript-eslint/no-unused-vars": [
             "error",

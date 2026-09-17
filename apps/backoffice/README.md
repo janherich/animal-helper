@@ -10,7 +10,7 @@ can edit injured copy, toggle applicability, and publish. It does not open
 private case data or dispatch mail.
 
 `npm run dev` from the repository root starts Docker Postgres, the API on
-`http://127.0.0.1:8787`, the customer app on `http://127.0.0.1:5173`, and this
+`http://127.0.0.1:8787`, the customer app on `http://localhost:5173`, and this
 app on `http://localhost:5174`. Vite proxies `/admin` to the API so session
 cookies stay first-party. Open the backoffice at `http://localhost:5174`, not at
 port 8787. Use `localhost`, not `127.0.0.1` — passkeys require that hostname.

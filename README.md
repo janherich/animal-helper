@@ -116,7 +116,7 @@ Local Postgres is Docker Compose (`postgres:16-alpine` on loopback port 55432).
 A running Docker Engine with Compose v2 is required. Homebrew Postgres and the
 Supabase CLI are not. `npm run dev` starts that container, applies migrations,
 serves the API on `http://127.0.0.1:8787`, the customer app on
-`http://127.0.0.1:5173`, and the backoffice on `http://localhost:5174`. Ctrl+C
+`http://localhost:5173`, and the backoffice on `http://localhost:5174`. Ctrl+C
 stops the API and Vite only; the database stays up.
 
 ```sh

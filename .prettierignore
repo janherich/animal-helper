@@ -2,6 +2,7 @@ docs/product/case-matrices/source/*.csv
 apps/customer-backup/
 **/dist/
 apps/customer/src/assets/icons/*.svg
+apps/customer/src/assets/brand/*.svg
 **/test-results/
 **/playwright-report/
 apps/customer/coverage/

@@ -121,7 +121,7 @@ export function createLocalDbEnvironment(
   const database = overrides.AH_DB_NAME ?? "animal_helper";
   const user = overrides.AH_DB_USER ?? "animal_helper";
   const password = overrides.AH_DB_PASSWORD ?? random(24).toString("base64url");
-  const corsOrigin = overrides.API_CORS_ORIGIN ?? "http://127.0.0.1:5173";
+  const corsOrigin = overrides.API_CORS_ORIGIN ?? "http://localhost:5173";
   const adminOrigin = overrides.ADMIN_ORIGIN ?? "http://localhost:5174";
   const apiPort = validatedPort(overrides.API_PORT ?? "8787", "API_PORT");
   const project = overrides.AH_DB_PROJECT ?? identity.project;
