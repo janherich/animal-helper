@@ -6,6 +6,7 @@ export const mediaFixture = {
   layout: { showMenu: false },
   backTarget: 'W03',
   manualTarget: 'W06',
+  resultTarget: 'W09',
   processing: processingFixture,
   allowedActions: ['back', 'pick', 'remove', 'confirm', 'manual'],
   limits: {

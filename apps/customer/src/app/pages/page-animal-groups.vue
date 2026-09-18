@@ -14,7 +14,7 @@ const resultsId = useId()
 const focused = ref(false)
 const activeIndex = ref(-1)
 const query = ref('')
-const path = ref<string[]>([])
+const path = ref<string[]>([...(previewSession.value?.animalIdentification?.path ?? [])])
 const cardTransition = ref('animal-forward')
 const branches = computed(() => {
   const chain = [props.view.root]
@@ -58,8 +58,11 @@ function disableLeavingCards(element: Element) {
   element.setAttribute('inert', '')
   element.setAttribute('aria-hidden', 'true')
 }
-const choice = ref('')
-const description = ref('')
+const savedIdentification = previewSession.value?.animalIdentification
+const choice = ref(
+  savedIdentification?.kind === 'species' ? (savedIdentification.speciesId ?? '') : (savedIdentification?.kind ?? '')
+)
+const description = ref(savedIdentification?.description ?? '')
 const completed = ref(false)
 function restartSelection() {
   if (!props.view.allowedActions.includes('select-group')) return
@@ -102,6 +105,9 @@ function confirm() {
     ...(selectedKind === 'other' ? { description: description.value.trim() } : {})
   }
   completed.value = true
+  session.editingAnimal = false
+  session.identificationFailed = false
+  void router.push({ name: props.view.confirmTarget })
 }
 function selectCard(id: string) {
   cardTransition.value = 'animal-forward'

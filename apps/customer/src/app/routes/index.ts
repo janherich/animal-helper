@@ -1,4 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router'
+import { animalDetailsFixture, editAnimalFixture } from '../pages/fixtures/animal-details'
 import { animalGroupsFixture } from '../pages/fixtures/animal-groups'
 import { homeDraftFixture, homeFixture } from '../pages/fixtures/home'
 import { locationFixture } from '../pages/fixtures/location'
@@ -38,6 +39,25 @@ export const routes: RouteRecordRaw[] = [
     meta: animalGroupsFixture.layout,
     beforeEnter: () => !!previewSession.value?.location || { name: 'W01' },
     component: () => import('../pages/page-animal-groups.vue')
+  },
+  {
+    path: '/w09',
+    name: 'W09',
+    props: { view: animalDetailsFixture, catalogue: animalGroupsFixture.root },
+    meta: animalDetailsFixture.layout,
+    beforeEnter: () =>
+      (!!previewSession.value?.location &&
+        (!!previewSession.value.animalIdentification || previewSession.value.identificationFailed)) || { name: 'W01' },
+    component: () => import('../pages/page-animal-details.vue')
+  },
+  {
+    path: '/w40',
+    name: 'W40',
+    props: { view: editAnimalFixture, catalogue: animalGroupsFixture.root },
+    meta: editAnimalFixture.layout,
+    beforeEnter: () =>
+      (!!previewSession.value?.location && !!previewSession.value.animalIdentification) || { name: 'W01' },
+    component: () => import('../pages/page-edit-animal.vue')
   },
   {
     path: '/:pathMatch(.*)*',

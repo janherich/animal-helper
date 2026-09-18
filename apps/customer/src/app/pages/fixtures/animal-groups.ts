@@ -4,6 +4,7 @@ export type AnimalGroupsView = {
   locale: string
   layout: { showMenu: boolean }
   backTarget: string
+  confirmTarget: string
   allowedActions: ('back' | 'select-group' | 'search' | 'select-animal' | 'confirm')[]
   copy: {
     restart: string
@@ -53,6 +54,7 @@ export const animalGroupsFixture: AnimalGroupsView = {
   locale: 'sk',
   layout: { showMenu: false },
   backTarget: 'W04',
+  confirmTarget: 'W09',
   allowedActions: ['back', 'select-group', 'search', 'select-animal', 'confirm'],
   copy: {
     restart: 'Začať výber odznova',

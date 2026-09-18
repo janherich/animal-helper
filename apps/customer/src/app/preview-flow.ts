@@ -5,6 +5,9 @@ import type { LocationPoint } from './pages/fixtures/location'
 export const previewSession = ref<{
   situation: string
   fromDraft: boolean
+  editingAnimal?: boolean
+  identificationFailed?: boolean
+  animalDetails?: Record<string, string | string[]>
   location?: LocationPoint
   media?: File[]
   animalGroup?: string

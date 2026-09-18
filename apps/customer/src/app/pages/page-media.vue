@@ -32,7 +32,11 @@ async function confirmMedia() {
       signal.addEventListener('abort', done, { once: true })
     })
     if (!signal.aborted) {
-      message.value = props.view.props.confirmed
+      if (previewSession.value) {
+        previewSession.value.identificationFailed = true
+        delete previewSession.value.animalIdentification
+      }
+      await router.push({ name: props.view.resultTarget })
       await nextTick()
     }
   })
