@@ -1,16 +1,43 @@
 <script setup lang="ts">
-import { onUnmounted, ref, watchEffect } from 'vue'
+import { nextTick, onUnmounted, ref, watchEffect } from 'vue'
 import { useElementBounding, useWindowSize } from '@vueuse/core'
 import { useRouter } from 'vue-router'
 import addMedia from '@/assets/brand/add-media.svg'
 import { previewSession } from '../preview-flow'
 import { toastBottomOffset, useToasts } from '../toasts'
 import type { MediaView } from './fixtures/media'
+import PageProcessing from './page-processing.vue'
+import { processingFixture } from './fixtures/processing'
+import { useDelayedPending } from '../use-delayed-pending'
 
 const props = defineProps<{ view: MediaView }>()
 const router = useRouter()
 const gallery = ref<HTMLInputElement>()
 const message = ref('')
+const confirmButton = ref<HTMLButtonElement>()
+const { pending, visible: processingVisible, run } = useDelayedPending(processingFixture.thresholdMs)
+async function confirmMedia() {
+  if (!items.value.length || !props.view.allowedActions.includes('confirm') || pending.value) return
+  message.value = ''
+  await run(async signal => {
+    // Deliberately no upload or AI request: this only previews the waiting state.
+    await new Promise<void>(resolve => {
+      const done = () => {
+        clearTimeout(timer)
+        signal.removeEventListener('abort', done)
+        resolve()
+      }
+      const timer = setTimeout(done, processingFixture.demoDurationMs)
+      signal.addEventListener('abort', done, { once: true })
+    })
+    if (!signal.aborted) {
+      message.value = props.view.props.confirmed
+      await nextTick()
+    }
+  })
+  await nextTick()
+  confirmButton.value?.focus({ preventScroll: true })
+}
 const actions = ref<HTMLElement>()
 const actionBounds = useElementBounding(actions)
 const viewport = useWindowSize()
@@ -138,166 +165,207 @@ onUnmounted(() => items.value.forEach(item => URL.revokeObjectURL(item.url)))
 </script>
 
 <template lang="pug">
-.customer-media(
-  class="flex flex-1 flex-col",
-  :lang="view.locale"
-)
-  .customer-media__back(class="px-4 pt-5 pb-1")
-    button(
-      type="button",
-      class="mb-4 flex min-h-11 items-center gap-1 text-heading-2 text-primary",
-      :disabled="!view.allowedActions.includes('back')",
-      @click="goBack"
-    )
-      base-icon(name="back")
-      span {{ view.props.back }}
-    hr(class="border-primary-light")
-  .customer-media__steps(class="px-4 pt-4 pb-2")
-    .customer-media__progress(
-      class="h-2 overflow-hidden rounded bg-primary-light",
-      role="progressbar",
-      :aria-label="view.props.step",
-      :aria-valuenow="view.props.progress",
-      aria-valuemin="0",
-      aria-valuemax="100"
-    )
-      div(
-        class="h-full rounded bg-primary-gradient",
-        :style="{ width: view.props.progress + '%' }"
-      )
-    p(class="mt-1") {{ view.props.step }}
-  header(class="px-5 pt-5 pb-3")
-    h1(class="mb-1 text-heading-1") {{ view.props.title }}
-    p {{ view.props.description }}
-  input(
-    ref="gallery",
-    type="file",
-    class="hidden",
-    :accept="accepted",
-    multiple,
-    :aria-label="view.props.gallery",
-    @change="pickFiles"
-  )
+.customer-media-shell(class="flex flex-1 flex-col")
   Transition(
-    name="media-state",
-    mode="out-in"
+    name="processing-view",
+    mode="out-in",
+    @after-enter="!pending && confirmButton?.focus({ preventScroll: true })"
   )
-    .customer-media__body(
-      :key="items.length ? 'selected' : 'empty'",
-      class="p-4"
+    PageProcessing(
+      v-if="processingVisible",
+      :title="processingFixture.title",
+      :preview="processingFixture.preview"
     )
-      .customer-media__empty(
-        v-if="!items.length",
-        class="flex flex-col items-center gap-8 rounded-control border-2 border-dashed border-primary-light bg-surface p-5 text-center text-primary"
-      )
-        p(class="text-body-strong") {{ view.props.prompt }}
-        button(
-          type="button",
-          class="rounded-full bg-canvas p-4 disabled:opacity-50",
-          :aria-label="view.props.gallery",
-          :disabled="!view.allowedActions.includes('pick')",
-          @click="gallery?.click()"
-        )
-          img(
-            :src="addMedia",
-            alt="",
-            width="72",
-            height="72",
-            class="size-[72px]"
-          )
-        p {{ view.props.limit }}
-        div(class="flex w-full flex-col gap-4")
-          button(
-            type="button",
-            class="w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:opacity-50",
-            :disabled="!view.allowedActions.includes('pick')",
-            @click="gallery?.click()"
-          ) {{ view.props.gallery }}
-          p(class="text-center text-small") {{ view.props.pickerHint }}
-      TransitionGroup.customer-media__grid(
-        v-else,
-        name="media-tile",
-        tag="div",
-        class="relative grid grid-cols-2 gap-4",
-        @before-leave="freezeLeavingTile"
-      )
-        figure(
-          v-for="(item, index) in items",
-          :key="item.url",
-          class="relative min-w-0 overflow-hidden rounded-control bg-surface shadow-md"
-        )
-          img(
-            v-if="item.file.type.startsWith('image/') && !item.failed",
-            :src="item.url",
-            :alt="item.file.name",
-            class="aspect-square w-full object-cover",
-            @error="item.failed = true"
-          )
-          video(
-            v-else-if="!item.failed",
-            :src="item.url",
-            :aria-label="item.file.name",
-            class="aspect-square w-full object-cover",
-            controls,
-            playsinline,
-            preload="metadata",
-            @error="item.failed = true"
-          )
-          p(
-            v-else,
-            class="flex aspect-square items-center p-4 text-small"
-          ) {{ view.props.unsupportedPreview }}
-          button(
-            type="button",
-            class="absolute top-2 right-2 flex size-11 items-center justify-center rounded-full bg-canvas text-danger transition-colors duration-150 enabled:hover:bg-danger enabled:hover:text-white enabled:focus-visible:bg-danger enabled:focus-visible:text-white motion-reduce:transition-none",
-            :aria-label="view.props.remove + ': ' + item.file.name",
-            :disabled="!view.allowedActions.includes('remove')",
-            @click="remove(index)"
-          )
-            base-icon(name="delete")
-        button(
-          key="add-media",
-          type="button",
-          class="flex aspect-square flex-col items-center justify-center gap-3 rounded-control border-2 border-dashed border-primary-light bg-surface p-5 text-primary",
-          :disabled="!view.allowedActions.includes('pick')",
-          @click="gallery?.click()"
-        )
-          base-icon(
-            name="add",
-            class="size-14 rounded-full bg-canvas p-1"
-          )
-          span {{ view.props.add }}
-      p(class="mt-4 text-center text-small text-primary") {{ view.props.preview }}
-  .customer-media__actions(
-    ref="actions",
-    class="sticky bottom-0 z-20 mt-auto shrink-0 bg-canvas p-4 pb-[max(1rem,env(safe-area-inset-bottom))]"
-  )
-    div(
-      aria-hidden="true",
-      class="pointer-events-none absolute inset-x-0 bottom-full h-6 bg-linear-to-b from-transparent to-canvas"
-    )
-    button(
-      v-if="items.length",
-      type="button",
-      class="w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand",
-      :disabled="!view.allowedActions.includes('confirm')",
-      @click="message = view.props.confirmed"
-    ) {{ view.props.confirm }}
-    button(
+    .customer-media(
       v-else,
-      type="button",
-      class="w-full rounded-control border border-primary bg-surface p-4 text-button text-primary",
-      :disabled="!view.allowedActions.includes('manual')",
-      @click="message = view.props.manualNotice"
-    ) {{ view.props.manual }}
-    p(
-      class="mt-3 text-center text-primary empty:hidden",
-      role="status",
-      aria-live="polite"
-    ) {{ message }}
+      class="flex flex-1 flex-col",
+      :inert="pending",
+      :aria-busy="pending",
+      :lang="view.locale"
+    )
+      .customer-media__back(class="px-4 pt-5 pb-1")
+        button(
+          type="button",
+          class="mb-4 flex min-h-11 items-center gap-1 text-heading-2 text-primary",
+          :disabled="!view.allowedActions.includes('back')",
+          @click="goBack"
+        )
+          base-icon(name="back")
+          span {{ view.props.back }}
+        hr(class="border-primary-light")
+      .customer-media__steps(class="px-4 pt-4 pb-2")
+        .customer-media__progress(
+          class="h-2 overflow-hidden rounded bg-primary-light",
+          role="progressbar",
+          :aria-label="view.props.step",
+          :aria-valuenow="view.props.progress",
+          aria-valuemin="0",
+          aria-valuemax="100"
+        )
+          div(
+            class="h-full rounded bg-primary-gradient",
+            :style="{ width: view.props.progress + '%' }"
+          )
+        p(class="mt-1") {{ view.props.step }}
+      header(class="px-5 pt-5 pb-3")
+        h1(class="mb-1 text-heading-1") {{ view.props.title }}
+        p {{ view.props.description }}
+      input(
+        ref="gallery",
+        type="file",
+        class="hidden",
+        :accept="accepted",
+        multiple,
+        :aria-label="view.props.gallery",
+        @change="pickFiles"
+      )
+      Transition(
+        name="media-state",
+        mode="out-in"
+      )
+        .customer-media__body(
+          :key="items.length ? 'selected' : 'empty'",
+          class="p-4"
+        )
+          .customer-media__empty(
+            v-if="!items.length",
+            class="flex flex-col items-center gap-8 rounded-control border-2 border-dashed border-primary-light bg-surface p-5 text-center text-primary"
+          )
+            p(class="text-body-strong") {{ view.props.prompt }}
+            button(
+              type="button",
+              class="rounded-full bg-canvas p-4 disabled:opacity-50",
+              :aria-label="view.props.gallery",
+              :disabled="!view.allowedActions.includes('pick')",
+              @click="gallery?.click()"
+            )
+              img(
+                :src="addMedia",
+                alt="",
+                width="72",
+                height="72",
+                class="size-[72px]"
+              )
+            p {{ view.props.limit }}
+            div(class="flex w-full flex-col gap-4")
+              button(
+                type="button",
+                class="w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:opacity-50",
+                :disabled="!view.allowedActions.includes('pick')",
+                @click="gallery?.click()"
+              ) {{ view.props.gallery }}
+              p(class="text-center text-small") {{ view.props.pickerHint }}
+          TransitionGroup.customer-media__grid(
+            v-else,
+            name="media-tile",
+            tag="div",
+            class="relative grid grid-cols-2 gap-4",
+            @before-leave="freezeLeavingTile"
+          )
+            figure(
+              v-for="(item, index) in items",
+              :key="item.url",
+              class="relative min-w-0 overflow-hidden rounded-control bg-surface shadow-md"
+            )
+              img(
+                v-if="item.file.type.startsWith('image/') && !item.failed",
+                :src="item.url",
+                :alt="item.file.name",
+                class="aspect-square w-full object-cover",
+                @error="item.failed = true"
+              )
+              video(
+                v-else-if="!item.failed",
+                :src="item.url",
+                :aria-label="item.file.name",
+                class="aspect-square w-full object-cover",
+                controls,
+                playsinline,
+                preload="metadata",
+                @error="item.failed = true"
+              )
+              p(
+                v-else,
+                class="flex aspect-square items-center p-4 text-small"
+              ) {{ view.props.unsupportedPreview }}
+              button(
+                type="button",
+                class="absolute top-2 right-2 flex size-11 items-center justify-center rounded-full bg-canvas text-danger transition-colors duration-150 enabled:hover:bg-danger enabled:hover:text-white enabled:focus-visible:bg-danger enabled:focus-visible:text-white motion-reduce:transition-none",
+                :aria-label="view.props.remove + ': ' + item.file.name",
+                :disabled="!view.allowedActions.includes('remove')",
+                @click="remove(index)"
+              )
+                base-icon(name="delete")
+            button(
+              key="add-media",
+              type="button",
+              class="flex aspect-square flex-col items-center justify-center gap-3 rounded-control border-2 border-dashed border-primary-light bg-surface p-5 text-primary",
+              :disabled="!view.allowedActions.includes('pick')",
+              @click="gallery?.click()"
+            )
+              base-icon(
+                name="add",
+                class="size-14 rounded-full bg-canvas p-1"
+              )
+              span {{ view.props.add }}
+          p(class="mt-4 text-center text-small text-primary") {{ view.props.preview }}
+      .customer-media__actions(
+        ref="actions",
+        class="sticky bottom-0 z-20 mt-auto shrink-0 bg-canvas p-4 pb-[max(1rem,env(safe-area-inset-bottom))]"
+      )
+        div(
+          aria-hidden="true",
+          class="pointer-events-none absolute inset-x-0 bottom-full h-6 bg-linear-to-b from-transparent to-canvas"
+        )
+        button(
+          v-if="items.length",
+          ref="confirmButton",
+          type="button",
+          class="flex w-full items-center justify-center rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand",
+          :disabled="pending || !view.allowedActions.includes('confirm')",
+          :aria-label="pending ? processingFixture.title : view.props.confirm",
+          :aria-busy="pending",
+          @click="confirmMedia"
+        )
+          span.customer-media__spinner(
+            v-if="pending",
+            class="size-5 animate-spin rounded-full border-2 border-white/40 border-t-white motion-reduce:animate-none",
+            aria-hidden="true"
+          )
+          span(v-else) {{ view.props.confirm }}
+        button(
+          v-else,
+          type="button",
+          class="w-full rounded-control border border-primary bg-surface p-4 text-button text-primary",
+          :disabled="!view.allowedActions.includes('manual')",
+          @click="message = view.props.manualNotice"
+        ) {{ view.props.manual }}
+        p(
+          class="mt-3 text-center text-primary empty:hidden",
+          role="status",
+          aria-live="polite"
+        ) {{ message }}
 </template>
 
 <style scoped>
+@media (prefers-reduced-motion: no-preference) {
+  .processing-view-enter-active {
+    transition:
+      opacity 250ms ease-out,
+      transform 250ms ease-out;
+  }
+  .processing-view-leave-active {
+    transition: opacity 100ms ease-out;
+    pointer-events: none;
+  }
+  .processing-view-enter-from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  .processing-view-leave-to {
+    opacity: 0;
+  }
+}
 .media-tile-move,
 .media-tile-enter-active,
 .media-tile-leave-active {

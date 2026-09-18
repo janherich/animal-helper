@@ -30,7 +30,30 @@ test('previews local media, preserves it on back and removes it', async ({ page 
   await page.getByRole('button', { name: 'Zavrieť oznámenie' }).click()
   await page.screenshot({ path: testInfo.outputPath('media-selected.png'), fullPage: true })
   await page.getByRole('button', { name: 'Potvrdiť', exact: true }).click()
+  await expect(page.locator('.customer-media__spinner')).toBeVisible()
+  await expect(page.locator('.customer-media__actions button').first()).toBeDisabled()
+  await expect(page.getByRole('heading', { name: 'Spracovávam údaje' })).toBeVisible()
+  const pupil = page.locator('.customer-processing__pupil')
+  await expect(pupil).toHaveCSS('animation-name', 'none')
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
+  const travel = await pupil.evaluate(element => {
+    const animation = element.getAnimations()[0]!
+    animation.pause()
+    animation.currentTime = 0
+    const left = new DOMMatrix(getComputedStyle(element).transform).m41
+    animation.currentTime = 1200
+    const right = new DOMMatrix(getComputedStyle(element).transform).m41
+    animation.currentTime = 2400
+    const returned = new DOMMatrix(getComputedStyle(element).transform).m41
+    animation.play()
+    return { left, right, returned }
+  })
+  expect(travel).toEqual({ left: -7, right: 7, returned: -7 })
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await expect(page.getByText('Lokálna ukážka čakania.', { exact: false })).toBeVisible()
+  await page.screenshot({ path: testInfo.outputPath('media-processing.png'), fullPage: true })
   await expect(page.getByText('Súbory sú pripravené iba v tejto ukážke.', { exact: false })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Spracovávam údaje' })).toHaveCount(0)
   await page.getByRole('button', { name: 'Späť', exact: true }).click()
   await page.getByRole('button', { name: 'Potvrdiť polohu' }).click()
   await expect(page.locator('.customer-media__grid img')).toBeVisible()
