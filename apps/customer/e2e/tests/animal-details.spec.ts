@@ -59,11 +59,16 @@ test('details and edit identification round trip preserve answers', async ({ pag
     const start = element.getBoundingClientRect().top
     animation.currentTime = 180
     const middle = element.getBoundingClientRect().top
+    animation.currentTime = 360
+    const overshootBottom = element.getBoundingClientRect().bottom
+    const surfaceExtension = getComputedStyle(element).boxShadow
     animation.finish()
     const end = element.getBoundingClientRect().top
     return {
       start,
       middle,
+      overshootBottom,
+      surfaceExtension,
       end,
       viewport: window.innerHeight,
       scroll: element.parentElement!.scrollTop,
@@ -74,6 +79,9 @@ test('details and edit identification round trip preserve answers', async ({ pag
     animationPositions.viewport - 1
   )
   expect(animationPositions.middle).toBeLessThan(animationPositions.start)
+  expect(animationPositions.overshootBottom).toBeLessThan(animationPositions.viewport)
+  expect(animationPositions.overshootBottom + 12).toBeGreaterThanOrEqual(animationPositions.viewport)
+  expect(animationPositions.surfaceExtension).toContain('rgb(255, 255, 255) 0px 12px 0px 0px')
   expect(animationPositions.end).toBeLessThan(animationPositions.middle)
   await panel.evaluate(async element => {
     await Promise.all(element.getAnimations().map(animation => animation.finished))
@@ -94,10 +102,39 @@ test('details and edit identification round trip preserve answers', async ({ pag
   await expect(adviceDialog).toBeHidden()
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.setViewportSize({ width: 768, height: 800 })
-  await adviceTrigger.click()
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
+  await page.evaluate(() => window.scrollTo(0, 600))
+  const leavingScroll = await page.evaluate(async () => {
+    const initial = window.scrollY
+    const samples: number[] = []
+    const trigger = Array.from(document.querySelectorAll<HTMLButtonElement>('button')).find(
+      button => button.textContent?.trim() === 'Rady'
+    )!
+    trigger.click()
+    for (let index = 0; index < 40; index++) {
+      await new Promise(requestAnimationFrame)
+      const leaving = document.querySelector('.customer-contacts.screen-leave-active')
+      if (leaving && Number(getComputedStyle(leaving).opacity) > 0.05) samples.push(window.scrollY)
+      if (document.querySelector('.customer-advice')) break
+    }
+    return { initial, samples }
+  })
+  expect(leavingScroll.initial).toBeGreaterThan(0)
+  expect(leavingScroll.samples.length).toBeGreaterThan(0)
+  expect(leavingScroll.samples.every(value => Math.abs(value - leavingScroll.initial) < 2)).toBe(true)
   await expect(page).toHaveURL(/\/w14$/)
   await expect(adviceDialog).toBeHidden()
   await expect(page.getByRole('heading', { name: 'Pozor!', exact: true })).toBeVisible()
+  await expect(page.locator('.customer-advice')).not.toHaveClass(/screen-enter-active/)
+  expect(await page.evaluate(() => window.scrollY)).toBe(0)
+  await page.goBack()
+  await expect(page.locator('.customer-contacts')).toBeVisible()
+  await expect(page.locator('.customer-contacts')).not.toHaveClass(/screen-enter-active/)
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(leavingScroll.initial)
+  await adviceTrigger.click()
+  await expect(page.locator('.customer-advice')).toBeVisible()
+  await expect(page.locator('.customer-advice')).not.toHaveClass(/screen-enter-active/)
+  await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.getByRole('button', { name: 'Rozumiem', exact: true }).click()
   await expect(page).toHaveURL(/\/w15$/)
   await page.setViewportSize({ width: 402, height: 874 })

@@ -34,12 +34,11 @@ async function open(opener?: EventTarget | null) {
   if (reduced.value !== 'reduce') {
     entrance = panel.value?.animate(
       [
-        { transform: 'translateY(100%)', offset: 0 },
-        { transform: 'translateY(-8px)', offset: 0.7 },
-        { transform: 'translateY(3px)', offset: 0.86 },
+        { transform: 'translateY(100%)', offset: 0, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' },
+        { transform: 'translateY(-4px)', offset: 0.75, easing: 'ease-in-out' },
         { transform: 'translateY(0)', offset: 1 }
       ],
-      { duration: 400, easing: 'ease-out' }
+      { duration: 480, easing: 'linear' }
     )
   }
 }
@@ -139,6 +138,8 @@ dialog.customer-advice-drawer(
 }
 .customer-advice-drawer__panel {
   max-height: max(0px, calc(100dvh - var(--advice-header-height, 80px) - 20px));
+  /* Extend the surface below the viewport during the small upward overshoot. */
+  box-shadow: 0 12px 0 0 var(--color-surface);
 }
 .customer-advice-drawer::backdrop {
   background: rgb(37 42 49 / 80%);

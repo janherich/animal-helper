@@ -15,6 +15,8 @@ import logoYellow from '@/assets/brand/logo-yellow.svg'
 import { usePageScrollbars } from '@/plugins/overlay-scrollbars'
 import { computed, watch } from 'vue'
 import { contactFixtures } from './pages/fixtures/contacts'
+import { holdScreenHeight, screenEntered, clearScreenScroll } from '@/providers/router/transition-scroll'
+onUnmounted(clearScreenScroll)
 
 usePageScrollbars()
 const route = useRoute()
@@ -168,7 +170,9 @@ onUnmounted(() => {
       RouterView(v-slot="{ Component }")
         Transition(
           name="screen",
-          mode="out-in"
+          mode="out-in",
+          @before-leave="holdScreenHeight",
+          @enter="screenEntered"
         )
           component(
             :is="Component",
