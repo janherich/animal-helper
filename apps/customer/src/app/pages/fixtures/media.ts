@@ -1,10 +1,17 @@
 // Temporary presentation contract and local limits, pending backend agreement.
+import { processingFixture } from './processing'
 export const mediaFixture = {
   screen: 'W04',
   locale: 'sk',
+  layout: { showMenu: false },
   backTarget: 'W03',
+  manualTarget: 'W06',
+  processing: processingFixture,
   allowedActions: ['back', 'pick', 'remove', 'confirm', 'manual'],
-  limits: { bytes: 20 * 1024 * 1024 },
+  limits: {
+    bytes: 20 * 1024 * 1024,
+    mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'video/mp4', 'video/webm', 'video/quicktime']
+  },
   props: {
     back: 'Späť',
     step: 'Krok 2 z 4',
@@ -29,7 +36,6 @@ export const mediaFixture = {
     dismiss: 'Zavrieť oznámenie',
     confirm: 'Potvrdiť',
     manual: 'Nemám fotografiu',
-    manualNotice: 'Manuálny výber zvieraťa ešte pripravujeme.',
     preview: 'Lokálna ukážka: súbory sa nikam neodosielajú a AI rozpoznávanie zatiaľ nie je zapojené.',
     confirmed: 'Súbory sú pripravené iba v tejto ukážke. AI spracovanie a ďalší krok ešte nie sú zapojené.',
     invalid: 'Vyberte fotografiu (JPEG, PNG, WebP) alebo video (MP4, WebM, MOV) do 20 MB.',

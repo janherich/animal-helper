@@ -1,9 +1,34 @@
-import { afterEach, expect, it } from 'vitest'
+import { afterEach, expect, it, vi } from 'vitest'
 import { effectScope } from 'vue'
-import { advanceToasts, pauseToast, toasts, useToasts } from '../toasts'
+import { advanceToasts, clearToasts, pauseToast, runToastAction, toasts, useToasts } from '../toasts'
 
 afterEach(() => {
   toasts.value = []
+})
+
+it('clears screen and navigation notifications and invalidates stale undo actions', () => {
+  const scope = effectScope()
+  const manager = scope.run(() => useToasts())!
+  const undo = vi.fn()
+  const dismissed = vi.fn()
+  manager.show({
+    title: 'Removed',
+    text: '',
+    kind: 'info',
+    dismissLabel: 'Close',
+    action: { label: 'Undo', run: undo },
+    onDismiss: dismissed
+  })
+  const oldToast = toasts.value[0]!
+  manager.clear()
+  expect(toasts.value).toHaveLength(0)
+  expect(dismissed).toHaveBeenCalledTimes(1)
+  runToastAction(oldToast)
+  expect(undo).not.toHaveBeenCalled()
+  manager.show({ title: 'Error', text: '', kind: 'error', dismissLabel: 'Close' })
+  clearToasts()
+  expect(toasts.value).toHaveLength(0)
+  scope.stop()
 })
 
 it('expires timed notifications, pauses independently for hover and focus, and preserves errors', () => {

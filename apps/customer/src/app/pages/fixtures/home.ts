@@ -4,7 +4,15 @@ import type { HomeView } from '../home-view'
 export const homeFixture: HomeView = {
   screen: 'W01',
   locale: 'sk',
+  layout: { showMenu: true },
   allowedActions: ['start-injured', 'start-stray', 'start-dead', 'start-cruelty', 'start-other'],
+  previewActions: {
+    'start-injured': { situation: 'injured', fromDraft: false, target: 'W03' },
+    'start-stray': { situation: 'stray', fromDraft: false, target: 'W03' },
+    'start-dead': { situation: 'dead', fromDraft: false, target: 'W03' },
+    'start-cruelty': { situation: 'cruelty', fromDraft: false, target: 'W03' },
+    'start-other': { situation: 'other', fromDraft: false, target: 'W03' }
+  },
   props: {
     title: 'Čo sa stalo?',
     description: 'Vyberte, o akú situáciu ide. Spolu sa pozrieme na to, ako pomôcť.',
@@ -56,6 +64,10 @@ export const homeFixture: HomeView = {
 export const homeDraftFixture: HomeView = {
   ...homeFixture,
   allowedActions: [...homeFixture.allowedActions, 'draft-complete', 'draft-resume'],
+  previewActions: {
+    ...homeFixture.previewActions,
+    'draft-resume': { situation: 'injured', fromDraft: true, target: 'W03' }
+  },
   props: {
     ...homeFixture.props,
     draft: {

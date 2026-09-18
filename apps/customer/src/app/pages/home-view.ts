@@ -3,7 +3,10 @@
 export type HomeView = {
   screen: 'W01'
   locale: string
+  layout: { showMenu: boolean }
   allowedActions: string[]
+  // Fixture-only transitions. Replace with server action descriptors and responses.
+  previewActions: Record<string, { situation: string; fromDraft: boolean; target: string }>
   props: {
     draft?: {
       heading: string

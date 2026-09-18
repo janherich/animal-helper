@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onUnmounted, ref, watchEffect } from 'vue'
+import { computed, nextTick, onUnmounted, ref, watchEffect } from 'vue'
 import { useElementBounding, useWindowSize } from '@vueuse/core'
 import { useRouter } from 'vue-router'
 import addMedia from '@/assets/brand/add-media.svg'
@@ -7,7 +7,6 @@ import { previewSession } from '../preview-flow'
 import { toastBottomOffset, useToasts } from '../toasts'
 import type { MediaView } from './fixtures/media'
 import PageProcessing from './page-processing.vue'
-import { processingFixture } from './fixtures/processing'
 import { useDelayedPending } from '../use-delayed-pending'
 
 const props = defineProps<{ view: MediaView }>()
@@ -15,9 +14,11 @@ const router = useRouter()
 const gallery = ref<HTMLInputElement>()
 const message = ref('')
 const confirmButton = ref<HTMLButtonElement>()
-const { pending, visible: processingVisible, run } = useDelayedPending(processingFixture.thresholdMs)
+const { pending, visible: processingVisible, run } = useDelayedPending(props.view.processing.thresholdMs)
 async function confirmMedia() {
   if (!items.value.length || !props.view.allowedActions.includes('confirm') || pending.value) return
+  // Confirmation commits the current selection; pending removals can no longer be undone.
+  notifications.clear()
   message.value = ''
   await run(async signal => {
     // Deliberately no upload or AI request: this only previews the waiting state.
@@ -27,7 +28,7 @@ async function confirmMedia() {
         signal.removeEventListener('abort', done)
         resolve()
       }
-      const timer = setTimeout(done, processingFixture.demoDurationMs)
+      const timer = setTimeout(done, props.view.processing.demoDurationMs)
       signal.addEventListener('abort', done, { once: true })
     })
     if (!signal.aborted) {
@@ -55,7 +56,7 @@ const notifications = useToasts()
 function showError(text: string, title = props.view.props.invalidTitle, kind: 'error' | 'warning' = 'error') {
   notifications.show({ title, text, kind, dismissLabel: props.view.props.dismiss })
 }
-const accepted = 'image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime'
+const accepted = computed(() => props.view.limits.mimeTypes.join(','))
 const items = ref(
   (previewSession.value?.media ?? []).map(file => ({
     file,
@@ -77,7 +78,7 @@ function pickFiles(event: Event) {
       oversized.push(file.name)
       continue
     }
-    if (!accepted.split(',').includes(file.type) || !file.size) {
+    if (!props.view.limits.mimeTypes.includes(file.type) || !file.size) {
       rejected.push(file.name)
       continue
     }
@@ -99,6 +100,7 @@ function pickFiles(event: Event) {
 let removalToast: number | undefined
 let removedFiles: { file: File; index: number }[] = []
 function restoreRemoved() {
+  if (pending.value) return false
   // Reverse the removals to restore their original positions, even when indices shifted.
   for (const { file, index } of [...removedFiles].reverse()) {
     if (
@@ -115,7 +117,7 @@ function restoreRemoved() {
   syncFiles()
 }
 function remove(index: number) {
-  if (!props.view.allowedActions.includes('remove')) return
+  if (pending.value || !props.view.allowedActions.includes('remove')) return
   const item = items.value.splice(index, 1)[0]
   if (item) {
     URL.revokeObjectURL(item.url)
@@ -173,8 +175,8 @@ onUnmounted(() => items.value.forEach(item => URL.revokeObjectURL(item.url)))
   )
     PageProcessing(
       v-if="processingVisible",
-      :title="processingFixture.title",
-      :preview="processingFixture.preview"
+      :title="view.processing.title",
+      :preview="view.processing.preview"
     )
     .customer-media(
       v-else,
@@ -323,7 +325,7 @@ onUnmounted(() => items.value.forEach(item => URL.revokeObjectURL(item.url)))
           type="button",
           class="flex w-full items-center justify-center rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand",
           :disabled="pending || !view.allowedActions.includes('confirm')",
-          :aria-label="pending ? processingFixture.title : view.props.confirm",
+          :aria-label="pending ? view.processing.title : view.props.confirm",
           :aria-busy="pending",
           @click="confirmMedia"
         )
@@ -338,7 +340,7 @@ onUnmounted(() => items.value.forEach(item => URL.revokeObjectURL(item.url)))
           type="button",
           class="w-full rounded-control border border-primary bg-surface p-4 text-button text-primary",
           :disabled="!view.allowedActions.includes('manual')",
-          @click="message = view.props.manualNotice"
+          @click="view.allowedActions.includes('manual') && router.push({ name: view.manualTarget })"
         ) {{ view.props.manual }}
         p(
           class="mt-3 text-center text-primary empty:hidden",

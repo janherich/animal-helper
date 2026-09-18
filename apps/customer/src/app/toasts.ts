@@ -33,17 +33,24 @@ export function dismissToast(id: number) {
   toasts.value = toasts.value.filter(toast => toast.id !== id)
   removed?.onDismiss?.()
 }
+export function clearToasts() {
+  for (const toast of [...toasts.value]) dismissToast(toast.id)
+}
 export function runToastAction(toast: Toast) {
+  if (!toasts.value.some(current => current.id === toast.id)) return
   if (toast.action?.run() !== false) dismissToast(toast.id)
 }
 
 // Notifications belong to the calling screen; callbacks never survive its disposal.
 export function useToasts() {
   const owned = new Set<number>()
-  onScopeDispose(() => {
+  function clear() {
     for (const id of owned) dismissToast(id)
-  })
+    owned.clear()
+  }
+  onScopeDispose(clear)
   return {
+    clear,
     update(id: number, patch: Partial<Pick<Toast, 'title' | 'text' | 'action' | 'duration'>>) {
       if (!owned.has(id)) return
       toasts.value = toasts.value.map(toast =>

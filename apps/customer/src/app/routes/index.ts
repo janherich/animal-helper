@@ -1,4 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router'
+import { animalGroupsFixture } from '../pages/fixtures/animal-groups'
 import { homeDraftFixture, homeFixture } from '../pages/fixtures/home'
 import { locationFixture } from '../pages/fixtures/location'
 import { mediaFixture } from '../pages/fixtures/media'
@@ -7,6 +8,7 @@ export const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'W01',
+    meta: homeFixture.layout,
     // Development preview selector only; never grants access to an actual case.
     props: route => ({
       view: import.meta.env.DEV && route.query.fixture === 'draft' ? homeDraftFixture : homeFixture
@@ -17,7 +19,7 @@ export const routes: RouteRecordRaw[] = [
     path: '/w03',
     name: 'W03',
     props: { view: locationFixture },
-    meta: { showMenu: false },
+    meta: locationFixture.layout,
     beforeEnter: () => previewSession.value !== null || { name: 'W01' },
     component: () => import('../pages/page-location.vue')
   },
@@ -25,9 +27,17 @@ export const routes: RouteRecordRaw[] = [
     path: '/w04',
     name: 'W04',
     props: { view: mediaFixture },
-    meta: { showMenu: false },
+    meta: mediaFixture.layout,
     beforeEnter: () => !!previewSession.value?.location || { name: 'W01' },
     component: () => import('../pages/page-media.vue')
+  },
+  {
+    path: '/w06',
+    name: 'W06',
+    props: { view: animalGroupsFixture },
+    meta: animalGroupsFixture.layout,
+    beforeEnter: () => !!previewSession.value?.location || { name: 'W01' },
+    component: () => import('../pages/page-animal-groups.vue')
   },
   {
     path: '/:pathMatch(.*)*',

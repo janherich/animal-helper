@@ -4,8 +4,10 @@ import { OverlayScrollbarsComponent } from 'overlayscrollbars-vue'
 import { nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import { homeDraftFixture, homeFixture } from './pages/fixtures/home'
+import { shellFixture as shell } from './pages/fixtures/shell'
 import { beginPreview } from './preview-flow'
 import ManagerToasts from './components/manager-toasts.vue'
+import { clearToasts } from './toasts'
 import logoOrange from '@/assets/brand/logo-orange.svg'
 import logoYellow from '@/assets/brand/logo-yellow.svg'
 import { usePageScrollbars } from '@/plugins/overlay-scrollbars'
@@ -13,14 +15,18 @@ import { usePageScrollbars } from '@/plugins/overlay-scrollbars'
 usePageScrollbars()
 const route = useRoute()
 const router = useRouter()
+const stopToastNavigation = router.afterEach((to, from, failure) => {
+  if (!failure && to.fullPath !== from.fullPath) clearToasts()
+})
+onUnmounted(stopToastNavigation)
 function handlePageAction(id: string) {
   if (route.name !== 'W01') return
   const view = import.meta.env.DEV && route.query.fixture === 'draft' ? homeDraftFixture : homeFixture
   if (!view.allowedActions.includes(id)) return
-  const situation = view.props.situations.find(item => item.action === id)
-  if (situation || id === 'draft-resume') {
-    beginPreview(situation?.id ?? 'injured', id === 'draft-resume')
-    void router.push({ name: 'W03' })
+  const action = view.previewActions[id]
+  if (action) {
+    beginPreview(action.situation, action.fromDraft)
+    void router.push({ name: action.target })
   }
 }
 const reducedMotion = usePreferredReducedMotion()
@@ -32,19 +38,6 @@ const notice = ref('')
 const body = ref<HTMLElement | null>(null)
 const scrollLocked = useScrollLock(body)
 let splashTimer: ReturnType<typeof setTimeout> | undefined
-const menuItems = [
-  { label: 'Moje prípady', icon: 'my-cases', home: true },
-  { label: 'Domov', icon: 'about', home: true },
-  { label: 'Časté otázky a návody', icon: 'faq' },
-  { label: 'Staň sa dobrovoľníkom', icon: 'volunteer' },
-  { label: 'Podpor Zverolinku', icon: 'donation' }
-]
-const socials = [
-  { name: 'Facebook', icon: 'facebook' },
-  { name: 'Instagram', icon: 'instagram' },
-  { name: 'LinkedIn', icon: 'linkedin' },
-  { name: 'TikTok', icon: 'tiktok' }
-]
 function openMenu() {
   menu.value?.showModal()
   menuOpen.value = true
@@ -76,7 +69,7 @@ async function showUnavailable(label: string) {
   closeMenu()
   notice.value = ''
   await nextTick()
-  notice.value = `${label}: túto časť aplikácie pripravujeme.`
+  notice.value = shell.props.unavailable.replace('{label}', label)
 }
 onMounted(() => {
   body.value = document.body
@@ -96,7 +89,10 @@ onUnmounted(() => {
 </script>
 
 <template lang="pug">
-.customer-app(class="relative min-h-dvh w-full bg-canvas")
+.customer-app(
+  class="relative min-h-dvh w-full bg-canvas",
+  :lang="shell.locale"
+)
   ManagerToasts
   .customer-app__content(
     class="flex min-h-dvh flex-col",
@@ -105,18 +101,18 @@ onUnmounted(() => {
     a.customer-app__skip(
       class="sr-only focus:not-sr-only focus:absolute focus:z-20 focus:bg-surface focus:p-4",
       href="#main-content"
-    ) Preskočiť na obsah
+    ) {{ shell.props.skip }}
     header.customer-app__header(
       class="sticky top-0 z-30 shrink-0 bg-surface px-[15px] pt-[max(16px,env(safe-area-inset-top))] pb-5 shadow-[0_2px_8px_rgb(37_42_49/8%)] supports-backdrop-filter:bg-surface/80 supports-backdrop-filter:backdrop-blur-md"
     )
       .customer-app__header-row(class="flex min-h-11 items-center justify-between")
         RouterLink(
-          to="/",
-          aria-label="Zverolinka – domov"
+          :to="shell.homeTarget",
+          :aria-label="shell.props.home"
         )
           img(
             :src="logoOrange",
-            alt="Zverolinka",
+            :alt="shell.props.brand",
             width="62",
             height="40",
             class="h-10 w-[62px]"
@@ -126,7 +122,7 @@ onUnmounted(() => {
           ref="menuTrigger",
           class="flex size-11 cursor-pointer items-center justify-center rounded-lg hover:bg-canvas",
           type="button",
-          aria-label="Otvoriť menu",
+          :aria-label="shell.props.openMenu",
           aria-haspopup="dialog",
           aria-controls="app-menu",
           :aria-expanded="menuOpen",
@@ -154,7 +150,7 @@ onUnmounted(() => {
   dialog#app-menu.customer-app__menu(
     ref="menu",
     class="fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none overflow-hidden border-0 bg-transparent p-0 text-ink",
-    aria-label="Hlavné menu",
+    :aria-label="shell.props.menu",
     @click.self="closeMenu",
     @keydown="onMenuKeydown",
     @close="onMenuClosed"
@@ -165,7 +161,7 @@ onUnmounted(() => {
       )
         img(
           :src="logoOrange",
-          alt="Zverolinka",
+          :alt="shell.props.brand",
           width="62",
           height="40",
           class="h-10 w-[62px]"
@@ -173,7 +169,7 @@ onUnmounted(() => {
         button(
           class="-mr-2 flex size-11 cursor-pointer items-center justify-center rounded-lg text-primary hover:bg-canvas",
           type="button",
-          aria-label="Zatvoriť menu",
+          :aria-label="shell.props.closeMenu",
           autofocus,
           @click="closeMenu"
         )
@@ -184,16 +180,16 @@ onUnmounted(() => {
       )
         nav(
           class="flex flex-col gap-3 py-3",
-          aria-label="Hlavná navigácia"
+          :aria-label="shell.props.navigation"
         )
           template(
-            v-for="item in menuItems",
+            v-for="item in shell.menuItems",
             :key="item.label"
           )
             RouterLink(
-              v-if="item.home",
+              v-if="item.target",
               class="flex min-h-14 items-center gap-3 px-4 py-4 text-body-strong hover:bg-canvas",
-              to="/",
+              :to="item.target",
               @click="closeMenu"
             )
               base-icon(:name="item.icon")
@@ -210,7 +206,7 @@ onUnmounted(() => {
         class="flex shrink-0 justify-center gap-2 border-t border-primary-light bg-canvas px-4 pt-3 pb-[max(16px,env(safe-area-inset-bottom))] text-primary"
       )
         button(
-          v-for="social in socials",
+          v-for="social in shell.socials",
           :key="social.icon",
           class="flex size-11 cursor-pointer items-center justify-center rounded-lg hover:bg-primary-light",
           type="button",
@@ -225,11 +221,11 @@ onUnmounted(() => {
     v-if="starting",
     class="fixed inset-0 z-50 flex items-center justify-center bg-primary",
     role="status",
-    aria-label="Vitajte v Zverolinke"
+    :aria-label="shell.props.welcome"
   )
     img(
       :src="logoYellow",
-      alt="Zverolinka",
+      :alt="shell.props.brand",
       width="207",
       height="134",
       class="h-[134px] w-[207px] max-w-[70%] object-contain"

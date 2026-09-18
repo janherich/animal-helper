@@ -1,10 +1,17 @@
 // Temporary presentation data. Neither these actions nor the transition are API contracts.
+import mapImage from '@/assets/brand/location-preview.png'
 export type LocationPoint = { label: string; lat: number; lng: number; source: 'fixture' | 'device' }
 export const locationFixture = {
   screen: 'W03a',
   locale: 'sk',
+  layout: { showMenu: false },
   allowedActions: ['back', 'confirm-location'],
   backTarget: 'W01',
+  confirmTarget: 'W04',
+  map: {
+    imageUrl: mapImage,
+    point: { label: 'Dolné Orešany', lat: 48.433, lng: 17.43, source: 'fixture' } satisfies LocationPoint
+  },
   props: {
     back: 'Späť',
     step: 'Krok 1 z 4',

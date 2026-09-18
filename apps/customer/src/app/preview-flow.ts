@@ -7,6 +7,18 @@ export const previewSession = ref<{
   fromDraft: boolean
   location?: LocationPoint
   media?: File[]
+  animalGroup?: string
+  animalSpecies?: string
+  animalCategory?: string
+  animalPath?: string[]
+  animalIdentification?: {
+    kind: 'species' | 'other' | 'unknown'
+    groupId?: string
+    path?: string[]
+    categoryId?: string
+    speciesId?: string
+    description?: string
+  }
 } | null>(null)
 
 export function beginPreview(situation: string, fromDraft = false) {

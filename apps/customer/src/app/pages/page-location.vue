@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { autoUpdate, offset, shift, size, useFloating } from '@floating-ui/vue'
-import { computed, onUnmounted, ref, watch, useId } from 'vue'
+import { computed, nextTick, onUnmounted, ref, watch, useId } from 'vue'
+import { scrollActiveOption } from '@/libs/scroll-active-option'
 import { useRouter } from 'vue-router'
-import mapImage from '@/assets/brand/location-preview.png'
 import type { LocationPoint, LocationView } from './fixtures/location'
 import { previewSession } from '../preview-flow'
 
@@ -70,7 +70,7 @@ function selectPlace(place: LocationPoint) {
   selected.value = place
   message.value = ''
 }
-function onSearchKeydown(event: KeyboardEvent) {
+async function onSearchKeydown(event: KeyboardEvent) {
   if (event.isComposing) return
   if (event.key === 'Escape') {
     focused.value = false
@@ -79,7 +79,16 @@ function onSearchKeydown(event: KeyboardEvent) {
     event.preventDefault()
     focused.value = true
     const count = matches.value.length
-    if (count) activeIndex.value = (activeIndex.value + (event.key === 'ArrowDown' ? 1 : -1) + count) % count
+    if (count) {
+      activeIndex.value =
+        activeIndex.value < 0
+          ? event.key === 'ArrowDown'
+            ? 0
+            : count - 1
+          : (activeIndex.value + (event.key === 'ArrowDown' ? 1 : -1) + count) % count
+      await nextTick()
+      scrollActiveOption(results.value, activeIndex.value)
+    }
   } else if (event.key === 'Enter' && open.value && activeIndex.value >= 0) {
     event.preventDefault()
     const place = matches.value[activeIndex.value]
@@ -116,7 +125,7 @@ function locate() {
 function confirmLocation() {
   if (!selected.value || !previewSession.value || !props.view.allowedActions.includes('confirm-location')) return
   previewSession.value.location = { ...selected.value }
-  void router.push({ name: 'W04' })
+  void router.push({ name: props.view.confirmTarget })
 }
 function goBack() {
   if (!props.view.allowedActions.includes('back')) return
@@ -211,7 +220,7 @@ onUnmounted(() => {
           :aria-label="place.label",
           :aria-describedby="resultsId + '-detail-' + index",
           :aria-selected="activeIndex === index",
-          class="min-h-11 shrink-0 cursor-pointer rounded-control px-3 py-2 text-left hover:bg-canvas",
+          class="min-h-11 shrink-0 cursor-pointer rounded-control px-3 py-2 text-left transition-colors duration-150 hover:bg-canvas motion-reduce:transition-none",
           :class="{ 'bg-primary-light': activeIndex === index }",
           @mousedown.prevent,
           @click="selectPlace(place)"
@@ -241,10 +250,10 @@ onUnmounted(() => {
       type="button",
       class="relative flex h-[400px] w-full items-center justify-center overflow-hidden rounded-[20px]",
       :aria-label="view.props.mapLabel",
-      @click="view.places[0] && selectPlace(view.places[0])"
+      @click="selectPlace(view.map.point)"
     )
       img(
-        :src="mapImage",
+        :src="view.map.imageUrl",
         alt="",
         class="absolute inset-0 size-full object-cover"
       )
