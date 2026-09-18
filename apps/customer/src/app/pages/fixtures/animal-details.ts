@@ -15,6 +15,7 @@ export const animalDetailsFixture = {
   failedBackTarget: 'W04',
   editTarget: 'W40',
   manualTarget: 'W06',
+  confirmTarget: 'W14',
   allowedActions: ['back', 'edit', 'confirm'],
   values: {} as Record<string, string | string[]>,
   copy: {

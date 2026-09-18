@@ -7,6 +7,7 @@ export const previewSession = ref<{
   fromDraft: boolean
   editingAnimal?: boolean
   identificationFailed?: boolean
+  adviceReady?: boolean
   animalDetails?: Record<string, string | string[]>
   location?: LocationPoint
   media?: File[]

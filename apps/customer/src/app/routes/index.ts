@@ -1,4 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router'
+import { adviceFixture, warningsOnlyFixture } from '../pages/fixtures/advice'
 import { animalDetailsFixture, editAnimalFixture } from '../pages/fixtures/animal-details'
 import { animalGroupsFixture } from '../pages/fixtures/animal-groups'
 import { homeDraftFixture, homeFixture } from '../pages/fixtures/home'
@@ -59,6 +60,17 @@ export const routes: RouteRecordRaw[] = [
       (!!previewSession.value?.location && !!previewSession.value.animalIdentification) || { name: 'W01' },
     component: () => import('../pages/page-edit-animal.vue')
   },
+  ...[warningsOnlyFixture, adviceFixture].map(view => ({
+    path: '/' + view.screen.toLowerCase(),
+    name: view.screen,
+    props: { view },
+    meta: view.layout,
+    beforeEnter: () =>
+      (!!previewSession.value?.location &&
+        !!previewSession.value.animalIdentification &&
+        !!previewSession.value.adviceReady) || { name: 'W01' },
+    component: () => import('../pages/page-advice.vue')
+  })),
   {
     path: '/:pathMatch(.*)*',
     name: 'not-found',

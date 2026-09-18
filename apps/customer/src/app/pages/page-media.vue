@@ -34,6 +34,7 @@ async function confirmMedia() {
     if (!signal.aborted) {
       if (previewSession.value) {
         previewSession.value.identificationFailed = true
+        previewSession.value.adviceReady = false
         delete previewSession.value.animalIdentification
       }
       await router.push({ name: props.view.resultTarget })

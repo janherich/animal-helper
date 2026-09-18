@@ -89,6 +89,7 @@ function resetSelection() {
   query.value = ''
   focused.value = false
   if (previewSession.value) delete previewSession.value.animalIdentification
+  if (previewSession.value) previewSession.value.adviceReady = false
 }
 function confirm() {
   const session = previewSession.value
@@ -107,6 +108,7 @@ function confirm() {
   completed.value = true
   session.editingAnimal = false
   session.identificationFailed = false
+  session.adviceReady = false
   void router.push({ name: props.view.confirmTarget })
 }
 function selectCard(id: string) {

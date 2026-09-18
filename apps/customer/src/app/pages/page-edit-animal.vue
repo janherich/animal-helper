@@ -63,6 +63,7 @@ function select(animal: CatalogueAnimal) {
   if (animal.path[1]) session.animalCategory = animal.path[1]
   else delete session.animalCategory
   session.identificationFailed = false
+  session.adviceReady = false
   session.editingAnimal = false
   void router.push({ name: props.view.backTarget })
 }

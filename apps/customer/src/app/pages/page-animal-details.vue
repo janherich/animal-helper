@@ -20,12 +20,11 @@ const animalLabel = computed(
       : props.view.copy.unknown)
 )
 const answers = ref<Record<string, string | string[]>>({ ...props.view.values, ...previewSession.value?.animalDetails })
-const completed = ref(false)
 watch(
   answers,
   value => {
     if (previewSession.value) previewSession.value.animalDetails = { ...value }
-    completed.value = false
+    if (previewSession.value) previewSession.value.adviceReady = false
   },
   { deep: true }
 )
@@ -58,7 +57,10 @@ const valid = computed(() =>
   )
 )
 function confirm() {
-  if (valid.value && props.view.allowedActions.includes('confirm')) completed.value = true
+  if (!valid.value || !props.view.allowedActions.includes('confirm') || !previewSession.value) return
+  previewSession.value.animalDetails = { ...answers.value }
+  previewSession.value.adviceReady = true
+  void router.push({ name: props.view.confirmTarget })
 }
 function edit() {
   if (!props.view.allowedActions.includes('edit')) return
@@ -217,9 +219,4 @@ function edit() {
       :disabled="!valid || !view.allowedActions.includes('confirm')",
       class="w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:opacity-40"
     ) {{ view.copy.confirm }}
-    p(
-      v-if="completed",
-      role="status",
-      class="mt-3 text-center text-primary"
-    ) {{ view.copy.completed }}
 </template>
