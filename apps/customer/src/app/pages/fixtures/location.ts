@@ -28,9 +28,30 @@ export const locationFixture = {
     confirmed: 'Poloha potvrdená iba v ukážke. Ďalší krok a uloženie na server ešte nie sú zapojené.'
   },
   places: [
-    { label: 'Dolné Orešany', lat: 48.433, lng: 17.43, source: 'fixture' },
-    { label: 'Bratislava, Hlavné námestie', lat: 48.1439, lng: 17.1086, source: 'fixture' },
-    { label: 'Trnava, Trojičné námestie', lat: 48.3775, lng: 17.5872, source: 'fixture' }
-  ] satisfies LocationPoint[]
+    {
+      label: 'Dolné Orešany',
+      title: 'Dolné Orešany',
+      detail: 'Okres Trnava • Slovensko',
+      lat: 48.433,
+      lng: 17.43,
+      source: 'fixture'
+    },
+    {
+      label: 'Bratislava, Hlavné námestie',
+      title: 'Hlavné námestie',
+      detail: 'Bratislava • Staré Mesto',
+      lat: 48.1439,
+      lng: 17.1086,
+      source: 'fixture'
+    },
+    {
+      label: 'Trnava, Trojičné námestie',
+      title: 'Trojičné námestie',
+      detail: 'Trnava • Centrum',
+      lat: 48.3775,
+      lng: 17.5872,
+      source: 'fixture'
+    }
+  ] satisfies (LocationPoint & { title: string; detail: string })[]
 }
 export type LocationView = typeof locationFixture
