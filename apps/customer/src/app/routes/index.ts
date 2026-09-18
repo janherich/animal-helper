@@ -2,6 +2,7 @@ import type { RouteRecordRaw } from 'vue-router'
 import { adviceFixture, warningsOnlyFixture } from '../pages/fixtures/advice'
 import { animalDetailsFixture, editAnimalFixture } from '../pages/fixtures/animal-details'
 import { animalGroupsFixture } from '../pages/fixtures/animal-groups'
+import { contactFixtures } from '../pages/fixtures/contacts'
 import { homeDraftFixture, homeFixture } from '../pages/fixtures/home'
 import { locationFixture } from '../pages/fixtures/location'
 import { mediaFixture } from '../pages/fixtures/media'
@@ -70,6 +71,17 @@ export const routes: RouteRecordRaw[] = [
         !!previewSession.value.animalIdentification &&
         !!previewSession.value.adviceReady) || { name: 'W01' },
     component: () => import('../pages/page-advice.vue')
+  })),
+  ...contactFixtures.map(view => ({
+    path: '/' + view.screen.toLowerCase(),
+    name: view.screen,
+    props: { view },
+    meta: view.layout,
+    beforeEnter: () =>
+      (!!previewSession.value?.location &&
+        !!previewSession.value.animalIdentification &&
+        !!previewSession.value.adviceReady) || { name: 'W01' },
+    component: () => import('../pages/page-contacts.vue')
   })),
   {
     path: '/:pathMatch(.*)*',

@@ -10,6 +10,7 @@ export type AdviceView = {
   locale: string
   layout: { showMenu: boolean }
   backTarget: string
+  confirmTarget: string
   allowedActions: ('back' | 'acknowledge')[]
   copy: {
     back: string
@@ -19,7 +20,8 @@ export type AdviceView = {
     description: string
     preview: string
     acknowledge: string
-    acknowledged: string
+    drawerTitle: string
+    closeAdvice: string
   }
   blocks: AdviceBlock[]
 }
@@ -28,6 +30,7 @@ export const adviceFixture: AdviceView = {
   locale: 'sk',
   layout: { showMenu: false },
   backTarget: 'W09',
+  confirmTarget: 'W15',
   allowedActions: ['back', 'acknowledge'],
   copy: {
     back: 'Späť',
@@ -37,7 +40,8 @@ export const adviceFixture: AdviceView = {
     description: 'V ďalších krokoch sa dozviete, koho kontaktovať. Medzitým však dodržte tieto zásady.',
     preview: 'Ukážka rozloženia: texty nižšie nie sú rady pre váš prípad. Konkrétne pokyny dodá server.',
     acknowledge: 'Rozumiem',
-    acknowledged: 'Potvrdené iba v lokálnej ukážke. Kontakty a ďalší postup ešte nie sú zapojené.'
+    drawerTitle: 'Rady na pomoc',
+    closeAdvice: 'Zavrieť rady'
   },
   blocks: [
     {

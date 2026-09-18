@@ -1,22 +1,41 @@
 <script setup lang="ts">
-import { usePreferredReducedMotion, useScrollLock } from '@vueuse/core'
+import { usePreferredReducedMotion, useScrollLock, useElementSize, useMediaQuery } from '@vueuse/core'
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-vue'
 import { nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import { homeDraftFixture, homeFixture } from './pages/fixtures/home'
 import { shellFixture as shell } from './pages/fixtures/shell'
-import { beginPreview } from './preview-flow'
+import { beginPreview, previewSession } from './preview-flow'
+import AdviceDrawer from './components/advice-drawer.vue'
+import { adviceFixture } from './pages/fixtures/advice'
 import ManagerToasts from './components/manager-toasts.vue'
 import { clearToasts } from './toasts'
 import logoOrange from '@/assets/brand/logo-orange.svg'
 import logoYellow from '@/assets/brand/logo-yellow.svg'
 import { usePageScrollbars } from '@/plugins/overlay-scrollbars'
+import { computed, watch } from 'vue'
+import { contactFixtures } from './pages/fixtures/contacts'
 
 usePageScrollbars()
 const route = useRoute()
 const router = useRouter()
+const adviceAction = computed(() => contactFixtures.find(view => view.screen === route.name)?.layout.adviceAction)
+const adviceDrawer = ref<InstanceType<typeof AdviceDrawer>>()
+const desktopAdvice = useMediaQuery('(min-width: 768px)')
+watch(desktopAdvice, desktop => {
+  if (desktop) adviceDrawer.value?.close(true)
+})
+function openAdvice(event: MouseEvent) {
+  if (desktopAdvice.value) void router.push({ name: previewSession.value?.adviceView?.screen ?? adviceFixture.screen })
+  else void adviceDrawer.value?.open(event.currentTarget)
+}
+const appHeader = ref<HTMLElement>()
+const { height: headerHeight } = useElementSize(appHeader, { width: 0, height: 80 }, { box: 'border-box' })
 const stopToastNavigation = router.afterEach((to, from, failure) => {
-  if (!failure && to.fullPath !== from.fullPath) clearToasts()
+  if (!failure && to.fullPath !== from.fullPath) {
+    clearToasts()
+    adviceDrawer.value?.close(true)
+  }
 })
 onUnmounted(stopToastNavigation)
 function handlePageAction(id: string) {
@@ -94,6 +113,11 @@ onUnmounted(() => {
   :lang="shell.locale"
 )
   ManagerToasts
+  AdviceDrawer(
+    ref="adviceDrawer",
+    :view="previewSession?.adviceView ?? adviceFixture",
+    :style="{ '--advice-header-height': headerHeight + 'px' }"
+  )
   .customer-app__content(
     class="flex min-h-dvh flex-col",
     :inert="starting"
@@ -103,6 +127,7 @@ onUnmounted(() => {
       href="#main-content"
     ) {{ shell.props.skip }}
     header.customer-app__header(
+      ref="appHeader",
       class="sticky top-0 z-30 shrink-0 bg-surface px-[15px] pt-[max(16px,env(safe-area-inset-top))] pb-5 shadow-[0_2px_8px_rgb(37_42_49/8%)] supports-backdrop-filter:bg-surface/80 supports-backdrop-filter:backdrop-blur-md"
     )
       .customer-app__header-row(class="flex min-h-11 items-center justify-between")
@@ -117,6 +142,13 @@ onUnmounted(() => {
             height="40",
             class="h-10 w-[62px]"
           )
+        button(
+          v-if="adviceAction",
+          type="button",
+          :aria-haspopup="desktopAdvice ? undefined : 'dialog'",
+          class="rounded-control bg-accent-gradient px-6 py-3 text-button text-white",
+          @click="openAdvice"
+        ) {{ adviceAction.label }}
         button.customer-app__menu-trigger(
           v-if="route.meta.showMenu !== false",
           ref="menuTrigger",

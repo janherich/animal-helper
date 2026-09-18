@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import type { AdviceView } from './fixtures/advice'
+import AdviceBlocks from '../components/advice-blocks.vue'
+import { previewSession } from '../preview-flow'
 const props = defineProps<{ view: AdviceView }>()
 const router = useRouter()
-const acknowledged = ref(false)
-const variants = {
-  avoid: { container: 'border-danger bg-danger-light', heading: 'text-danger', icon: 'attention' },
-  do: { container: 'border-success bg-success-light', heading: 'text-success', icon: 'info' }
-}
 function acknowledge() {
-  if (props.view.allowedActions.includes('acknowledge')) acknowledged.value = true
+  if (!props.view.allowedActions.includes('acknowledge')) return
+  if (previewSession.value) previewSession.value.adviceView = props.view
+  void router.push({ name: props.view.confirmTarget })
 }
 </script>
 
@@ -47,36 +45,7 @@ function acknowledge() {
     h1(class="mb-1 text-heading-1") {{ view.copy.title }}
     p {{ view.copy.description }}
   p(class="px-4 pt-2 text-center text-small text-primary") {{ view.copy.preview }}
-  .customer-advice__blocks(class="flex flex-col gap-4 p-4")
-    section(
-      v-for="block in view.blocks",
-      :key="block.id",
-      :aria-labelledby="'advice-' + block.id",
-      class="overflow-hidden rounded-control border py-1",
-      :class="[variants[block.kind].container, 'customer-advice__' + block.kind]"
-    )
-      div(
-        class="flex items-center gap-2 px-4 pt-3 pb-2",
-        :class="variants[block.kind].heading"
-      )
-        base-icon(:name="variants[block.kind].icon")
-        h2(
-          :id="'advice-' + block.id",
-          class="min-w-0 text-heading-3"
-        ) {{ block.title }}
-      ol(class="flex list-none flex-col gap-1 px-5 pb-2")
-        li(
-          v-for="(item, index) in block.items",
-          :key="item.id",
-          class="py-1"
-        )
-          h3(class="flex gap-1 text-heading-3")
-            span(aria-hidden="true") {{ index + 1 }}.
-            span {{ item.title }}
-          p(
-            v-if="item.description",
-            class="mt-1"
-          ) {{ item.description }}
+  AdviceBlocks(:blocks="view.blocks")
   div(class="sticky bottom-0 z-20 mt-auto bg-canvas p-4 pb-[max(1rem,env(safe-area-inset-bottom))]")
     div(
       aria-hidden="true",
@@ -88,9 +57,4 @@ function acknowledge() {
       :disabled="!view.allowedActions.includes('acknowledge')",
       @click="acknowledge"
     ) {{ view.copy.acknowledge }}
-    p(
-      v-if="acknowledged",
-      role="status",
-      class="mt-3 text-center text-primary"
-    ) {{ view.copy.acknowledged }}
 </template>

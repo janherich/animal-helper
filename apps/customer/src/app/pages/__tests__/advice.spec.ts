@@ -27,7 +27,7 @@ it('renders red-only and combined variants from ordered data', async () => {
     .findAll('button')
     .find(button => button.text() === view.copy.acknowledge)!
     .trigger('click')
-  expect(wrapper.get('[role=status]').text()).toBe(view.copy.acknowledged)
+  expect(push).toHaveBeenCalledWith({ name: view.confirmTarget })
   await wrapper
     .findAll('button')
     .find(button => button.text() === view.copy.back)!
