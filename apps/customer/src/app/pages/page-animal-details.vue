@@ -104,10 +104,15 @@ function edit() {
   h2(class="px-5 py-2 text-heading-3") {{ view.copy.animal }}
   div(
     v-if="failed",
-    class="mx-4 my-2 rounded-control bg-primary-light p-5",
+    class="mx-4 my-2 rounded-control border border-accent bg-accent-light px-5 py-4",
     role="status"
   )
-    p(class="text-body-strong") {{ view.copy.failedTitle }}
+    div(class="flex items-center gap-2 text-accent")
+      base-icon(
+        name="warning",
+        class="size-6 shrink-0"
+      )
+      p(class="min-w-0 text-heading-3") {{ view.copy.failedTitle }}
     p(class="mt-2") {{ view.copy.failedDescription }}
   template(v-else)
     section(class="mx-4 mb-4 rounded-control border border-primary-light bg-surface p-5")
