@@ -116,7 +116,7 @@ function locate() {
 function confirmLocation() {
   if (!selected.value || !previewSession.value || !props.view.allowedActions.includes('confirm-location')) return
   previewSession.value.location = { ...selected.value }
-  message.value = props.view.props.confirmed
+  void router.push({ name: 'W04' })
 }
 function goBack() {
   if (!props.view.allowedActions.includes('back')) return
@@ -256,7 +256,9 @@ onUnmounted(() => {
           name="compass",
           class="size-6"
         )
-      span(class="relative flex items-center gap-2 rounded-control border border-primary bg-surface px-4 py-2 text-primary shadow")
+      span(
+        class="relative flex items-center gap-2 rounded-control border border-primary bg-surface px-4 py-2 text-primary shadow"
+      )
         base-icon(
           name="locate",
           class="size-6 shrink-0"
@@ -267,7 +269,13 @@ onUnmounted(() => {
       class="rounded-control bg-primary-light p-3 text-primary"
     ) {{ view.props.selected }}: {{ selected.label }} ({{ selected.lat.toFixed(5) }}, {{ selected.lng.toFixed(5) }})
     p(class="text-center text-small text-primary") {{ view.props.preview }}
-  .customer-location__actions(class="p-4")
+  .customer-location__actions(
+    class="sticky bottom-0 z-20 mt-auto shrink-0 bg-canvas p-4 pb-[max(1rem,env(safe-area-inset-bottom))]"
+  )
+    div(
+      aria-hidden="true",
+      class="pointer-events-none absolute inset-x-0 bottom-full h-6 bg-linear-to-b from-transparent to-canvas"
+    )
     button(
       type="button",
       class="w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:cursor-not-allowed disabled:opacity-50",

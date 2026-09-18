@@ -6,6 +6,7 @@ export const previewSession = ref<{
   situation: string
   fromDraft: boolean
   location?: LocationPoint
+  media?: File[]
 } | null>(null)
 
 export function beginPreview(situation: string, fromDraft = false) {

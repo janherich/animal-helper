@@ -5,6 +5,7 @@ import { nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import { homeDraftFixture, homeFixture } from './pages/fixtures/home'
 import { beginPreview } from './preview-flow'
+import ManagerToasts from './components/manager-toasts.vue'
 import logoOrange from '@/assets/brand/logo-orange.svg'
 import logoYellow from '@/assets/brand/logo-yellow.svg'
 import { usePageScrollbars } from '@/plugins/overlay-scrollbars'
@@ -96,6 +97,7 @@ onUnmounted(() => {
 
 <template lang="pug">
 .customer-app(class="relative min-h-dvh w-full bg-canvas")
+  ManagerToasts
   .customer-app__content(
     class="flex min-h-dvh flex-col",
     :inert="starting"
@@ -105,7 +107,7 @@ onUnmounted(() => {
       href="#main-content"
     ) Preskočiť na obsah
     header.customer-app__header(
-      class="relative z-10 bg-surface px-[15px] pt-[max(16px,env(safe-area-inset-top))] pb-5 shadow-[0_2px_8px_rgb(37_42_49/8%)]"
+      class="sticky top-0 z-30 shrink-0 bg-surface px-[15px] pt-[max(16px,env(safe-area-inset-top))] pb-5 shadow-[0_2px_8px_rgb(37_42_49/8%)] supports-backdrop-filter:bg-surface/80 supports-backdrop-filter:backdrop-blur-md"
     )
       .customer-app__header-row(class="flex min-h-11 items-center justify-between")
         RouterLink(

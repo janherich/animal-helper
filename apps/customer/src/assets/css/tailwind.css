@@ -9,4 +9,19 @@
   :focus-visible {
     @apply outline-2 outline-offset-4 outline-primary;
   }
+  :where(
+      button,
+      a[href],
+      summary,
+      [role='button'],
+      [role='option'],
+      input[type='button'],
+      input[type='submit'],
+      input[type='reset']
+    ):not(:disabled):not([aria-disabled='true']) {
+    cursor: pointer;
+  }
+  :where(button, a[href], summary, [role='button'], [role='option'], input):is(:disabled, [aria-disabled='true']) {
+    cursor: not-allowed;
+  }
 }

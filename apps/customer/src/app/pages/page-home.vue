@@ -91,9 +91,9 @@ async function requestAction(id: string) {
     )
       base-icon(name="notice-info")
       p {{ view.props.anonymousNotice }}
-    p.customer-home__preview(class="text-small text-primary") {{ view.props.previewNotice }}
+    p.customer-home__preview(class="text-center text-small text-primary") {{ view.props.previewNotice }}
     p(
-      class="text-body text-primary empty:hidden",
+      class="text-center text-body text-primary empty:hidden",
       role="status",
       aria-live="polite"
     ) {{ notice }}

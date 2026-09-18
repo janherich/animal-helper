@@ -123,8 +123,8 @@ The four social icons use the blue Figma variants, with their white background p
 `base-icon` takes `name: string` (SVG filename without extension) and optional `label`. It defaults to a decorative 24px
 icon. For meaningful standalone icons, provide a label; for icon-only buttons, label the button instead. Override size
 with `size-*`. The 54 monochrome icons use `currentColor`, so `text-*` sets their color. Only `place-on-map` preserves
-its multiple original colors; brand logos remain separate with their original colors. Unknown names render no icon; verify names
-against the source files.
+its multiple original colors; brand logos remain separate with their original colors. Unknown names render no icon;
+verify names against the source files.
 
 ## App shell
 
@@ -136,11 +136,11 @@ modal dialog with keyboard focus cycling, Escape/backdrop dismissal and focus re
 independently on short screens. Device status bars in the designs are not reproduced in the web app.
 
 Sources: splash `2121:14081`, home `2120:13017`, drawer `2120:13345` in the Figma file linked above. Logo exports:
-yellow `2121:14082`, orange `1589:12316`. Original logo paths are preserved. An SVG mask and a small eyelid path
-animate a 420ms blink: once on the splash, every 30 seconds on the orange logo. Reduced motion disables blinking.
-Screen content fades out over 100ms and enters over 250ms with an 8px upward movement, while the header stays fixed
-in size. Reduced motion disables these transitions. Full-width white content blocks have rounded corners only above
-the content's 640px maximum width; at or below that width they meet the viewport with square corners.
+yellow `2121:14082`, orange `1589:12316`. Original logo paths are preserved. An SVG mask and a small eyelid path animate
+a 420ms blink: once on the splash, every 30 seconds on the orange logo. Reduced motion disables blinking. Screen content
+fades out over 100ms and enters over 250ms with an 8px upward movement, while the header stays fixed in size. Reduced
+motion disables these transitions. Full-width white content blocks have rounded corners only above the content's 640px
+maximum width; at or below that width they meet the viewport with square corners.
 
 Home now renders a typed local fixture from `src/app/pages/fixtures/home.ts`, passed as route props to W01 at `/`.
 `home-view.ts` is a temporary frontend presentation model, not the shared API contract. All homepage copy, choice
@@ -164,9 +164,27 @@ this temporary transition, which is not a specification of the eventual server f
 The map is the Figma illustration from `2127:15214`, clearly marked as a mock. Clicking it selects the named fixture
 location, not coordinates corresponding to the clicked pixel. Search filters three local samples with accent-insensitive
 matching. Device geolocation runs only on explicit request; denial/timeouts are handled, and no coordinates are sent to
-Google or the API. Confirm stores the selection only in memory and shows a notice because the next screen is not
-implemented. No Google credentials or B2B keys are reused. B2B's `vue3-google-map` and `@googlemaps/js-api-loader` can
-be integrated once project credentials are available; neither unused dependency is installed in this preview.
+Google or the API. Confirm stores the selection only in memory and opens the local media step. No Google credentials or
+B2B keys are reused. B2B's `vue3-google-map` and `@googlemaps/js-api-loader` can be integrated once project credentials
+are available; neither unused dependency is installed in this preview.
+
+### Media preview
+
+`/w04` requires an in-memory selected location. It implements the W04 empty state and W05-style selected-file grid from
+Figma, using the same local page rather than claiming a server-driven transition. A single gallery input selects local
+files; any camera option is provided by the system picker, depending on browser/device support. Images and videos use
+temporary object URLs, revoked on removal/unmount. File objects survive Back within the preview session, but not reload
+or a new report. There is no file-count limit; the temporary restrictions are 20 MB per file and
+JPEG/PNG/WebP/MP4/WebM/MOV MIME types. These are not backend policy or security validation. Confirm and manual
+identification only show explanatory notices: no upload, AI request, recognition result or subsequent details screen is
+implemented. Copy and limits live in the media fixture.
+
+The shared toast manager supports success, error, warning and info variants with a title, description and optional
+action/timer. Media removals share one eight-second undo group; further removals reset the timer, and undo restores the
+group's original ordering. Dismissal, expiry or leaving the screen clears that group. Focus and a hidden browser tab
+pause the countdown; hovering does not. Errors remain until dismissed or the screen is disposed. Toasts sit above the
+media actions. The header and step actions are sticky; the header blurs underlying content and the footer fades content
+into its background. Empty/grid changes and grid reordering animate unless reduced motion is requested.
 
 Home and My cases both lead to Home temporarily. FAQ, volunteering and donation are disabled; social actions display an
 unavailable notice until their destinations are agreed. The splash is not an API loading indicator. Screen identifiers

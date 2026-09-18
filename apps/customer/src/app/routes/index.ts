@@ -1,6 +1,7 @@
 import type { RouteRecordRaw } from 'vue-router'
 import { homeDraftFixture, homeFixture } from '../pages/fixtures/home'
 import { locationFixture } from '../pages/fixtures/location'
+import { mediaFixture } from '../pages/fixtures/media'
 import { previewSession } from '../preview-flow'
 export const routes: RouteRecordRaw[] = [
   {
@@ -19,6 +20,14 @@ export const routes: RouteRecordRaw[] = [
     meta: { showMenu: false },
     beforeEnter: () => previewSession.value !== null || { name: 'W01' },
     component: () => import('../pages/page-location.vue')
+  },
+  {
+    path: '/w04',
+    name: 'W04',
+    props: { view: mediaFixture },
+    meta: { showMenu: false },
+    beforeEnter: () => !!previewSession.value?.location || { name: 'W01' },
+    component: () => import('../pages/page-media.vue')
   },
   {
     path: '/:pathMatch(.*)*',
