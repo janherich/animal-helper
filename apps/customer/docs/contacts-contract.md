@@ -22,9 +22,9 @@ legal guidance. The ordered `footerActions` array defines visible buttons, label
 alternatives action opens W22; the resolved action opens W24 without submitting anything. Back has a data-defined
 target. The optional `advice` payload contains the trigger label, locale, dialog labels and full ordered advice blocks
 (see `instructions-contract.md`). It is supplied with this page, not recovered from a previous page or global fallback.
-Omitting it hides the advice action. Below 768px it opens a bottom sheet; on desktop it opens a centered dialog,
-without navigation or a stepper. The same renderer supports red-only and combined red/green advice.
-The mobile sheet is capped below the measured app header; both presentations scroll internally, lock the background, trap
-focus and restores focus to its trigger. Escape, backdrop, close controls and acknowledgement dismiss it. Motion
-respects reduced-motion. Access guards only protect the local demonstration; server authorization and final command
-schema remain to be agreed. This document is not a claim that a backend API exists.
+Omitting it hides the advice action. Below 768px it opens a bottom sheet; on desktop it opens a centered dialog, without
+navigation or a stepper. The same renderer supports red-only and combined red/green advice. The mobile sheet is capped
+below the measured app header; both presentations scroll internally, lock the background, trap focus and restores focus
+to its trigger. Escape, backdrop, close controls and acknowledgement dismiss it. Motion respects reduced-motion. Access
+guards only protect the local demonstration; server authorization and final command schema remain to be agreed. This
+document is not a claim that a backend API exists.

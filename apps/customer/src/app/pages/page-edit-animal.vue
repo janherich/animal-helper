@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import PageIntro from '../components/page-intro.vue'
 import { computed, nextTick, ref, useId, watch } from 'vue'
 import { autoUpdate, offset, shift, size, useFloating } from '@floating-ui/vue'
 import { useRouter } from 'vue-router'
 import { scrollActiveOption } from '@/libs/scroll-active-option'
-import { catalogueAnimals, type CatalogueAnimal } from '../animal-catalogue'
+import { catalogueAnimals, searchAnimals, type CatalogueAnimal } from '../animal-catalogue'
 import { previewSession } from '../preview-flow'
 import type { AnimalBranch } from './fixtures/animal-groups'
 import type { EditAnimalView } from './fixtures/animal-details'
@@ -15,14 +16,8 @@ const active = ref(-1)
 const anchor = ref<HTMLElement>()
 const results = ref<HTMLElement>()
 const id = useId()
-const normalize = (text: string) =>
-  text
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-const matches = computed(() =>
-  catalogueAnimals(props.catalogue).filter(animal => normalize(animal.label).includes(normalize(query.value.trim())))
-)
+const animals = computed(() => catalogueAnimals(props.catalogue))
+const matches = computed(() => searchAnimals(animals.value, query.value))
 const open = computed(() => focused.value && !!query.value.trim() && props.view.allowedActions.includes('search'))
 const { floatingStyles } = useFloating(anchor, results, {
   open,
@@ -101,33 +96,15 @@ function go(action: 'media' | 'manual') {
   class="flex flex-1 flex-col",
   :lang="view.locale"
 )
-  div(class="px-4 pt-5 pb-1")
-    button(
-      type="button",
-      class="mb-4 flex min-h-11 items-center gap-1 font-form text-back text-primary",
-      :disabled="!view.allowedActions.includes('back')",
-      @click="router.push({ name: view.backTarget })"
-    )
-      base-icon(name="back")
-      span {{ view.copy.back }}
-    hr(class="border-primary-light")
-  div(class="px-4 pt-4 pb-2")
-    div(
-      class="progress-track h-2 overflow-hidden rounded bg-primary-light",
-      role="progressbar",
-      :aria-label="view.copy.step",
-      :aria-valuenow="view.copy.progress",
-      aria-valuemin="0",
-      aria-valuemax="100"
-    )
-      div(
-        class="h-full rounded bg-primary-gradient",
-        :style="{ width: view.copy.progress + '%' }"
-      )
-    p(class="mt-1 font-form text-body font-normal") {{ view.copy.step }}
-  header(class="px-5 pt-5 pb-3")
-    h1(class="mb-1 text-heading-1") {{ view.copy.title }}
-    p {{ view.copy.description }}
+  PageIntro(
+    :back="view.copy.back",
+    :back-disabled="!view.allowedActions.includes('back')",
+    :step="view.copy.step",
+    :progress="view.copy.progress",
+    :title="view.copy.title",
+    :description="view.copy.description",
+    @back="router.push({ name: view.backTarget })"
+  )
   div(class="px-4 py-4")
     div(
       ref="anchor",

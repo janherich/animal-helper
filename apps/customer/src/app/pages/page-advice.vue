@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageIntro from '../components/page-intro.vue'
 import { useRouter } from 'vue-router'
 import type { AdviceView } from './fixtures/advice'
 import AdviceBlocks from '../components/advice-blocks.vue'
@@ -15,33 +16,15 @@ function acknowledge() {
   class="flex flex-1 flex-col",
   :lang="view.locale"
 )
-  div(class="px-4 pt-5 pb-1")
-    button(
-      type="button",
-      class="mb-4 flex min-h-11 items-center gap-1 font-form text-back text-primary",
-      :disabled="!view.allowedActions.includes('back')",
-      @click="router.push({ name: view.backTarget })"
-    )
-      base-icon(name="back")
-      span {{ view.copy.back }}
-    hr(class="border-primary-light")
-  div(class="px-4 pt-4 pb-2")
-    div(
-      class="progress-track h-2 overflow-hidden rounded bg-primary-light",
-      role="progressbar",
-      :aria-label="view.copy.step",
-      :aria-valuenow="view.copy.progress",
-      aria-valuemin="0",
-      aria-valuemax="100"
-    )
-      div(
-        class="h-full rounded bg-primary-gradient",
-        :style="{ width: view.copy.progress + '%' }"
-      )
-    p(class="mt-1 font-form text-body font-normal") {{ view.copy.step }}
-  header(class="px-5 pt-5 pb-3")
-    h1(class="mb-1 text-heading-1") {{ view.copy.title }}
-    p {{ view.copy.description }}
+  PageIntro(
+    :back="view.copy.back",
+    :back-disabled="!view.allowedActions.includes('back')",
+    :step="view.copy.step",
+    :progress="view.copy.progress",
+    :title="view.copy.title",
+    :description="view.copy.description",
+    @back="router.push({ name: view.backTarget })"
+  )
   AdviceBlocks(:blocks="view.blocks")
   div(class="sticky bottom-0 z-20 mt-auto bg-canvas p-4 pb-[max(1rem,env(safe-area-inset-bottom))]")
     div(

@@ -1,8 +1,8 @@
 import catImage from '@/assets/demo/macka.png'
 import dogImage from '@/assets/demo/pes.png'
 import birdImage from '@/assets/demo/vtak.png'
-import type { InstructionsView } from './instructions'
 import { municipalityFixture } from './contacts'
+import type { InstructionsView } from './instructions'
 // Working presentation contract. Real instructions must be supplied and approved by the server.
 export type HelpImage = { id: string; src?: string; alt: string; caption: string }
 export type HelpText = { text: string; emphasis?: 'strong' | 'em'; href?: string }[]

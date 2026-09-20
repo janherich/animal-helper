@@ -10,12 +10,17 @@ test('assembles splash from three directions and skips it with reduced motion', 
   const positions = await page.evaluate(() => {
     const parts = ['splash-zvero', 'splash-linka', 'splash-bird']
     const animations = parts.map(name => document.querySelector('.' + name)!.getAnimations()[0]!)
-    animations.forEach(animation => { animation.pause(); animation.currentTime = 0 })
+    animations.forEach(animation => {
+      animation.pause()
+      animation.currentTime = 0
+    })
     const start = parts.map(name => {
       const matrix = new DOMMatrix(getComputedStyle(document.querySelector('.' + name)!).transform)
       return { x: matrix.m41, y: matrix.m42 }
     })
-    animations.forEach(animation => { animation.currentTime = 950 })
+    animations.forEach(animation => {
+      animation.currentTime = 950
+    })
     const end = parts.map(name => getComputedStyle(document.querySelector('.' + name)!).transform)
     return { start, end }
   })

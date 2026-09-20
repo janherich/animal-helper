@@ -218,7 +218,7 @@ onUnmounted(() => {
           name="screen",
           mode="out-in",
           @before-leave="holdScreenHeight",
-          @enter="screenEntered"
+          @enter="screenEntered",
           @after-enter="completionPageReady = true"
         )
           component(
@@ -331,8 +331,12 @@ onUnmounted(() => {
     animation: splash-fade-out 180ms ease-out 1420ms both;
   }
   @keyframes splash-fade-out {
-    from { opacity: 1; }
-    to { opacity: 0; }
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
   }
   .screen-enter-active {
     transition:

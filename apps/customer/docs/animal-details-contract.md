@@ -25,6 +25,6 @@ Media processing is deliberately simulated: no upload or AI call takes place. It
 manual recovery as the only primary CTA. This state shares the W09 route; its Figma frame duplicates the W09c name also
 used for a completed form. That identifier ambiguity must be resolved before adopting server screen IDs.
 
-The final "Zobraziť možnosti pomoci" action now opens the W14 presentation fixture after local validation.
-It does not request real advice. See [advice-contract.md](./advice-contract.md).
-Reloading loses the preview session. Direct routes require local prerequisites, not real authorization.
+The final "Zobraziť možnosti pomoci" action now opens the W14 presentation fixture after local validation. It does not
+request real advice. See [advice-contract.md](./advice-contract.md). Reloading loses the preview session. Direct routes
+require local prerequisites, not real authorization.

@@ -27,15 +27,14 @@ guarded routes allow preview without a production selector.
 
 Inputs remain only in page-local memory; leaving or replacing the view discards them. Nothing is logged, persisted,
 submitted or subscribed. “Odoslať a ukončiť” previews the final heart animation, then navigates to the data-defined
-submit target underneath the app-owned overlay. The overlay fades only after the heart sequence and
-destination page transition have both finished. The green callout is help navigation, not submission confirmation. Real submission is not
+submit target underneath the app-owned overlay. The overlay fades only after the heart sequence and destination page
+transition have both finished. The green callout is help navigation, not submission confirmation. Real submission is not
 implemented. The route guard protects only the demo, not backend authorization.
+
 # Záverečná animácia
 
-Po platnom potvrdení formulára ukážka zobrazí krátku celoplošnú animáciu srdca
-a pod ňou naviguje na `submitTarget`. Odkryje ho až po dokončení animácie aj prechodu cieľovej stránky.
-Prístupný názov dodáva `completionLabel`.
-Pri obmedzenom pohybe sa zobrazí statické srdce bez pulzovania.
-Počas animácie nie je možné formulár potvrdiť opakovane.
-Pri napojení API sa táto animácia smie spustiť až po úspešnej odpovedi servera;
-chyba odoslania musí ponechať formulár aj jeho hodnoty. Súčasná fixture nič neodosiela.
+Po platnom potvrdení formulára ukážka zobrazí krátku celoplošnú animáciu srdca a pod ňou naviguje na `submitTarget`.
+Odkryje ho až po dokončení animácie aj prechodu cieľovej stránky. Prístupný názov dodáva `completionLabel`. Pri
+obmedzenom pohybe sa zobrazí statické srdce bez pulzovania. Počas animácie nie je možné formulár potvrdiť opakovane. Pri
+napojení API sa táto animácia smie spustiť až po úspešnej odpovedi servera; chyba odoslania musí ponechať formulár aj
+jeho hodnoty. Súčasná fixture nič neodosiela.

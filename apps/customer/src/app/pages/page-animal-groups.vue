@@ -4,7 +4,8 @@ import { autoUpdate, offset, shift, size, useFloating } from '@floating-ui/vue'
 import { useRouter } from 'vue-router'
 import { scrollActiveOption } from '@/libs/scroll-active-option'
 import { previewSession } from '../preview-flow'
-import type { AnimalGroupsView, AnimalBranch, AnimalNode } from './fixtures/animal-groups'
+import { catalogueAnimals, searchAnimals, normalizeAnimalSearch, type CatalogueAnimal } from '../animal-catalogue'
+import type { AnimalGroupsView } from './fixtures/animal-groups'
 
 const props = defineProps<{ view: AnimalGroupsView }>()
 const router = useRouter()
@@ -42,18 +43,7 @@ const cards = computed(() => {
 })
 const heading = computed(() => props.view.props.title)
 const intro = computed(() => props.view.props.description)
-type SearchAnimal = Extract<AnimalNode, { kind: 'animal' }> & { path: string[] }
-const animals = computed(() => {
-  const found: SearchAnimal[] = []
-  function visit(parent: AnimalBranch, ancestors: string[]) {
-    for (const node of parent.children) {
-      if (node.kind === 'branch') visit(node, [...ancestors, node.id])
-      else if (node.kind === 'animal') found.push({ ...node, path: ancestors })
-    }
-  }
-  visit(props.view.root, [])
-  return found
-})
+const animals = computed(() => catalogueAnimals(props.view.root))
 function disableLeavingCards(element: Element) {
   element.setAttribute('inert', '')
   element.setAttribute('aria-hidden', 'true')
@@ -69,7 +59,6 @@ function restartSelection() {
   cardTransition.value = 'animal-backward'
   resetSelection()
   path.value = []
-  syncPath()
 }
 function syncPath() {
   const session = previewSession.value
@@ -88,8 +77,6 @@ function resetSelection() {
   completed.value = false
   query.value = ''
   focused.value = false
-  if (previewSession.value) delete previewSession.value.animalIdentification
-  if (previewSession.value) previewSession.value.adviceReady = false
 }
 function confirm() {
   const session = previewSession.value
@@ -97,6 +84,7 @@ function confirm() {
   if (choice.value === 'other' && !description.value.trim()) return
   syncPath()
   const selectedKind = choice.value === 'unknown' ? 'unknown' : choice.value === 'other' ? 'other' : 'species'
+  if (selectedKind === 'species') session.animalSpecies = choice.value
   session.animalIdentification = {
     kind: selectedKind,
     ...(session.animalGroup ? { groupId: session.animalGroup } : {}),
@@ -118,26 +106,12 @@ function selectCard(id: string) {
   if (node.kind === 'branch') {
     resetSelection()
     path.value = [...path.value, node.id]
-    syncPath()
   } else {
     choice.value = choice.value === id ? '' : id
     completed.value = false
   }
 }
-const normalize = (value: string) =>
-  value
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-const matches = computed(() => {
-  const needle = normalize(query.value.trim())
-  return needle
-    ? animals.value.filter(animal => {
-        const words = normalize(animal.label).split(/\s+/)
-        return words.some((_, index) => words.slice(index).join(' ').startsWith(needle))
-      })
-    : []
-})
+const matches = computed(() => searchAnimals(animals.value, query.value))
 const open = computed(() => focused.value && !!query.value.trim() && props.view.allowedActions.includes('search'))
 const { floatingStyles } = useFloating(search, results, {
   open,
@@ -162,8 +136,8 @@ watch(query, () => {
   activeIndex.value = -1
 })
 function titleParts(label: string) {
-  const needle = normalize(query.value.trim())
-  const index = normalize(label).indexOf(needle)
+  const needle = normalizeAnimalSearch(query.value.trim())
+  const index = normalizeAnimalSearch(label).indexOf(needle)
   if (!needle || index < 0) return { before: label, match: '', after: '' }
   return {
     before: label.slice(0, index),
@@ -171,13 +145,11 @@ function titleParts(label: string) {
     after: label.slice(index + needle.length)
   }
 }
-function selectAnimal(animal: SearchAnimal) {
+function selectAnimal(animal: CatalogueAnimal) {
   if (!props.view.allowedActions.includes('select-animal') || !previewSession.value) return
   cardTransition.value = 'animal-forward'
   resetSelection()
   path.value = [...animal.path]
-  syncPath()
-  previewSession.value.animalSpecies = animal.id
   choice.value = animal.id
   searchFirst.value = animal.id
 }

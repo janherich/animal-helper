@@ -11,6 +11,6 @@ invalidates that marker. This is a preview guard, not authorization. The backend
 applicable advice; the frontend must not infer medical recommendations from selections.
 
 Current fixtures deliberately contain illustrative placeholder instructions, visibly marked as not case advice. They do
-not use the raptor-specific instructions in the design for arbitrary selected species. "Rozumiem" opens the fixture-driven
-contact page using the data-defined confirm target (currently W15). No API request, report submission, triage or
-veterinary advice generation occurs.
+not use the raptor-specific instructions in the design for arbitrary selected species. "Rozumiem" opens the
+fixture-driven contact page using the data-defined confirm target (currently W15). No API request, report submission,
+triage or veterinary advice generation occurs.

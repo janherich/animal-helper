@@ -12,9 +12,12 @@ const body = ref<HTMLElement | null>(null)
 const locked = useScrollLock(body)
 let timer: ReturnType<typeof setTimeout> | undefined
 let closeTimer: ReturnType<typeof setTimeout> | undefined
-watch(() => props.reveal, reveal => {
-  if (reveal) closeTimer = setTimeout(() => emit('complete'), reducedMotion.value === 'reduce' ? 0 : 240)
-})
+watch(
+  () => props.reveal,
+  reveal => {
+    if (reveal) closeTimer = setTimeout(() => emit('complete'), reducedMotion.value === 'reduce' ? 0 : 240)
+  }
+)
 onMounted(() => {
   body.value = document.body
   locked.value = true
@@ -42,8 +45,18 @@ Teleport(to="body")
     div(role="status")
       span(class="sr-only") {{ label }}
       .completion-animation__art(aria-hidden="true")
-        img.completion-animation__fill(:src="heartFill", alt="", width="156", height="156")
-        img.completion-animation__outline(:src="heartOutline", alt="", width="156", height="156")
+        img.completion-animation__fill(
+          :src="heartFill",
+          alt="",
+          width="156",
+          height="156"
+        )
+        img.completion-animation__outline(
+          :src="heartOutline",
+          alt="",
+          width="156",
+          height="156"
+        )
 </template>
 
 <style scoped>
@@ -89,21 +102,42 @@ Teleport(to="body")
     transition: opacity 240ms ease-out;
   }
   .completion-animation__fill {
-    animation: heart-expand 1600ms cubic-bezier(.4, 0, .2, 1) both;
+    animation: heart-expand 1600ms cubic-bezier(0.4, 0, 0.2, 1) both;
   }
   .completion-animation__outline {
     animation: heart-pulse 1600ms ease-in-out both;
   }
   @keyframes heart-expand {
-    0%, 10% { transform: scale(.013); }
-    45%, 60% { transform: scale(1); }
-    100% { transform: scale(40); }
+    0%,
+    10% {
+      transform: scale(0.013);
+    }
+    45%,
+    60% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(40);
+    }
   }
   @keyframes heart-pulse {
-    0%, 10% { transform: scale(1); opacity: 1; }
-    30% { transform: scale(1.06); }
-    45%, 60% { transform: scale(.462); opacity: 1; }
-    100% { transform: scale(.006); opacity: 0; }
+    0%,
+    10% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    30% {
+      transform: scale(1.06);
+    }
+    45%,
+    60% {
+      transform: scale(0.462);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(0.006);
+      opacity: 0;
+    }
   }
 }
 </style>

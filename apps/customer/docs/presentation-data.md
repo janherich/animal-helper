@@ -20,9 +20,9 @@ route authorization with each response, not assume the static preview route tabl
 ## Not a completed server integration
 
 Step 3 and identification editing use `fixtures/animal-details.ts`; see
-[animal-details-contract.md](./animal-details-contract.md) for the dynamic block model and preview limitations.
-Step 4 uses `fixtures/advice.ts` for ordered prohibition/recommendation blocks; see
-[advice-contract.md](./advice-contract.md). Clinical decision-making remains outside the client.
+[animal-details-contract.md](./animal-details-contract.md) for the dynamic block model and preview limitations. Step 4
+uses `fixtures/advice.ts` for ordered prohibition/recommendation blocks; see [advice-contract.md](./advice-contract.md).
+Clinical decision-making remains outside the client.
 
 The root shell and route table currently load local fixtures. Labels are already localized; substitution of supplied
 `{count}` or `{label}` placeholders is formatting, not translation. Keep a small bundled fallback for

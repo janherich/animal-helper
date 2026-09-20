@@ -59,7 +59,12 @@ export const homeFixture: HomeView = {
         paragraphs: [],
         items: [
           { id: 'capture', label: 'Ako bezpečne odchytiť zranené zviera?', icon: 'faq-forward', action: 'faq-capture' },
-          { id: 'cost', label: 'Kto platí ošetrenie voľne žijúceho zvieraťa?', icon: 'faq-forward', action: 'faq-cost' },
+          {
+            id: 'cost',
+            label: 'Kto platí ošetrenie voľne žijúceho zvieraťa?',
+            icon: 'faq-forward',
+            action: 'faq-cost'
+          },
           { id: 'bird', label: 'Čo robiť, ak nájdem vypadnuté vtáča?', icon: 'faq-forward', action: 'faq-bird' },
           { id: 'all', label: 'Prejsť na všetky FAQs', action: 'faq-all', accent: true }
         ]

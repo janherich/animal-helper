@@ -1,5 +1,5 @@
-import type { InstructionsView } from './instructions'
 import { adviceFixture } from './advice'
+import type { InstructionsView } from './instructions'
 // Working presentation contract, not a live directory or a recommendation engine.
 export type ContactLink = { label: string; href?: string }
 export type ContactBlock =

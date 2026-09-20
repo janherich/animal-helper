@@ -2,8 +2,8 @@ import BaseExpander from '@/libs/components/base-expander.vue'
 import BaseIcon from '@/libs/components/base-icon.vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import { expect, it, vi } from 'vitest'
-import { previewSession } from '../../preview-flow'
 import { completion } from '../../completion'
+import { previewSession } from '../../preview-flow'
 import {
   helpThankYouFixture,
   thankYouFixture,

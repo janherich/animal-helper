@@ -25,12 +25,18 @@ consumes only the tree. Real animal pictures are pending; missing images show a 
 
 ## Local behaviour
 
-Search is global and includes only animal leaves, not branches. Selecting a result opens its parent branch and marks the
+Search is global and includes only animal leaves, not branches. Both manual selection and quick editing match the start
+of any word in the animal name, ignoring case and diacritics. Selecting a result opens its parent branch and marks the
 animal, without confirming it. Typing alone does not change the path. Cards traverse the same tree. An icon labelled
 “Začať výber odznova” stays inside search, disabled only when there is nothing to reset, and replaces breadcrumbs. It
-returns to root, clears search, selection, description and identification metadata, preserving location and media. The
+returns to root and clears only the local draft search, selection and description, preserving location and media. The
 top Back button always returns to media, regardless of tree depth. Forward/back card transitions leave the global search
 stationary and respect reduced motion.
+
+The confirmed identification, compatibility fields and advice readiness remain unchanged throughout manual editing,
+including reset, branch traversal, search selection and leaving without confirmation. Only confirmation replaces the
+saved identification and invalidates advice. Cancelling an edit therefore cannot invalidate access to the details or
+quick-edit page. This is local preview state today; the backend should apply the same commit-on-confirm boundary.
 
 The whole page scrolls beneath the main app header; search has no separate sticky section, blur or shadow. Changing a
 branch resets page scrolling to the top. The footer stays sticky with a soft gradient above it. The reset control keeps
@@ -50,8 +56,8 @@ description.
 
 Known-animal confirmation stores `kind`, full branch `path` and `speciesId` in memory. Other-animal confirmation stores
 `kind: 'other'`, `description` and the current branch path. The preview also keeps legacy `groupId` and `categoryId`
-fields for compatibility; the full path is authoritative for deeper nesting. The next step is not implemented; an
-explicit local-preview notice is displayed.
+fields for compatibility; the full path is authoritative for deeper nesting. Confirmation navigates to the target
+provided by the view, currently the details page. No real API submission is performed.
 
 ## Backend integration
 

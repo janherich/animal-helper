@@ -1,5 +1,5 @@
-import type { ContactBlock } from './contacts'
 import type { AdvicePanel } from './advice'
+import type { ContactBlock } from './contacts'
 import type { SelfHelpBlock } from './self-help'
 
 export type InstructionBlock = ContactBlock | SelfHelpBlock
