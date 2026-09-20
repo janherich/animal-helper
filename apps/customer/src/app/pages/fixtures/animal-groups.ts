@@ -1,5 +1,7 @@
 // Temporary presentation fixture, not a backend contract or a complete animal catalogue.
+import type { FormValidation } from '../../contracts/validation'
 export type AnimalGroupsView = {
+  validation?: FormValidation
   screen: 'W06a'
   locale: string
   layout: { showMenu: boolean }

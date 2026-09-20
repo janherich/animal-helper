@@ -1,5 +1,8 @@
 // Working presentation model. Submission and consent processing are not connected.
+import type { FormValidation } from '../../contracts/validation'
 export type ThankYouView = {
+  validation?: FormValidation
+  values?: Record<string, string>
   screen: 'W24' | 'W25' | 'W26' | 'W38' | 'W39'
   locale: string
   layout: { showMenu: boolean }
@@ -70,6 +73,10 @@ function createUnsuccessfulThankYou(): ThankYouView {
   }
 }
 export const thankYouFixture: ThankYouView = {
+  values: { email: 'nespravna-adresa' },
+  validation: {
+    fieldErrors: { email: ['Zadajte platnú e-mailovú adresu, napríklad meno@example.sk.'] }
+  },
   screen: 'W24',
   locale: 'sk',
   layout: { showMenu: false },

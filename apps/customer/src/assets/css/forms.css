@@ -95,6 +95,13 @@
 .customer-app input[type='checkbox']:disabled:is(:checked, :indeterminate) {
   background-color: var(--color-muted);
 }
+.customer-app :is(input, textarea, select, fieldset, section)[aria-invalid='true'] {
+  border-color: var(--color-danger);
+}
+.customer-app :is(input, textarea, select)[aria-invalid='true']:focus {
+  border-color: var(--color-danger);
+  box-shadow: inset 0 0 0 1px var(--color-danger);
+}
 @media (forced-colors: active) {
   .customer-app input:is([type='checkbox'], [type='radio']) {
     appearance: auto;

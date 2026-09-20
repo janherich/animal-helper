@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import PageActions from '../components/page-actions.vue'
 import PageIntro from '../components/page-intro.vue'
+import ValidationMessage from '../components/validation-message.vue'
+import { useFormValidation } from '@/libs/use-form-validation'
 import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { previewSession } from '../preview-flow'
@@ -10,6 +12,8 @@ import type { AnimalBranch } from './fixtures/animal-groups'
 import type { AnimalDetailsView, DetailQuestion } from './fixtures/animal-details'
 const props = defineProps<{ view: AnimalDetailsView; catalogue: AnimalBranch }>()
 const router = useRouter()
+const form = ref<HTMLFormElement>()
+const validation = useFormValidation(() => props.view.validation)
 const failed = computed(() => props.view.showAnimal !== false && !!previewSession.value?.identificationFailed)
 const identification = computed(() => previewSession.value?.animalIdentification)
 const animal = computed(() =>
@@ -37,6 +41,7 @@ function selected(question: DetailQuestion, id: string) {
 }
 function choose(question: DetailQuestion, id: string) {
   if (question.disabled || question.options.find(option => option.id === id)?.disabled) return
+  validation.clear(question.id)
   if (question.kind === 'single') answers.value[question.id] = id
   else {
     const current = answers.value[question.id]
@@ -49,7 +54,10 @@ function choose(question: DetailQuestion, id: string) {
         : [...values.filter(value => !question.options.find(option => option.id === value)?.exclusive), id]
   }
   for (const option of question.options)
-    if (option.description && !selected(question, option.id)) delete answers.value[`${question.id}:${option.id}`]
+    if (option.description && !selected(question, option.id)) {
+      delete answers.value[`${question.id}:${option.id}`]
+      validation.clear(`${question.id}:${option.id}`)
+    }
 }
 const valid = computed(() =>
   props.view.questions.every(
@@ -63,6 +71,10 @@ const valid = computed(() =>
 )
 function confirm() {
   if (!valid.value || !props.view.allowedActions.includes('confirm') || !previewSession.value) return
+  if (validation.hasFieldErrors.value) {
+    validation.focusFirstError(form.value)
+    return
+  }
   previewSession.value.animalDetails = { ...answers.value }
   previewSession.value.adviceReady = true
   if (props.view.confirmTarget === 'W39') previewSession.value.thankYouReturnTarget = 'W09'
@@ -146,13 +158,20 @@ function edit() {
       class="px-5 py-2 text-heading-3"
     ) {{ view.copy.details }}
     form#animal-details-form(
+      ref="form",
       class="flex flex-col gap-2 px-4",
       @submit.prevent="confirm"
     )
+      ValidationMessage(
+        :messages="validation.formErrors.value",
+        summary
+      )
       fieldset(
         v-for="question in view.questions",
         :key="question.id",
         :disabled="question.disabled",
+        v-bind="validation.attrs(question.id)",
+        tabindex="-1",
         class="min-w-0 rounded-control border border-primary-light bg-surface py-4",
         :aria-labelledby="'question-' + question.id"
       )
@@ -171,11 +190,13 @@ function edit() {
         )
           textarea(
             v-model="answers[question.id]",
+            v-bind="validation.attrs(question.id)",
             :aria-label="question.label",
             :placeholder="question.placeholder",
             :required="question.required",
             rows="4",
-            class="w-full resize-none rounded-control border border-primary bg-surface p-3 outline-none focus-visible:shadow-[inset_0_0_0_2px_var(--color-primary-light)]"
+            class="w-full resize-none rounded-control border border-primary bg-surface p-3 outline-none focus-visible:shadow-[inset_0_0_0_2px_var(--color-primary-light)]",
+            @input="validation.clear(question.id)"
           )
         div(class="flex flex-col gap-3 px-4")
           div(
@@ -188,6 +209,7 @@ function edit() {
                 :name="question.id",
                 :value="option.id",
                 :disabled="question.disabled || option.disabled",
+                v-bind="validation.attrs(question.id)",
                 :checked="selected(question, option.id)",
                 class="size-6 shrink-0 accent-primary",
                 @change="choose(question, option.id)"
@@ -200,12 +222,23 @@ function edit() {
               div(class="pt-3")
                 textarea(
                   v-model="answers[question.id + ':' + option.id]",
+                  v-bind="validation.attrs(question.id + ':' + option.id)",
                   :aria-label="option.description",
                   :placeholder="option.description",
                   :disabled="question.disabled || option.disabled || !selected(question, option.id)",
                   rows="4",
-                  class="w-full resize-none rounded-control border border-primary bg-surface p-3 outline-none focus-visible:shadow-[inset_0_0_0_2px_var(--color-primary-light)]"
+                  class="w-full resize-none rounded-control border border-primary bg-surface p-3 outline-none focus-visible:shadow-[inset_0_0_0_2px_var(--color-primary-light)]",
+                  @input="validation.clear(question.id + ':' + option.id)"
                 )
+                ValidationMessage(
+                  :id="validation.errorId(question.id + ':' + option.id)",
+                  :messages="validation.messages(question.id + ':' + option.id)"
+                )
+        ValidationMessage(
+          :id="validation.errorId(question.id)",
+          :messages="validation.messages(question.id)",
+          class="px-4"
+        )
   PageActions(
     as="div",
     class=""

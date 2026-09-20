@@ -14,6 +14,33 @@ import PageThankYou from '../page-thank-you.vue'
 const push = vi.hoisted(() => vi.fn())
 vi.mock('vue-router', () => ({ useRouter: () => ({ push }) }))
 
+it('shows response errors and preserves the draft when a new response arrives', async () => {
+  completion.value = null
+  const wrapper = mount(PageThankYou, {
+    props: { view: thankYouFixture },
+    global: { components: { BaseIcon, BaseExpander } }
+  })
+  const email = wrapper.get<HTMLInputElement>('input[type=email]')
+  expect(email.attributes('aria-invalid')).toBe('true')
+  expect(wrapper.get(`[id="${email.attributes('aria-describedby')}"]`).text()).toContain('Zadajte platnú')
+  await wrapper.get('form').trigger('submit')
+  expect(completion.value).toBeNull()
+  await email.setValue('user@example.org')
+  expect(email.attributes('aria-invalid')).toBeUndefined()
+  await wrapper.setProps({
+    view: { ...thankYouFixture, validation: { fieldErrors: { email: ['Server refused'] } } }
+  })
+  expect(email.element.value).toBe('user@example.org')
+  expect(email.attributes('aria-invalid')).toBe('true')
+  await wrapper.get('form').trigger('submit')
+  expect(completion.value).toBeNull()
+  await email.setValue('corrected@example.org')
+  await wrapper.get('form').trigger('submit')
+  expect(completion.value).not.toBeNull()
+  completion.value = null
+  wrapper.unmount()
+})
+
 it('renders optional contact fields and opt-ins without submitting or persisting', async () => {
   push.mockClear()
   previewSession.value = { situation: 'test', fromDraft: false, thankYouReturnTarget: 'W22' }
@@ -24,6 +51,7 @@ it('renders optional contact fields and opt-ins without submitting or persisting
   expect(wrapper.findAll('input:not([type=checkbox])')).toHaveLength(3)
   expect(wrapper.findAll('input[required]')).toHaveLength(0)
   expect(wrapper.findAll<HTMLInputElement>('input[type=checkbox]').every(input => !input.element.checked)).toBe(true)
+  await wrapper.get('input[type=email]').setValue('')
   await wrapper.get('form').trigger('submit')
   expect(push).not.toHaveBeenCalled()
   expect(wrapper.get('button[type=submit]').attributes('disabled')).toBeDefined()

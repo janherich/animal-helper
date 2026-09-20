@@ -1,4 +1,5 @@
 // Draft presentation contracts. Fixtures implement these types, never define them.
+import type { FormValidation } from './validation'
 export type DetailQuestion = {
   id: string
   label: string
@@ -92,6 +93,7 @@ export type MediaView = {
   }
 }
 export type AnimalDetailsView = {
+  validation?: FormValidation
   screen: string
   locale: string
   layout: { showMenu: boolean }

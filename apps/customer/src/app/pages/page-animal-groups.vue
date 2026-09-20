@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import PageActions from '../components/page-actions.vue'
 import PageIntro from '../components/page-intro.vue'
+import ValidationMessage from '../components/validation-message.vue'
+import { useFormValidation } from '@/libs/use-form-validation'
 import { computed, ref, useId, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAutocomplete } from '@/libs/use-autocomplete'
@@ -10,6 +12,8 @@ import type { AnimalGroupsView } from './fixtures/animal-groups'
 
 const props = defineProps<{ view: AnimalGroupsView }>()
 const router = useRouter()
+const form = ref<HTMLElement>()
+const validation = useFormValidation(() => props.view.validation)
 const resultsId = useId()
 const query = ref('')
 const path = ref<string[]>([...(previewSession.value?.animalIdentification?.path ?? [])])
@@ -51,6 +55,10 @@ const choice = ref(
 )
 const description = ref(savedIdentification?.description ?? '')
 const completed = ref(false)
+function changeAlternative() {
+  completed.value = false
+  validation.clear('animal', 'description')
+}
 function restartSelection() {
   if (!props.view.allowedActions.includes('select-group')) return
   cardTransition.value = 'animal-backward'
@@ -58,6 +66,8 @@ function restartSelection() {
   path.value = []
 }
 function resetSelection() {
+  validation.clear('animal')
+  validation.clear('description')
   searchFirst.value = ''
   choice.value = ''
   description.value = ''
@@ -69,6 +79,10 @@ function confirm() {
   const session = previewSession.value
   if (!session || !props.view.allowedActions.includes('confirm') || !choice.value) return
   if (choice.value === 'other' && !description.value.trim()) return
+  if (validation.hasFieldErrors.value) {
+    validation.focusFirstError(form.value)
+    return
+  }
   const context = { path: [...path.value] }
   confirmAnimalIdentification(
     choice.value === 'unknown'
@@ -88,6 +102,8 @@ function selectCard(id: string) {
     resetSelection()
     path.value = [...path.value, node.id]
   } else {
+    validation.clear('animal')
+    validation.clear('description')
     choice.value = choice.value === id ? '' : id
     completed.value = false
   }
@@ -134,6 +150,7 @@ function goBack() {
 
 <template lang="pug">
 .customer-animal-groups(
+  ref="form",
   class="flex flex-1 flex-col",
   :lang="view.locale"
 )
@@ -275,7 +292,15 @@ function goBack() {
     as="div",
     class="flex shrink-0 flex-col gap-3"
   )
-    fieldset.customer-animal-groups__other(class="rounded-control border border-primary-light bg-surface p-4")
+    ValidationMessage(
+      :messages="validation.formErrors.value",
+      summary
+    )
+    fieldset.customer-animal-groups__other(
+      class="rounded-control border border-primary-light bg-surface p-4",
+      v-bind="validation.attrs('animal')",
+      tabindex="-1"
+    )
       legend(class="px-1 font-semibold") {{ view.copy.alternatives }}
       label(class="flex items-center gap-2")
         input(
@@ -285,19 +310,25 @@ function goBack() {
           value="other",
           class="size-5 accent-primary",
           :disabled="!view.allowedActions.includes('select-animal')",
-          @change="completed = false"
+          @change="changeAlternative"
         )
         span {{ branch.otherLabel }}
       base-expander.customer-animal-groups__description(:state="choice === 'other'")
         div(class="pt-3")
           textarea(
             v-model="description",
+            v-bind="validation.attrs('description')",
             :aria-label="view.copy.description",
             :placeholder="view.copy.description",
             rows="4",
             :required="choice === 'other'",
             class="w-full resize-none rounded-control border border-primary bg-surface p-3 outline-none focus-visible:shadow-[inset_0_0_0_2px_var(--color-primary-light)]",
-            :disabled="choice !== 'other' || !view.allowedActions.includes('select-animal')"
+            :disabled="choice !== 'other' || !view.allowedActions.includes('select-animal')",
+            @input="validation.clear('description')"
+          )
+          ValidationMessage(
+            :id="validation.errorId('description')",
+            :messages="validation.messages('description')"
           )
       label(class="mt-3 flex items-center gap-2")
         input(
@@ -307,9 +338,13 @@ function goBack() {
           value="unknown",
           class="size-5 accent-primary",
           :disabled="!view.allowedActions.includes('select-animal')",
-          @change="completed = false"
+          @change="changeAlternative"
         )
         span {{ view.copy.unknown }}
+      ValidationMessage(
+        :id="validation.errorId('animal')",
+        :messages="validation.messages('animal')"
+      )
     button(
       type="button",
       class="ui-button min-h-13 w-full rounded-control bg-primary-gradient p-4 text-button text-white disabled:opacity-40",

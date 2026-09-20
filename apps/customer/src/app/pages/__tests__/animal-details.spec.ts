@@ -5,6 +5,7 @@ import { afterEach, expect, it, vi } from 'vitest'
 import { beginPreview, previewSession } from '../../preview-flow'
 import { animalDetailsFixture } from '../fixtures/animal-details'
 import { animalGroupsFixture } from '../fixtures/animal-groups'
+import { detailsValidationFixture } from '../fixtures/validation-preview'
 import PageAnimalDetails from '../page-animal-details.vue'
 const push = vi.hoisted(() => vi.fn())
 vi.mock('vue-router', () => ({ useRouter: () => ({ push }) }))
@@ -24,6 +25,20 @@ function setup(view = structuredClone(animalDetailsFixture)) {
     global: { components: { BaseIcon, BaseExpander } }
   })
 }
+it('renders independent group and description errors without discarding answers', async () => {
+  const wrapper = setup(detailsValidationFixture)
+  expect(wrapper.get('textarea').attributes('aria-invalid')).toBe('true')
+  await wrapper.get('form').trigger('submit')
+  expect(push).not.toHaveBeenCalled()
+  await wrapper.get('textarea').setValue('Podrobnejší opis poranenia')
+  expect(wrapper.get('textarea').attributes('aria-invalid')).toBeUndefined()
+  expect(wrapper.get('input[name=conscious]').attributes('aria-invalid')).toBe('true')
+  await wrapper.get('input[name=conscious][value=no]').setValue()
+  expect(previewSession.value!.animalDetails!['symptoms:other']).toBe('Podrobnejší opis poranenia')
+  await wrapper.get('form').trigger('submit')
+  expect(push).toHaveBeenCalledWith({ name: 'W14' })
+  wrapper.unmount()
+})
 it('renders supplied questions, validates answers and makes unknown exclusive', async () => {
   const wrapper = setup()
   expect(wrapper.text()).toContain('Mačka domáca')

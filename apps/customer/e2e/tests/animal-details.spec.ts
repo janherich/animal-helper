@@ -112,7 +112,7 @@ test('details and edit identification round trip preserve answers', async ({ pag
   await page.setViewportSize({ width: 402, height: 874 })
   await page.getByRole('button', { name: 'Podarilo sa pomôcť', exact: true }).click()
   await expect(page.getByRole('heading', { name: 'Ďakujeme za vašu pomoc' })).toBeVisible()
-  await expect(page.locator('input[type=email]')).toHaveValue('')
+  await expect(page.locator('input[type=email]')).toHaveValue('nespravna-adresa')
   await page.getByRole('button', { name: 'Späť', exact: true }).click()
   const contactsUrl = page.url()
   const adviceTrigger = page.getByRole('button', { name: 'Rady', exact: true })

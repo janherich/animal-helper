@@ -1,4 +1,6 @@
+import type { FormValidation } from '../../contracts/validation'
 export type CrueltyFollowupView = {
+  validation?: FormValidation
   screen: 'W28' | 'W29' | 'W30' | 'W37'
   answerSource?: 'other'
   locale: string

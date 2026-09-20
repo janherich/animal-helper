@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import PageActions from '../components/page-actions.vue'
+import ValidationMessage from '../components/validation-message.vue'
+import { useFormValidation } from '@/libs/use-form-validation'
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { backWithinFlow } from '../instruction-navigation'
@@ -7,6 +9,8 @@ import { previewSession } from '../preview-flow'
 import type { CrueltyFollowupView } from './fixtures/cruelty-followup'
 const props = defineProps<{ view: CrueltyFollowupView }>()
 const router = useRouter()
+const form = ref<HTMLElement>()
+const validation = useFormValidation(() => props.view.validation)
 const saved =
   props.view.answerSource === 'other' ? previewSession.value?.otherReport : previewSession.value?.crueltyReport
 const reasons = ref(props.view.reasons ? [...(saved?.reasons ?? [])] : [])
@@ -29,6 +33,10 @@ function goBack() {
   backWithinFlow(router, props.view.backTarget, [props.view.backTarget])
 }
 function proceed(action: CrueltyFollowupView['actions'][number]) {
+  if (validation.hasFieldErrors.value) {
+    validation.focusFirstError(form.value)
+    return
+  }
   if (props.view.answerSource === 'other' && previewSession.value) previewSession.value.documentingOther = true
   if (action.outcome && previewSession.value && previewSession.value.crueltyReport?.outcome !== action.outcome) {
     previewSession.value.crueltyReport = { outcome: action.outcome, reasons: [] }
@@ -38,6 +46,7 @@ function proceed(action: CrueltyFollowupView['actions'][number]) {
 </script>
 <template lang="pug">
 .customer-cruelty-followup(
+  ref="form",
   class="flex flex-1 flex-col",
   :lang="view.locale"
 )
@@ -53,11 +62,18 @@ function proceed(action: CrueltyFollowupView['actions'][number]) {
   header(class="px-5 pt-5 pb-3")
     h1(class="mb-1 text-heading-1") {{ view.copy.title }}
     p(v-if="view.copy.description") {{ view.copy.description }}
+  ValidationMessage(
+    :messages="validation.formErrors.value",
+    summary,
+    class="mx-4 mb-3"
+  )
   div(
     v-if="view.reasons",
     class="px-4 pt-2 pb-4"
   )
     section(
+      v-bind="validation.attrs('reasons')",
+      tabindex="-1",
       class="rounded-control border border-primary-light bg-surface py-4",
       aria-labelledby="cruelty-reasons"
     )
@@ -70,9 +86,11 @@ function proceed(action: CrueltyFollowupView['actions'][number]) {
           label(class="flex items-center gap-2")
             input(
               v-model="reasons",
+              v-bind="validation.attrs('reasons')",
               type="checkbox",
               :value="reason.id",
-              class="size-6 shrink-0 accent-primary"
+              class="size-6 shrink-0 accent-primary",
+              @change="validation.clear('reasons', 'description')"
             )
             span {{ reason.label }}
           base-expander(
@@ -82,13 +100,24 @@ function proceed(action: CrueltyFollowupView['actions'][number]) {
             div(class="pt-3")
               textarea(
                 v-model="description",
+                v-bind="validation.attrs('description')",
                 :aria-label="reason.description.placeholder",
                 :placeholder="reason.description.placeholder",
                 :maxlength="reason.description.maxLength",
                 :disabled="!reasons.includes(reason.id)",
                 rows="4",
-                class="w-full resize-none rounded-control border border-primary bg-surface p-3 placeholder:text-muted focus:shadow-[inset_0_0_0_1px_var(--color-primary)] focus:outline-none"
+                class="w-full resize-none rounded-control border border-primary bg-surface p-3 placeholder:text-muted focus:shadow-[inset_0_0_0_1px_var(--color-primary)] focus:outline-none",
+                @input="validation.clear('description')"
               )
+              ValidationMessage(
+                :id="validation.errorId('description')",
+                :messages="validation.messages('description')"
+              )
+      ValidationMessage(
+        :id="validation.errorId('reasons')",
+        :messages="validation.messages('reasons')",
+        class="px-4"
+      )
   PageActions(class="flex flex-col gap-4")
     button(
       v-for="action in view.actions",
