@@ -2,6 +2,7 @@
 export type DetailQuestion = {
   id: string
   label: string
+  hideLabel?: boolean
   kind: 'multiple' | 'single' | 'text'
   placeholder?: string
   required: boolean
@@ -79,7 +80,7 @@ export const animalDetailsFixture = {
     }
   ] as DetailQuestion[]
 }
-export type AnimalDetailsView = typeof animalDetailsFixture
+export type AnimalDetailsView = typeof animalDetailsFixture & { showAnimal?: boolean }
 
 export const editAnimalFixture = {
   screen: 'W40',

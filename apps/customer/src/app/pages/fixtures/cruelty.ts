@@ -1,3 +1,5 @@
+import { animalDetailsFixture, type AnimalDetailsView } from './animal-details'
+
 // Working server presentation contract. Mobile calling uses the OS; submission remains local.
 export type CrueltyView = {
   screen: 'W27'
@@ -51,4 +53,11 @@ export const crueltyFixture: CrueltyView = {
     },
     continue: { label: 'Nejde o akútny prípad', target: 'W03' }
   }
+}
+
+// Documenting cruelty ends at acknowledgement, not a second round of advice.
+export const crueltyDetailsFixture: AnimalDetailsView = {
+  ...animalDetailsFixture,
+  confirmTarget: 'W39',
+  copy: { ...animalDetailsFixture.copy, confirm: 'Potvrdiť údaje' }
 }

@@ -2,12 +2,13 @@
 import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { previewSession } from '../preview-flow'
+import { backWithinFlow } from '../instruction-navigation'
 import { catalogueAnimals } from '../animal-catalogue'
 import type { AnimalBranch } from './fixtures/animal-groups'
 import type { AnimalDetailsView, DetailQuestion } from './fixtures/animal-details'
 const props = defineProps<{ view: AnimalDetailsView; catalogue: AnimalBranch }>()
 const router = useRouter()
-const failed = computed(() => !!previewSession.value?.identificationFailed)
+const failed = computed(() => props.view.showAnimal !== false && !!previewSession.value?.identificationFailed)
 const identification = computed(() => previewSession.value?.animalIdentification)
 const animal = computed(() =>
   catalogueAnimals(props.catalogue).find(item => item.id === identification.value?.speciesId)
@@ -60,6 +61,7 @@ function confirm() {
   if (!valid.value || !props.view.allowedActions.includes('confirm') || !previewSession.value) return
   previewSession.value.animalDetails = { ...answers.value }
   previewSession.value.adviceReady = true
+  if (props.view.confirmTarget === 'W39') previewSession.value.thankYouReturnTarget = 'W09'
   void router.push({ name: props.view.confirmTarget })
 }
 function edit() {
@@ -79,7 +81,7 @@ function edit() {
       type="button",
       class="mb-4 flex min-h-11 items-center gap-1 text-heading-2 text-primary",
       :disabled="!view.allowedActions.includes('back')",
-      @click="router.push({ name: failed ? view.failedBackTarget : view.backTarget })"
+      @click="backWithinFlow(router, failed ? view.failedBackTarget : view.backTarget, [view.backTarget, view.failedBackTarget])"
     )
       base-icon(name="back")
       span {{ view.copy.back }}
@@ -101,9 +103,15 @@ function edit() {
   header(class="px-5 pt-5 pb-3")
     h1(class="mb-1 text-heading-1") {{ view.copy.title }}
     p {{ view.copy.description }}
-  div(class="px-4 py-2")
+  div(
+    v-if="view.showAnimal !== false",
+    class="px-4 py-2"
+  )
     hr(class="border-primary-light")
-  h2(class="px-5 py-2 text-heading-3") {{ view.copy.animal }}
+  h2(
+    v-if="view.showAnimal !== false",
+    class="px-5 py-2 text-heading-3"
+  ) {{ view.copy.animal }}
   div(
     v-if="failed",
     class="mx-4 my-2 rounded-control border border-accent bg-accent-light px-5 py-4",
@@ -117,7 +125,10 @@ function edit() {
       p(class="min-w-0 text-heading-3") {{ view.copy.failedTitle }}
     p(class="mt-2") {{ view.copy.failedDescription }}
   template(v-else)
-    section(class="mx-4 mb-4 rounded-control border border-primary-light bg-surface p-5")
+    section(
+      v-if="view.showAnimal !== false",
+      class="mx-4 mb-4 rounded-control border border-primary-light bg-surface p-5"
+    )
       div(class="flex items-center justify-between gap-3")
         p(class="text-body-strong text-primary") {{ animalLabel }}
         button(
@@ -144,7 +155,10 @@ function edit() {
           name="stray-animal",
           style="width: 64px; height: 64px"
         )
-    h2(class="px-5 py-2 text-heading-3") {{ view.copy.details }}
+    h2(
+      v-if="view.questions.length && view.copy.details",
+      class="px-5 py-2 text-heading-3"
+    ) {{ view.copy.details }}
     form#animal-details-form(
       class="flex flex-col gap-2 px-4",
       @submit.prevent="confirm"
@@ -157,9 +171,13 @@ function edit() {
       )
         div(
           :id="'question-' + question.id",
-          class="px-4 text-body-strong"
+          class="px-4 text-body-strong",
+          :class="question.hideLabel ? 'sr-only' : ''"
         ) {{ question.label }}
-        hr(class="my-3 border-primary-light")
+        hr(
+          v-if="!question.hideLabel",
+          class="my-3 border-primary-light"
+        )
         div(
           v-if="question.kind === 'text'",
           class="px-4"

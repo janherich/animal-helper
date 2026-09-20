@@ -105,6 +105,7 @@ async function requestAction(id: string) {
       details.customer-home__section(
         v-for="section in view.props.sections",
         :key="section.id",
+        :open="section.expanded",
         class="group border-t border-primary-light py-2"
       )
         summary(
@@ -116,11 +117,38 @@ async function requestAction(id: string) {
             class="size-10 group-open:rotate-180"
           )
         .customer-home__section-content(class="px-1 pt-2 pb-4")
+          h3(
+            v-if="section.heading",
+            class="mb-2 text-body-strong"
+          ) {{ section.heading }}
           p(
             v-for="(paragraph, index) in section.paragraphs",
             :key="index",
             class="mb-2 last:mb-0"
           ) {{ paragraph }}
+          ul(
+            v-if="section.items",
+            class="flex flex-col gap-2"
+          )
+            li(
+              v-for="item in section.items",
+              :key="item.id"
+            )
+              component(
+                :is="item.action ? 'button' : 'div'",
+                :type="item.action ? 'button' : undefined",
+                :disabled="item.action ? !view.allowedActions.includes(item.action) : undefined",
+                class="flex min-h-8 w-full items-center gap-3 text-left text-body",
+                :class="[item.action && 'cursor-pointer disabled:cursor-not-allowed disabled:opacity-50', item.accent && 'pt-2 font-semibold text-accent underline underline-offset-2']",
+                @click="item.action && requestAction(item.action)"
+              )
+                base-icon(
+                  v-if="item.icon",
+                  :name="item.icon",
+                  class="size-5 shrink-0 text-primary",
+                  :class="item.icon === 'back' && 'rotate-180'"
+                )
+                span {{ item.label }}
   footer.customer-home__footer(class="mt-auto px-4 pt-6 pb-[max(24px,env(safe-area-inset-bottom))] text-center text-primary")
     .customer-home__socials(class="mb-4 flex justify-center gap-2")
       button(

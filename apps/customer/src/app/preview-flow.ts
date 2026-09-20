@@ -6,11 +6,14 @@ import type { LocationPoint } from './pages/fixtures/location'
 export const previewSession = ref<{
   situation: string
   fromDraft: boolean
+  otherSituation?: 'road' | 'human' | 'other'
+  otherReport?: { reasons: string[]; description?: string }
+  documentingOther?: boolean
   crueltyReport?: { outcome: 'reported' | 'not-reported'; reasons: string[]; description?: string }
   editingAnimal?: boolean
   identificationFailed?: boolean
   adviceReady?: boolean
-  thankYouReturnTarget?: 'W15' | 'W18' | 'W20' | 'W21' | 'W36' | 'W22'
+  thankYouReturnTarget?: 'W15' | 'W18' | 'W20' | 'W21' | 'W36' | 'W22' | 'W09'
   adviceView?: AdviceView
   animalDetails?: Record<string, string | string[]>
   location?: LocationPoint

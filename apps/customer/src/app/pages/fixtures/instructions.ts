@@ -6,7 +6,7 @@ export type InstructionAction = {
   id: 'resolved' | 'unresolved' | 'alternatives'
   label: string
   appearance: 'primary' | 'secondary'
-  target: 'W22' | 'W24' | 'W25'
+  target: 'W22' | 'W24' | 'W25' | 'W37'
 }
 export type InstructionsView = {
   screen: 'W15' | 'W18' | 'W20' | 'W21' | 'W36' | 'W22'

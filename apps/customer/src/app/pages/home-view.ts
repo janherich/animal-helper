@@ -22,7 +22,14 @@ export type HomeView = {
     situations: { id: string; label: string; icon: string; action: string; appearance: 'primary' | 'secondary' }[]
     anonymousNotice: string
     about: { title: string; description: string }
-    sections: { id: string; title: string; paragraphs: string[] }[]
+    sections: {
+      id: string
+      title: string
+      expanded?: boolean
+      heading?: string
+      paragraphs: string[]
+      items?: { id: string; label: string; icon?: string; action?: string; accent?: boolean }[]
+    }[]
     socials: { label: string; icon: string; action: string }[]
     copyright: string
     previewNotice: string

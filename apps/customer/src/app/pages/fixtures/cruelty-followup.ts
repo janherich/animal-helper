@@ -1,14 +1,20 @@
 export type CrueltyFollowupView = {
-  screen: 'W28' | 'W29' | 'W30'
+  screen: 'W28' | 'W29' | 'W30' | 'W37'
+  answerSource?: 'other'
   locale: string
   layout: { showMenu: boolean }
-  backTarget: 'W27' | 'W28'
+  backTarget: 'W27' | 'W28' | 'W36'
   copy: { back: string; title: string; description?: string; preview: string }
   reasons?: {
     title: string
     options: { id: string; label: string; description?: { placeholder: string; maxLength: number } }[]
   }
-  actions: { label: string; target: 'W29' | 'W30' | 'W03'; outcome?: 'reported' | 'not-reported'; primary: boolean }[]
+  actions: {
+    label: string
+    target: 'W29' | 'W30' | 'W03' | 'W04'
+    outcome?: 'reported' | 'not-reported'
+    primary: boolean
+  }[]
 }
 const common = { locale: 'sk', layout: { showMenu: false } }
 const preview = 'Lokálna ukážka evidencie prípadu. Odoslanie prípadu zatiaľ nie je zapojené.'

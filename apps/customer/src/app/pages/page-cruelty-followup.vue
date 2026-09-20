@@ -6,13 +6,18 @@ import { previewSession } from '../preview-flow'
 import type { CrueltyFollowupView } from './fixtures/cruelty-followup'
 const props = defineProps<{ view: CrueltyFollowupView }>()
 const router = useRouter()
-const reasons = ref(props.view.reasons ? [...(previewSession.value?.crueltyReport?.reasons ?? [])] : [])
-const description = ref(props.view.reasons ? (previewSession.value?.crueltyReport?.description ?? '') : '')
+const saved =
+  props.view.answerSource === 'other' ? previewSession.value?.otherReport : previewSession.value?.crueltyReport
+const reasons = ref(props.view.reasons ? [...(saved?.reasons ?? [])] : [])
+const description = ref(props.view.reasons ? (saved?.description ?? '') : '')
 watch(
   [reasons, description],
   () => {
-    const report = previewSession.value?.crueltyReport
-    if (!props.view.reasons || report?.outcome !== 'not-reported') return
+    const session = previewSession.value
+    if (!session || !props.view.reasons) return
+    if (props.view.answerSource === 'other') session.otherReport ??= { reasons: [] }
+    const report = props.view.answerSource === 'other' ? session.otherReport : session.crueltyReport
+    if (!report) return
     report.reasons = [...reasons.value]
     if (reasons.value.includes('other')) report.description = description.value.trim()
     else delete report.description
@@ -23,6 +28,7 @@ function goBack() {
   backWithinFlow(router, props.view.backTarget, [props.view.backTarget])
 }
 function proceed(action: CrueltyFollowupView['actions'][number]) {
+  if (props.view.answerSource === 'other' && previewSession.value) previewSession.value.documentingOther = true
   if (action.outcome && previewSession.value && previewSession.value.crueltyReport?.outcome !== action.outcome) {
     previewSession.value.crueltyReport = { outcome: action.outcome, reasons: [] }
   }

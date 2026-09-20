@@ -5,13 +5,25 @@ export const homeFixture: HomeView = {
   screen: 'W01',
   locale: 'sk',
   layout: { showMenu: true },
-  allowedActions: ['start-injured', 'start-stray', 'start-dead', 'start-cruelty', 'start-other'],
+  allowedActions: [
+    'start-injured',
+    'start-stray',
+    'start-dead',
+    'start-cruelty',
+    'start-other',
+    'faq-capture',
+    'faq-cost',
+    'faq-bird',
+    'faq-all',
+    'legal-privacy',
+    'legal-terms'
+  ],
   previewActions: {
     'start-injured': { situation: 'injured', fromDraft: false, target: 'W03' },
     'start-stray': { situation: 'stray', fromDraft: false, target: 'W03' },
     'start-dead': { situation: 'dead', fromDraft: false, target: 'W03' },
     'start-cruelty': { situation: 'cruelty', fromDraft: false, target: 'W27' },
-    'start-other': { situation: 'other', fromDraft: false, target: 'W03' }
+    'start-other': { situation: 'other', fromDraft: false, target: 'W32' }
   },
   props: {
     title: 'Čo sa stalo?',
@@ -40,12 +52,38 @@ export const homeFixture: HomeView = {
     about: { title: 'Zverolinka', description: 'Prvý kontakt pri záchrane zvierat.' },
     // Expanded content is deliberately labelled until approved copy is available.
     sections: [
-      { id: 'faq', title: 'Často kladené otázky', paragraphs: ['Ukážkový obsah: odpovede doplníme z backendu.'] },
-      { id: 'contact', title: 'Kontakt', paragraphs: ['Ukážkový obsah: kontaktné údaje doplníme z backendu.'] },
+      {
+        id: 'faq',
+        title: 'Často kladené otázky',
+        expanded: true,
+        paragraphs: [],
+        items: [
+          { id: 'capture', label: 'Ako bezpečne odchytiť zranené zviera?', icon: 'faq-forward', action: 'faq-capture' },
+          { id: 'cost', label: 'Kto platí ošetrenie voľne žijúceho zvieraťa?', icon: 'faq-forward', action: 'faq-cost' },
+          { id: 'bird', label: 'Čo robiť, ak nájdem vypadnuté vtáča?', icon: 'faq-forward', action: 'faq-bird' },
+          { id: 'all', label: 'Prejsť na všetky FAQs', action: 'faq-all', accent: true }
+        ]
+      },
+      {
+        id: 'contact',
+        title: 'Kontakt',
+        expanded: true,
+        heading: 'Zverolinka o.z.',
+        paragraphs: [],
+        items: [
+          { id: 'address', label: 'Račianska 62, 821 08 Bratislava', icon: 'place' },
+          { id: 'email', label: 'info@zverolinka.sk', icon: 'email' },
+          { id: 'web', label: 'www.zverolinka.sk', icon: 'web' }
+        ]
+      },
       {
         id: 'legal',
         title: 'Právne informácie',
-        paragraphs: ['Ukážkový obsah: právne informácie doplníme z backendu.']
+        paragraphs: ['Ukážkový obsah: schválené právne dokumenty a ich odkazy doplní server.'],
+        items: [
+          { id: 'privacy', label: 'Ochrana osobných údajov', action: 'legal-privacy', accent: true },
+          { id: 'terms', label: 'Podmienky používania', action: 'legal-terms', accent: true }
+        ]
       }
     ],
     socials: [

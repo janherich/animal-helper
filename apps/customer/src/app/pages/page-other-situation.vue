@@ -1,0 +1,39 @@
+<script setup lang="ts">
+import { useRouter } from 'vue-router'
+import { beginPreview, previewSession } from '../preview-flow'
+import { backWithinFlow } from '../instruction-navigation'
+import type { otherSituationFixture } from './fixtures/other-situations'
+defineProps<{ view: typeof otherSituationFixture }>()
+const router = useRouter()
+function choose(choice: (typeof otherSituationFixture.choices)[number]) {
+  // A changed branch starts a fresh local draft; same-branch back preserves it.
+  if (previewSession.value?.otherSituation !== choice.id) beginPreview('other')
+  if (previewSession.value) previewSession.value.otherSituation = choice.id
+  void router.push({ name: choice.target })
+}
+</script>
+<template lang="pug">
+.customer-other-situation(
+  class="flex flex-1 flex-col",
+  :lang="view.locale"
+)
+  div(class="px-4 pt-5 pb-1")
+    button(
+      type="button",
+      class="mb-4 flex min-h-11 items-center gap-1 text-heading-2 text-primary",
+      @click="backWithinFlow(router, view.backTarget, [view.backTarget])"
+    )
+      base-icon(name="back")
+      span {{ view.copy.back }}
+    hr(class="border-primary-light")
+  header(class="px-5 pt-5 pb-3")
+    h1(class="text-heading-1") {{ view.copy.title }}
+  div(class="flex flex-col gap-4 px-4 pt-6 pb-4")
+    button(
+      v-for="choice in view.choices",
+      :key="choice.id",
+      type="button",
+      class="w-full rounded-control border border-primary bg-surface p-4 text-button text-primary",
+      @click="choose(choice)"
+    ) {{ choice.label }}
+</template>

@@ -9,6 +9,9 @@ hint, not proof of telephony support; the app cannot infer whether a call connec
 - Call button → W28 reporting outcome (also requests system calling on phones).
 - Reported → W29 acknowledgement → Document case → W03.
 - Not reported → W30 optional reasons → Document case → W03.
+- After location, identification and details, all cruelty branches end at W39 acknowledgement. Do not repeat
+  advice/contact screens. The initial W27 safety notice stays visible. This ending follows the updated product decision;
+  presentation and submission remain fixtures.
 
 Each screen has its own route and transition. Back uses allowed router history with a safe fallback. Location returns to
 its actual W27/W29/W30 entry. Other home entries still go directly to location; media returns to location.

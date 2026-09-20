@@ -19,11 +19,11 @@ watch(
 const tones = { open: 'text-success', closing: 'text-accent', closed: 'text-danger' }
 function goBack() {
   if (!props.view.allowedActions.includes('back')) return
-  backWithinFlow(router, props.view.backTarget, props.view.screen === 'W22' ? contactScreens : ['W14'])
+  backWithinFlow(router, props.view.backTarget, props.view.screen === 'W22' ? contactScreens : [props.view.backTarget])
 }
 function act(action: InstructionAction) {
   if (!props.view.allowedActions.includes(action.id)) return
-  if (!['W22', 'W24', 'W25'].includes(action.target)) {
+  if (!['W22', 'W24', 'W25', 'W37'].includes(action.target)) {
     notice.value = props.view.copy.unavailable
     return
   }

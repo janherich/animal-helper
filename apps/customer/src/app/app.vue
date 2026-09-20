@@ -45,7 +45,7 @@ const stopToastNavigation = router.afterEach((to, from, failure) => {
 onUnmounted(stopToastNavigation)
 function handlePageAction(id: string) {
   if (route.name !== 'W01') return
-  const view = import.meta.env.DEV && route.query.fixture === 'draft' ? homeDraftFixture : homeFixture
+  const view = import.meta.env.DEV && route.query.fixture !== 'clean' ? homeDraftFixture : homeFixture
   if (!view.allowedActions.includes(id)) return
   const action = view.previewActions[id]
   if (action) {

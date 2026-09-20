@@ -1,5 +1,24 @@
 import { expect, test } from '@playwright/test'
 
+test('documented cruelty ends at thanks without another advice stage', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Týranie/zanedbávanie zvieraťa', exact: true }).click()
+  await page.getByRole('button', { name: 'Nejde o akútny prípad' }).click()
+  await page.getByRole('button', { name: 'Ukážková mapa — vybrať Dolné Orešany' }).click()
+  await page.getByRole('button', { name: 'Potvrdiť polohu' }).click()
+  await page.getByRole('button', { name: 'Nemám fotografiu' }).click()
+  await page.getByRole('combobox').fill('mac')
+  await page.getByRole('option', { name: 'Mačka domáca' }).click()
+  await page.getByRole('button', { name: 'Potvrdiť voľbu' }).click()
+  await page.getByRole('checkbox', { name: 'Krváca', exact: true }).check()
+  await page.locator('input[name=conscious][value=yes]').check()
+  await page.locator('input[name=juvenile][value=no]').check()
+  await expect(page.getByRole('button', { name: 'Zobraziť možnosti pomoci' })).toHaveCount(0)
+  await page.getByRole('button', { name: 'Potvrdiť údaje' }).click()
+  await expect(page).toHaveURL(/\/w39$/)
+})
+
 test('non-acute cruelty precedes location and media without a back loop', async ({ page }) => {
   await page.goto('/w27')
   await expect(page).toHaveURL(/\/$/)
@@ -35,7 +54,9 @@ for (const reported of [true, false]) {
       await page.getByLabel('Iné', { exact: true }).check()
       await page.getByRole('textbox').fill('Ukážkový dôvod')
       await expect(page.locator('.base-expander')).toHaveCSS('opacity', '1')
-      await expect.poll(async () => (await page.locator('.base-expander').boundingBox())?.height ?? 0).toBeGreaterThan(100)
+      await expect
+        .poll(async () => (await page.locator('.base-expander').boundingBox())?.height ?? 0)
+        .toBeGreaterThan(100)
     }
     await expect(page.locator('.customer-cruelty-followup')).toHaveCSS('opacity', '1')
     await page.screenshot({ path: testInfo.outputPath('outcome-mobile.png'), fullPage: true })

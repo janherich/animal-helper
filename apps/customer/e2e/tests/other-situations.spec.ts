@@ -1,0 +1,82 @@
+import { expect, test, type Page } from '@playwright/test'
+
+async function start(page: Page, choice: string) {
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Iné', exact: true }).click()
+  await expect(page).toHaveURL(/\/w32$/)
+  await page.getByRole('button', { name: choice }).click()
+  await expect(page).toHaveURL(/\/w03$/)
+  await page.getByRole('button', { name: 'Ukážková mapa — vybrať Dolné Orešany' }).click()
+  await page.getByRole('button', { name: 'Potvrdiť polohu' }).click()
+}
+async function identify(page: Page) {
+  await expect(page).toHaveURL(/\/w04$/)
+  await page.getByRole('button', { name: 'Nemám fotografiu' }).click()
+  await page.getByRole('combobox').fill('mac')
+  await page.getByRole('option', { name: 'Mačka domáca' }).click()
+  await page.getByRole('button', { name: 'Potvrdiť voľbu' }).click()
+  await expect(page).toHaveURL(/\/w09$/)
+}
+
+test('road case skips identification, supports failure details and documents the known location', async ({
+  page
+}, testInfo) => {
+  await page.setViewportSize({ width: 402, height: 874 })
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goto('/w37')
+  await expect(page).toHaveURL(/\/$/)
+  await start(page, 'Na/pri ceste alebo koľajniciach')
+  await expect(page).toHaveURL(/\/w33$/)
+  await expect(page.getByRole('button', { name: 'Upraviť', exact: true })).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Zobraziť možnosti pomoci' })).toBeDisabled()
+  await page.getByRole('radio', { name: 'Pohybuje sa na alebo pri diaľnici', exact: true }).check()
+  await page.getByRole('button', { name: 'Zobraziť možnosti pomoci' }).click()
+  await expect(page).toHaveURL(/\/w36$/)
+  await page.getByRole('button', { name: 'Nepodarilo sa pomôcť', exact: true }).click()
+  await expect(page).toHaveURL(/\/w37$/)
+  await expect(page.getByRole('button', { name: 'Zdokumentovať prípad' })).toBeEnabled()
+  await page.screenshot({ path: testInfo.outputPath('other-failure-empty.png'), fullPage: true })
+  await page.getByRole('checkbox', { name: 'Nedvihli mi', exact: true }).check()
+  await page.getByRole('checkbox', { name: 'Iné', exact: true }).check()
+  await page.getByRole('textbox').fill('Testovací popis')
+  await page.screenshot({ path: testInfo.outputPath('other-failure-expanded.png'), fullPage: true })
+  await page.getByRole('button', { name: 'Zdokumentovať prípad' }).click()
+  await expect(page).toHaveURL(/\/w04$/)
+  await page.getByRole('button', { name: 'Späť', exact: true }).click()
+  await expect(page).toHaveURL(/\/w37$/)
+  await expect(page.getByRole('textbox')).toHaveValue('Testovací popis')
+  await page.getByRole('button', { name: 'Zdokumentovať prípad' }).click()
+  await identify(page)
+  await page.getByRole('button', { name: 'Potvrdiť', exact: true }).click()
+  await expect(page).toHaveURL(/\/w39$/)
+})
+
+test('human activity uses identification and situation radios before advice', async ({ page }) => {
+  await start(page, 'Uviazlo alebo ho ohrozuje ľudská činnosť')
+  await identify(page)
+  await page.getByRole('radio', { name: 'Iné', exact: true }).check()
+  await page.getByRole('textbox').fill('Testovacia situácia')
+  await page.getByRole('button', { name: 'Zobraziť možnosti pomoci' }).click()
+  await expect(page).toHaveURL(/\/w14$/)
+})
+
+test('other situation ends with identification and thanks, without advice', async ({ page }, testInfo) => {
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Iné', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'V akej situácii je zviera?' })).toBeVisible()
+  await expect(page.locator('.customer-other-situation')).toHaveCSS('opacity', '1')
+  await page.screenshot({ path: testInfo.outputPath('other-choice.png'), fullPage: true })
+  await start(page, 'Iná situácia')
+  await identify(page)
+  await expect(page.getByRole('radio')).toHaveCount(0)
+  await page.getByRole('button', { name: 'Potvrdiť', exact: true }).click()
+  await expect(page).toHaveURL(/\/w39$/)
+})
+
+test('road success reaches thanks without animal identification', async ({ page }) => {
+  await start(page, 'Na/pri ceste alebo koľajniciach')
+  await page.getByRole('radio', { name: 'Pohybuje sa na alebo pri diaľnici', exact: true }).check()
+  await page.getByRole('button', { name: 'Zobraziť možnosti pomoci' }).click()
+  await page.getByRole('button', { name: 'Podarilo sa pomôcť', exact: true }).click()
+  await expect(page).toHaveURL(/\/w24$/)
+})
