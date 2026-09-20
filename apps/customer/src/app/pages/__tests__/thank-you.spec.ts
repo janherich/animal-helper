@@ -45,7 +45,7 @@ it('renders optional contact fields and opt-ins without submitting or persisting
   push.mockClear()
   previewSession.value = { situation: 'test', fromDraft: false, thankYouReturnTarget: 'W22' }
   const wrapper = mount(PageThankYou, {
-    props: { view: thankYouFixture },
+    props: { view: { ...thankYouFixture, backTarget: 'W22' } },
     global: { components: { BaseIcon, BaseExpander }, stubs: { CompletionAnimation: true } }
   })
   expect(wrapper.findAll('input:not([type=checkbox])')).toHaveLength(3)

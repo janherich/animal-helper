@@ -4,8 +4,8 @@ import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import HelpText from '../components/help-text.vue'
 import HelpImage from '../components/help-image.vue'
-import { previewSession } from '../preview-flow'
-import { backWithinFlow, contactScreens } from '../instruction-navigation'
+import { flowActions } from '../flow-client'
+import { backWithinFlow } from '../instruction-navigation'
 import { safeContactHref } from './fixtures/contacts'
 import type { InstructionsView, InstructionAction } from './fixtures/instructions'
 const props = defineProps<{ view: InstructionsView }>()
@@ -20,19 +20,16 @@ watch(
 const tones = { open: 'text-success', closing: 'text-accent', closed: 'text-danger' }
 function goBack() {
   if (!props.view.allowedActions.includes('back')) return
-  backWithinFlow(router, props.view.backTarget, props.view.screen === 'W22' ? contactScreens : [props.view.backTarget])
+  backWithinFlow(router, props.view.backTarget, flowActions.instructionBackTargets(props.view))
 }
 function act(action: InstructionAction) {
   if (!props.view.allowedActions.includes(action.id)) return
-  if (!['W22', 'W24', 'W25', 'W37'].includes(action.target)) {
+  const target = flowActions.instruction(props.view, action)
+  if (!target) {
     notice.value = props.view.copy.unavailable
     return
   }
-  if (previewSession.value) {
-    if (action.target === 'W24' || action.target === 'W25')
-      previewSession.value.thankYouReturnTarget = props.view.screen
-  }
-  void router.push({ name: action.target })
+  void router.push({ name: target })
 }
 </script>
 

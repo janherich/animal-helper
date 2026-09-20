@@ -2,33 +2,51 @@
 // Replace these functions with validated API responses (view + next action).
 // Routes register renderers; only this fixture adapter selects scenario variants.
 import { previewSession } from '../../preview-flow'
-import { animalDetailsFixture } from './animal-details'
 import type { ContactsView } from './contacts'
-import { crueltyDetailsFixture } from './cruelty'
+import { contactFixtures } from './contacts'
+import { flowPolicy, flowScenarios } from './flow-scenarios'
+import { homeDraftFixture, homeFixture } from './home'
 import { locationFixture } from './location'
 import { mediaFixture } from './media'
-import { humanDetailsFixture, otherDetailsFixture, roadInstructionsFixture } from './other-situations'
+import { roadInstructionsFixture } from './other-situations'
+import { selfHelpFixture } from './self-help'
+import type { ThankYouView } from './thank-you'
 
 function isRoadFlow() {
   return previewSession.value?.situation === 'other' && previewSession.value.otherSituation === 'road'
 }
 export function previewLocationView() {
-  const situation = previewSession.value?.situation
-  return {
-    ...locationFixture,
-    confirmTarget: isRoadFlow() ? 'W33' : locationFixture.confirmTarget,
-    backTarget: situation === 'cruelty' ? 'W27' : situation === 'other' ? 'W32' : locationFixture.backTarget,
-    backHistoryTargets: situation === 'cruelty' ? ['W27', 'W29', 'W30'] : situation === 'other' ? ['W32'] : []
-  }
+  return { ...locationFixture, ...scenario().location }
 }
 export function previewMediaView() {
-  return { ...mediaFixture, backTarget: previewSession.value?.documentingOther ? 'W37' : mediaFixture.backTarget }
+  return {
+    ...mediaFixture,
+    backTarget: previewSession.value?.documentingOther ? flowPolicy.documentedMediaBack : mediaFixture.backTarget
+  }
+}
+function scenario() {
+  const session = previewSession.value
+  const key =
+    session?.situation === 'other'
+      ? (session.otherSituation ?? 'other')
+      : session?.situation === 'cruelty'
+        ? 'cruelty'
+        : 'standard'
+  return flowScenarios[key]!
 }
 export function previewDetailsView() {
-  const session = previewSession.value
-  if (session?.situation === 'other')
-    return session.otherSituation === 'human' ? humanDetailsFixture : otherDetailsFixture
-  return session?.situation === 'cruelty' ? crueltyDetailsFixture : animalDetailsFixture
+  return scenario().details
+}
+export function previewHomeView(clean: boolean) {
+  return import.meta.env.DEV && !clean ? homeDraftFixture : homeFixture
+}
+export function previewPageAdvice(screen: unknown) {
+  if (screen === selfHelpFixture.screen) return selfHelpFixture.advice
+  const view = contactFixtures.find(view => view.screen === screen)
+  return view ? previewContactView(view).advice : undefined
+}
+export function previewThankYouView(view: ThankYouView) {
+  return { ...view, backTarget: previewSession.value?.thankYouReturnTarget ?? view.backTarget }
 }
 export function previewContactView(view: ContactsView) {
   return isRoadFlow() && view.screen === 'W36' ? roadInstructionsFixture : view

@@ -3,11 +3,11 @@ import { usePreferredReducedMotion, useScrollLock, useElementSize } from '@vueus
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-vue'
 import { nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
-import { homeDraftFixture, homeFixture } from './pages/fixtures/home'
 import { shellFixture as shell } from './pages/fixtures/shell'
-import { beginPreview, finishPreview } from './preview-flow'
+import { finishPreview } from './preview-flow'
+import { flowActions } from './flow-client'
 import AdviceDrawer from './components/advice-drawer.vue'
-import { previewContactView } from './pages/fixtures/preview-server'
+import { previewHomeView, previewPageAdvice } from './flow-client'
 import ManagerToasts from './components/manager-toasts.vue'
 import CompletionAnimation from './components/completion-animation.vue'
 import { completion } from './completion'
@@ -16,8 +16,6 @@ import logoOrange from '@/assets/brand/logo-orange.svg'
 import logoSplash from '@/assets/brand/logo-splash.svg?raw'
 import { usePageScrollbars } from '@/plugins/overlay-scrollbars'
 import { computed } from 'vue'
-import { contactFixtures } from './pages/fixtures/contacts'
-import { selfHelpFixture } from './pages/fixtures/self-help'
 import { holdScreenHeight, screenEntered, clearScreenScroll } from '@/providers/router/transition-scroll'
 import { focusPageContent } from '@/providers/router/navigation-focus'
 onUnmounted(clearScreenScroll)
@@ -63,11 +61,7 @@ function finishCompletion() {
   completionPageReady.value = false
   void nextTick(() => document.getElementById('main-content')?.focus({ preventScroll: true }))
 }
-const pageAdvice = computed(() => {
-  if (route.name === selfHelpFixture.screen) return selfHelpFixture.advice
-  const view = contactFixtures.find(view => view.screen === route.name)
-  return view ? previewContactView(view).advice : undefined
-})
+const pageAdvice = computed(() => previewPageAdvice(route.name))
 const adviceDrawer = ref<InstanceType<typeof AdviceDrawer>>()
 function openAdvice(event: MouseEvent) {
   void adviceDrawer.value?.open(event.currentTarget)
@@ -83,13 +77,8 @@ const stopToastNavigation = router.afterEach((to, from, failure) => {
 onUnmounted(stopToastNavigation)
 function handlePageAction(id: string) {
   if (route.name !== 'W01') return
-  const view = import.meta.env.DEV && route.query.fixture !== 'clean' ? homeDraftFixture : homeFixture
-  if (!view.allowedActions.includes(id)) return
-  const action = view.previewActions[id]
-  if (action) {
-    beginPreview(action.situation, action.fromDraft)
-    void router.push({ name: action.target })
-  }
+  const target = flowActions.start(previewHomeView(route.query.fixture === 'clean'), id)
+  if (target) void router.push({ name: target })
 }
 const reducedMotion = usePreferredReducedMotion()
 const starting = ref(true)

@@ -6,7 +6,8 @@ import { useFormValidation } from '@/libs/use-form-validation'
 import { computed, ref, useId } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAutocomplete } from '@/libs/use-autocomplete'
-import { previewSession, confirmAnimalIdentification } from '../preview-flow'
+import { previewSession } from '../preview-flow'
+import { flowActions } from '../flow-client'
 import { catalogueAnimals, searchAnimals, normalizeAnimalSearch, type CatalogueAnimal } from '../animal-catalogue'
 import type { AnimalGroupsView } from './fixtures/animal-groups'
 
@@ -86,15 +87,16 @@ function confirm() {
     return
   }
   const context = { path: [...path.value] }
-  confirmAnimalIdentification(
+  const target = flowActions.identify(
     choice.value === 'unknown'
       ? { ...context, kind: 'unknown' }
       : choice.value === 'other'
         ? { ...context, kind: 'other', description: description.value.trim() }
-        : { ...context, kind: 'species', speciesId: choice.value }
+        : { ...context, kind: 'species', speciesId: choice.value },
+    props.view.confirmTarget
   )
   completed.value = true
-  void router.push({ name: props.view.confirmTarget })
+  void router.push({ name: target })
 }
 function selectCard(id: string) {
   const node = cards.value.find(item => item.id === id)

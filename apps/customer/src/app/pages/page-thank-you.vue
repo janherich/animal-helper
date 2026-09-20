@@ -4,7 +4,6 @@ import ValidationMessage from '../components/validation-message.vue'
 import { useFormValidation } from '@/libs/use-form-validation'
 import { computed, ref, useId, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { previewSession } from '../preview-flow'
 import type { ThankYouView } from './fixtures/thank-you'
 import { completion } from '../completion'
 const props = defineProps<{ view: ThankYouView }>()
@@ -51,7 +50,7 @@ form.customer-thank-you(
       type="button",
       class="mb-4 flex min-h-11 items-center gap-1 font-form text-back text-primary",
       :disabled="!view.allowedActions.includes('back')",
-      @click="router.push({ name: previewSession?.thankYouReturnTarget ?? view.backTarget })"
+      @click="router.push({ name: view.backTarget })"
     )
       base-icon(name="back")
       span {{ view.copy.back }}

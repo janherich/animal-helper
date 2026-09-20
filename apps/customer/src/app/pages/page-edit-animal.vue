@@ -5,7 +5,8 @@ import { computed, ref, useId } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAutocomplete } from '@/libs/use-autocomplete'
 import { catalogueAnimals, searchAnimals, type CatalogueAnimal } from '../animal-catalogue'
-import { previewSession, confirmAnimalIdentification } from '../preview-flow'
+import { previewSession } from '../preview-flow'
+import { flowActions } from '../flow-client'
 import type { AnimalBranch } from './fixtures/animal-groups'
 import type { EditAnimalView } from './fixtures/animal-details'
 const props = defineProps<{ view: EditAnimalView; catalogue: AnimalBranch }>()
@@ -32,13 +33,15 @@ const {
 function select(animal: CatalogueAnimal) {
   const session = previewSession.value
   if (!session || !props.view.allowedActions.includes('search')) return
-  confirmAnimalIdentification({ kind: 'species', path: animal.path, speciesId: animal.id })
-  void router.push({ name: props.view.backTarget })
+  const target = flowActions.identify(
+    { kind: 'species', path: animal.path, speciesId: animal.id },
+    props.view.backTarget
+  )
+  void router.push({ name: target })
 }
 function go(action: 'media' | 'manual') {
   if (!props.view.allowedActions.includes(action)) return
-  if (previewSession.value) previewSession.value.editingAnimal = true
-  void router.push({ name: action === 'media' ? props.view.mediaTarget : props.view.manualTarget })
+  void router.push({ name: flowActions.edit(action === 'media' ? props.view.mediaTarget : props.view.manualTarget) })
 }
 </script>
 

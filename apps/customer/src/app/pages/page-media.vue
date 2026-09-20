@@ -6,6 +6,7 @@ import { useElementBounding, useWindowSize } from '@vueuse/core'
 import { useRouter } from 'vue-router'
 import addMedia from '@/assets/brand/add-media.svg'
 import { previewSession } from '../preview-flow'
+import { flowActions } from '../flow-client'
 import { toastBottomOffset, useToasts } from '../toasts'
 import type { MediaView } from './fixtures/media'
 import PageProcessing from './page-processing.vue'
@@ -24,23 +25,9 @@ async function confirmMedia() {
   notifications.clear()
   message.value = ''
   await run(async signal => {
-    // Deliberately no upload or AI request: this only previews the waiting state.
-    await new Promise<void>(resolve => {
-      const done = () => {
-        clearTimeout(timer)
-        signal.removeEventListener('abort', done)
-        resolve()
-      }
-      const timer = setTimeout(done, props.view.processing.demoDurationMs)
-      signal.addEventListener('abort', done, { once: true })
-    })
-    if (!signal.aborted) {
-      if (previewSession.value) {
-        previewSession.value.identificationFailed = true
-        previewSession.value.adviceReady = false
-        delete previewSession.value.animalIdentification
-      }
-      await router.push({ name: props.view.resultTarget })
+    const target = await flowActions.processMedia(props.view.processing.demoDurationMs, props.view.resultTarget, signal)
+    if (target && !signal.aborted) {
+      await router.push({ name: target })
       await nextTick()
     }
   })

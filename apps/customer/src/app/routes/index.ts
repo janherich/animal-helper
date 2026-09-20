@@ -1,20 +1,23 @@
 import type { RouteRecordRaw } from 'vue-router'
+import {
+  previewAccess,
+  previewContactView,
+  previewDetailsView,
+  previewHomeView,
+  previewLocationView,
+  previewMediaView,
+  previewThankYouView
+} from '../flow-client'
 import { adviceFixture, warningsOnlyFixture } from '../pages/fixtures/advice'
 import { animalDetailsFixture, editAnimalFixture } from '../pages/fixtures/animal-details'
 import { animalGroupsFixture } from '../pages/fixtures/animal-groups'
 import { contactFixtures } from '../pages/fixtures/contacts'
 import { crueltyFixture } from '../pages/fixtures/cruelty'
-import { homeDraftFixture, homeFixture } from '../pages/fixtures/home'
+import { policeFailedFixture, policeReportedFixture, policeResultFixture } from '../pages/fixtures/cruelty-followup'
+import { homeFixture } from '../pages/fixtures/home'
 import { locationFixture } from '../pages/fixtures/location'
 import { mediaFixture } from '../pages/fixtures/media'
-import { otherSituationFixture } from '../pages/fixtures/other-situations'
-import {
-  previewAccess,
-  previewContactView,
-  previewDetailsView,
-  previewLocationView,
-  previewMediaView
-} from '../pages/fixtures/preview-server'
+import { otherFailedFixture, otherSituationFixture, roadDetailsFixture } from '../pages/fixtures/other-situations'
 import { selfHelpFixture } from '../pages/fixtures/self-help'
 import { thankYouFixtures } from '../pages/fixtures/thank-you'
 export const routes: RouteRecordRaw[] = [
@@ -29,6 +32,7 @@ export const routes: RouteRecordRaw[] = [
   {
     path: '/w33',
     name: 'W33',
+    props: { view: roadDetailsFixture, catalogue: animalGroupsFixture.root },
     meta: { showMenu: false },
     beforeEnter: () => previewAccess('W33'),
     component: () => import('../pages/page-road-details.vue')
@@ -36,6 +40,7 @@ export const routes: RouteRecordRaw[] = [
   {
     path: '/w37',
     name: 'W37',
+    props: { view: otherFailedFixture },
     meta: { showMenu: false },
     beforeEnter: () => previewAccess('W37'),
     component: () => import('../pages/page-other-failed.vue')
@@ -51,6 +56,7 @@ export const routes: RouteRecordRaw[] = [
   {
     path: '/w28',
     name: 'W28',
+    props: { view: policeResultFixture },
     meta: { showMenu: false },
     beforeEnter: () => previewAccess('W28'),
     component: () => import('../pages/page-police-result.vue')
@@ -58,6 +64,7 @@ export const routes: RouteRecordRaw[] = [
   {
     path: '/w29',
     name: 'W29',
+    props: { view: policeReportedFixture },
     meta: { showMenu: false },
     beforeEnter: () => previewAccess('W29'),
     component: () => import('../pages/page-police-reported.vue')
@@ -65,6 +72,7 @@ export const routes: RouteRecordRaw[] = [
   {
     path: '/w30',
     name: 'W30',
+    props: { view: policeFailedFixture },
     meta: { showMenu: false },
     beforeEnter: () => previewAccess('W30'),
     component: () => import('../pages/page-police-failed.vue')
@@ -72,7 +80,7 @@ export const routes: RouteRecordRaw[] = [
   ...thankYouFixtures.map(view => ({
     path: '/' + view.screen.toLowerCase(),
     name: view.screen,
-    props: { view },
+    props: () => ({ view: previewThankYouView(view) }),
     meta: view.layout,
     beforeEnter: () => previewAccess(view.screen),
     component: () => import('../pages/page-thank-you.vue')
@@ -91,7 +99,7 @@ export const routes: RouteRecordRaw[] = [
     meta: homeFixture.layout,
     // Development preview selector only; never grants access to an actual case.
     props: route => ({
-      view: import.meta.env.DEV && route.query.fixture !== 'clean' ? homeDraftFixture : homeFixture
+      view: previewHomeView(route.query.fixture === 'clean')
     }),
     component: () => import('../pages/page-home.vue')
   },

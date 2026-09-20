@@ -6,6 +6,7 @@ import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { backWithinFlow } from '../instruction-navigation'
 import { previewSession } from '../preview-flow'
+import { flowActions } from '../flow-client'
 import type { CrueltyFollowupView } from './fixtures/cruelty-followup'
 const props = defineProps<{ view: CrueltyFollowupView }>()
 const router = useRouter()
@@ -18,14 +19,7 @@ const description = ref(props.view.reasons ? (saved?.description ?? '') : '')
 watch(
   [reasons, description],
   () => {
-    const session = previewSession.value
-    if (!session || !props.view.reasons) return
-    if (props.view.answerSource === 'other') session.otherReport ??= { reasons: [] }
-    const report = props.view.answerSource === 'other' ? session.otherReport : session.crueltyReport
-    if (!report) return
-    report.reasons = [...reasons.value]
-    if (reasons.value.includes('other')) report.description = description.value.trim()
-    else delete report.description
+    flowActions.saveReport(props.view, reasons.value, description.value)
   },
   { deep: true }
 )
@@ -37,11 +31,8 @@ function proceed(action: CrueltyFollowupView['actions'][number]) {
     validation.focusFirstError(form.value)
     return
   }
-  if (props.view.answerSource === 'other' && previewSession.value) previewSession.value.documentingOther = true
-  if (action.outcome && previewSession.value && previewSession.value.crueltyReport?.outcome !== action.outcome) {
-    previewSession.value.crueltyReport = { outcome: action.outcome, reasons: [] }
-  }
-  void router.push({ name: action.target })
+  const target = flowActions.followup(props.view, action)
+  if (target) void router.push({ name: target })
 }
 </script>
 <template lang="pug">

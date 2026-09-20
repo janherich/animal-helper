@@ -2,7 +2,12 @@ import { mount } from '@vue/test-utils'
 import { beforeEach, expect, it, vi } from 'vitest'
 import { beginPreview, previewSession } from '../../preview-flow'
 import { animalGroupsFixture } from '../fixtures/animal-groups'
-import { otherDetailsFixture, otherFailedFixture, otherSituationFixture } from '../fixtures/other-situations'
+import {
+  otherDetailsFixture,
+  otherFailedFixture,
+  otherSituationFixture,
+  roadDetailsFixture
+} from '../fixtures/other-situations'
 import { previewAccess } from '../fixtures/preview-server'
 import PageAnimalDetails from '../page-animal-details.vue'
 import PageCrueltyFollowup from '../page-cruelty-followup.vue'
@@ -32,7 +37,8 @@ it('keeps road answers and return access after confirming the documentation form
   const session = previewSession.value!
   session.otherSituation = 'road'
   session.location = { lat: 48, lng: 17, label: 'A', source: 'fixture' }
-  const road = mount(PageRoadDetails, { global })
+  const props = { view: roadDetailsFixture, catalogue: animalGroupsFixture.root }
+  const road = mount(PageRoadDetails, { props, global })
   await road.get('input[value=other]').setValue(true)
   await road.get('textarea').setValue('Situácia na ceste')
   await road.get('form').trigger('submit')
@@ -51,7 +57,7 @@ it('keeps road answers and return access after confirming the documentation form
   expect(previewAccess('W37')).toBe(true)
   details.unmount()
 
-  const restored = mount(PageRoadDetails, { global })
+  const restored = mount(PageRoadDetails, { props, global })
   expect((restored.get('input[value=other]').element as HTMLInputElement).checked).toBe(true)
   expect((restored.get('textarea').element as HTMLTextAreaElement).value).toBe('Situácia na ceste')
   restored.unmount()

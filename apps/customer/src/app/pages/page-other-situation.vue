@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { beginPreview, previewSession } from '../preview-flow'
+import { flowActions } from '../flow-client'
 import { backWithinFlow } from '../instruction-navigation'
 import type { OtherSituationView, OtherSituationChoice } from '../contracts/other-situation'
 defineProps<{ view: OtherSituationView }>()
 const router = useRouter()
 function choose(choice: OtherSituationChoice) {
-  // A changed branch starts a fresh local draft; same-branch back preserves it.
-  if (previewSession.value?.otherSituation !== choice.id) beginPreview('other')
-  if (previewSession.value) previewSession.value.otherSituation = choice.id
-  void router.push({ name: choice.target })
+  void router.push({ name: flowActions.chooseSituation(choice) })
 }
 </script>
 <template lang="pug">

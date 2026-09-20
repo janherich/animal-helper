@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import PageCrueltyFollowup from './page-cruelty-followup.vue'
-import { policeReportedFixture } from './fixtures/cruelty-followup'
+import type { CrueltyFollowupView } from './fixtures/cruelty-followup'
+defineProps<{ view: CrueltyFollowupView }>()
 </script>
 <template lang="pug">
-PageCrueltyFollowup(:view="policeReportedFixture")
+PageCrueltyFollowup(:view="view")
 </template>

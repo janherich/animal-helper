@@ -6,6 +6,7 @@ import { useFormValidation } from '@/libs/use-form-validation'
 import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { previewSession } from '../preview-flow'
+import { flowActions } from '../flow-client'
 import { backWithinFlow } from '../instruction-navigation'
 import { catalogueAnimals } from '../animal-catalogue'
 import { reconcileDetailAnswers } from '../detail-answers'
@@ -56,8 +57,7 @@ watch(
 watch(
   answers,
   value => {
-    if (previewSession.value) previewSession.value[props.answerScope] = { ...value }
-    if (previewSession.value) previewSession.value.adviceReady = false
+    flowActions.saveDetails(value, props.answerScope)
   },
   { deep: true }
 )
@@ -101,15 +101,12 @@ function confirm() {
     validation.focusFirstError(form.value)
     return
   }
-  previewSession.value[props.answerScope] = { ...answers.value }
-  previewSession.value.adviceReady = true
-  if (props.view.confirmTarget === 'W39') previewSession.value.thankYouReturnTarget = 'W09'
-  void router.push({ name: props.view.confirmTarget })
+  const target = flowActions.details(answers.value, props.answerScope, props.view.confirmTarget)
+  if (target) void router.push({ name: target })
 }
 function edit() {
   if (!props.view.allowedActions.includes('edit')) return
-  if (previewSession.value) previewSession.value.editingAnimal = true
-  void router.push({ name: props.view.editTarget })
+  void router.push({ name: flowActions.edit(props.view.editTarget) })
 }
 </script>
 

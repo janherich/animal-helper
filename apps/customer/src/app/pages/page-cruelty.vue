@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import PageActions from '../components/page-actions.vue'
-import { previewSession } from '../preview-flow'
+import { flowActions } from '../flow-client'
 import { useRouter } from 'vue-router'
 import { backWithinFlow } from '../instruction-navigation'
 import type { CrueltyView } from './fixtures/cruelty'
@@ -17,8 +17,7 @@ function callPolice() {
 }
 function proceed() {
   if (!props.view.allowedActions.includes('continue')) return
-  if (previewSession.value) delete previewSession.value.crueltyReport
-  void router.push({ name: props.view.actions.continue.target })
+  void router.push({ name: flowActions.continueCruelty(props.view.actions.continue.target) })
 }
 </script>
 
