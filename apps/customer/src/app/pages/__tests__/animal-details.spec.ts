@@ -65,10 +65,37 @@ it('replaces the form with manual recovery after a simulated failure', async () 
   previewSession.value!.identificationFailed = true
   await wrapper.vm.$nextTick()
   expect(wrapper.find('form').exists()).toBe(false)
-  expect(wrapper.text()).toContain(animalDetailsFixture.copy.failedPreview)
+  expect(wrapper.text()).not.toContain(animalDetailsFixture.copy.failedPreview)
   await wrapper
     .findAll('button')
     .find(button => button.text() === animalDetailsFixture.copy.manual)!
     .trigger('click')
   expect(push).toHaveBeenCalledWith({ name: 'W06' })
+})
+
+it('accepts disabled questions and options without changing prefilled answers', async () => {
+  const view = structuredClone(animalDetailsFixture)
+  view.questions = [
+    { id: 'locked', label: 'Locked', kind: 'text', required: true, disabled: true, options: [] },
+    {
+      id: 'choice',
+      label: 'Choice',
+      kind: 'single',
+      required: true,
+      options: [
+        { id: 'locked-option', label: 'Locked option', disabled: true, description: 'Details' },
+        { id: 'enabled', label: 'Enabled' }
+      ]
+    }
+  ]
+  view.values = { choice: 'locked-option', 'choice:locked-option': 'Existing detail' }
+  const wrapper = setup(view)
+  expect(wrapper.get('fieldset').attributes('disabled')).toBeDefined()
+  expect(wrapper.get('input[value=locked-option]').attributes('disabled')).toBeDefined()
+  expect(wrapper.get('textarea[aria-label=Details]').attributes('disabled')).toBeDefined()
+  expect(wrapper.get('button[type=submit]').attributes('disabled')).toBeUndefined()
+  await wrapper.get('form').trigger('submit')
+  expect(previewSession.value!.animalDetails!.choice).toBe('locked-option')
+  await wrapper.get('input[value=enabled]').setValue()
+  expect(previewSession.value!.animalDetails!.choice).toBe('enabled')
 })

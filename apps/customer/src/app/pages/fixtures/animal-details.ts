@@ -6,7 +6,8 @@ export type DetailQuestion = {
   kind: 'multiple' | 'single' | 'text'
   placeholder?: string
   required: boolean
-  options: { id: string; label: string; exclusive?: boolean; description?: string }[]
+  disabled?: boolean
+  options: { id: string; label: string; exclusive?: boolean; description?: string; disabled?: boolean }[]
 }
 export const animalDetailsFixture = {
   screen: 'W09a',

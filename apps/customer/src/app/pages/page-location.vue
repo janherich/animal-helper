@@ -282,7 +282,6 @@ onUnmounted(() => {
       v-if="selected",
       class="rounded-control bg-primary-light p-3 text-primary"
     ) {{ view.props.selected }}: {{ selected.label }} ({{ selected.lat.toFixed(5) }}, {{ selected.lng.toFixed(5) }})
-    p(class="text-center text-small text-primary") {{ view.props.preview }}
   .customer-location__actions(
     class="sticky bottom-0 z-20 mt-auto shrink-0 bg-canvas p-4 pb-[max(1rem,env(safe-area-inset-bottom))]"
   )
@@ -292,7 +291,7 @@ onUnmounted(() => {
     )
     button(
       type="button",
-      class="w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:cursor-not-allowed disabled:opacity-50",
+      class="ui-button w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:cursor-not-allowed disabled:opacity-50",
       :disabled="!selected || locating || !view.allowedActions.includes('confirm-location')",
       @click="confirmLocation"
     ) {{ view.props.confirm }}

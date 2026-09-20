@@ -11,7 +11,6 @@ const values = ref<Record<string, string>>({})
 const consents = ref<Record<string, boolean>>({})
 const reasons = ref<Record<string, boolean>>({})
 const descriptions = ref<Record<string, string>>({})
-const notice = ref('')
 watch(
   () => props.view,
   () => {
@@ -19,11 +18,10 @@ watch(
     consents.value = {}
     reasons.value = {}
     descriptions.value = {}
-    notice.value = ''
   }
 )
 function submit() {
-  if (props.view.allowedActions.includes('submit')) notice.value = props.view.copy.unavailable
+  if (props.view.allowedActions.includes('submit')) void router.push({ name: props.view.submitTarget })
 }
 </script>
 
@@ -46,7 +44,6 @@ form.customer-thank-you(
   header(class="px-5 pt-5 pb-3")
     h1(class="mb-1 text-heading-1") {{ view.copy.title }}
     p(v-if="view.copy.description") {{ view.copy.description }}
-  p(class="px-4 text-center text-small text-primary") {{ view.copy.preview }}
   div(
     v-for="(group, groupIndex) in view.reasonGroups ?? (view.reasons ? [view.reasons] : [])",
     :key="groupIndex",
@@ -65,7 +62,7 @@ form.customer-thank-you(
           v-for="reason in group.options",
           :key="reason.id"
         )
-          label(class="flex items-start gap-2")
+          label(class="flex items-center gap-2")
             input(
               v-model="reasons[reason.id]",
               type="checkbox",
@@ -97,7 +94,7 @@ form.customer-thank-you(
       p(class="mb-5 px-1") {{ view.help.description }}
       button(
         type="button",
-        class="w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:opacity-40",
+        class="ui-button w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:opacity-40",
         :disabled="!view.help.action.enabled",
         @click="view.help.action.enabled && router.push({ name: view.help.action.target })"
       ) {{ view.help.action.label }}
@@ -115,7 +112,7 @@ form.customer-thank-you(
     )
       label(
         :for="id + field.id",
-        class="px-2 text-small"
+        class="px-2 font-form text-small"
       ) {{ field.label }}
       input(
         :id="id + field.id",
@@ -131,14 +128,14 @@ form.customer-thank-you(
     label(
       v-for="consent in view.consents",
       :key="consent.id",
-      class="flex cursor-pointer items-start gap-2"
+      class="flex items-center gap-2"
     )
       input(
         v-model="consents[consent.id]",
         type="checkbox",
         :name="consent.id",
         :required="consent.required",
-        class="mt-0.5 size-5 shrink-0 accent-primary"
+        class="size-5 shrink-0 accent-primary"
       )
       span {{ consent.label }}
   footer(class="sticky bottom-0 z-20 mt-auto flex flex-col gap-4 bg-canvas p-4 pb-[max(1rem,env(safe-area-inset-bottom))]")
@@ -148,12 +145,7 @@ form.customer-thank-you(
     )
     button(
       type="submit",
-      class="w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:opacity-40",
+      class="ui-button w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:opacity-40",
       :disabled="!view.allowedActions.includes('submit')"
     ) {{ view.copy.submit }}
-    p(
-      v-if="notice",
-      role="status",
-      class="text-center text-primary"
-    ) {{ notice }}
 </template>

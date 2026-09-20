@@ -184,7 +184,6 @@ function go(action: 'media' | 'manual') {
           role="status",
           class="p-3"
         ) {{ view.copy.empty }}
-  p(class="px-4 py-4 text-center text-small text-primary") {{ view.copy.preview }}
   div(class="sticky bottom-0 z-20 mt-auto flex flex-col gap-4 bg-canvas p-4 pb-[max(1rem,env(safe-area-inset-bottom))]")
     div(
       aria-hidden="true",
@@ -193,13 +192,13 @@ function go(action: 'media' | 'manual') {
     button(
       type="button",
       :disabled="!view.allowedActions.includes('media')",
-      class="w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand",
+      class="ui-button w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand",
       @click="go('media')"
     ) {{ view.copy.media }}
     button(
       type="button",
       :disabled="!view.allowedActions.includes('manual')",
-      class="w-full rounded-control border border-primary bg-surface p-4 text-button text-primary",
+      class="ui-button w-full rounded-control border border-primary bg-surface p-4 text-button text-primary",
       @click="go('manual')"
     ) {{ view.copy.manual }}
 </template>

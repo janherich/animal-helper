@@ -40,8 +40,8 @@ test('fills desktop width, centers content and keeps mobile overflow-free', asyn
   await expect(page.locator('.customer-home__about header')).toHaveCSS('border-top-left-radius', '0px')
   await expect(page.locator('.customer-home__sections')).toHaveCSS('border-bottom-left-radius', '0px')
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(320)
-  await expect(page.locator("symbol[id^='icon-']")).toHaveCount(56)
-  await expect(page.getByText('Hlásenie ešte nie je možné odoslať.', { exact: false })).toBeVisible()
+  await expect(page.locator("symbol[id^='icon-']")).toHaveCount(57)
+  await expect(page.getByText('Hlásenie ešte nie je možné odoslať.', { exact: false })).toHaveCount(0)
 })
 
 test('opens an accessible drawer, traps focus and restores the trigger', async ({ page }) => {

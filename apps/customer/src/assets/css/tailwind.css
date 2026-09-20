@@ -1,6 +1,13 @@
 @import 'tailwindcss' source('../../');
 @import '@fontsource-variable/roboto/wght.css';
+@import '@fontsource-variable/inter/wght.css';
 @import './theme.css';
+@import './buttons.css';
+@import './forms.css';
+
+@plugin '@tailwindcss/forms' {
+  strategy: 'base';
+}
 
 @layer base {
   body {

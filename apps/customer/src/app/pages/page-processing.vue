@@ -35,10 +35,6 @@ section.customer-processing(class="flex flex-1 flex-col items-center justify-cen
     class="pt-5 pb-3 text-heading-1",
     aria-live="polite"
   ) {{ title }}
-  p(
-    v-if="preview",
-    class="max-w-sm text-small text-primary"
-  ) {{ preview }}
 </template>
 
 <style scoped>

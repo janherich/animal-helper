@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { usePreferredReducedMotion, useScrollLock, useElementSize, useMediaQuery } from '@vueuse/core'
+import { usePreferredReducedMotion, useScrollLock, useElementSize } from '@vueuse/core'
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-vue'
 import { nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import { homeDraftFixture, homeFixture } from './pages/fixtures/home'
 import { shellFixture as shell } from './pages/fixtures/shell'
-import { beginPreview, previewSession } from './preview-flow'
+import { beginPreview } from './preview-flow'
 import AdviceDrawer from './components/advice-drawer.vue'
-import { adviceFixture } from './pages/fixtures/advice'
+import { previewContactView } from './pages/fixtures/preview-server'
 import ManagerToasts from './components/manager-toasts.vue'
 import { clearToasts } from './toasts'
 import logoOrange from '@/assets/brand/logo-orange.svg'
 import logoYellow from '@/assets/brand/logo-yellow.svg'
 import { usePageScrollbars } from '@/plugins/overlay-scrollbars'
-import { computed, watch } from 'vue'
+import { computed } from 'vue'
 import { contactFixtures } from './pages/fixtures/contacts'
 import { selfHelpFixture } from './pages/fixtures/self-help'
 import { holdScreenHeight, screenEntered, clearScreenScroll } from '@/providers/router/transition-scroll'
@@ -22,17 +22,14 @@ onUnmounted(clearScreenScroll)
 usePageScrollbars()
 const route = useRoute()
 const router = useRouter()
-const adviceAction = computed(
-  () => [...contactFixtures, selfHelpFixture].find(view => view.screen === route.name)?.layout.adviceAction
-)
-const adviceDrawer = ref<InstanceType<typeof AdviceDrawer>>()
-const desktopAdvice = useMediaQuery('(min-width: 768px)')
-watch(desktopAdvice, desktop => {
-  if (desktop) adviceDrawer.value?.close(true)
+const pageAdvice = computed(() => {
+  if (route.name === selfHelpFixture.screen) return selfHelpFixture.advice
+  const view = contactFixtures.find(view => view.screen === route.name)
+  return view ? previewContactView(view).advice : undefined
 })
+const adviceDrawer = ref<InstanceType<typeof AdviceDrawer>>()
 function openAdvice(event: MouseEvent) {
-  if (desktopAdvice.value) void router.push({ name: previewSession.value?.adviceView?.screen ?? adviceFixture.screen })
-  else void adviceDrawer.value?.open(event.currentTarget)
+  void adviceDrawer.value?.open(event.currentTarget)
 }
 const appHeader = ref<HTMLElement>()
 const { height: headerHeight } = useElementSize(appHeader, { width: 0, height: 80 }, { box: 'border-box' })
@@ -133,8 +130,9 @@ onUnmounted(() => {
 )
   ManagerToasts
   AdviceDrawer(
+    v-if="pageAdvice",
     ref="adviceDrawer",
-    :view="previewSession?.adviceView ?? adviceFixture",
+    :view="pageAdvice",
     :style="{ '--advice-header-height': headerHeight + 'px' }"
   )
   .customer-app__content(
@@ -162,12 +160,12 @@ onUnmounted(() => {
             class="h-10 w-[62px]"
           )
         button(
-          v-if="adviceAction",
+          v-if="pageAdvice",
           type="button",
-          :aria-haspopup="desktopAdvice ? undefined : 'dialog'",
-          class="rounded-control bg-accent-gradient px-6 py-3 text-button text-white",
+          aria-haspopup="dialog",
+          class="ui-button rounded-control bg-accent-gradient px-6 py-3 text-button text-white",
           @click="openAdvice"
-        ) {{ adviceAction.label }}
+        ) {{ pageAdvice.triggerLabel }}
         button.customer-app__menu-trigger(
           v-if="route.meta.showMenu !== false",
           ref="menuTrigger",
@@ -210,7 +208,9 @@ onUnmounted(() => {
     @keydown="onMenuKeydown",
     @close="onMenuClosed"
   )
-    .customer-app__drawer(class="flex h-full w-[calc(100%-48px)] max-w-[324px] flex-col overflow-hidden rounded-r-control bg-surface")
+    .customer-app__drawer(
+      class="flex h-full w-[calc(100%-48px)] max-w-[324px] flex-col overflow-hidden rounded-r-control bg-surface"
+    )
       .customer-app__drawer-header(
         class="flex shrink-0 items-center justify-between border-b border-primary-light px-[15px] pt-[max(16px,env(safe-area-inset-top))] pb-5"
       )

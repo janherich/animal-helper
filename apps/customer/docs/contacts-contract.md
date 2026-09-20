@@ -20,10 +20,11 @@ Phone links only allow tel numbers; other links only allow HTTP(S) without crede
 live phone/navigation/volunteer links. Their wording and addresses are placeholders, not verified emergency, medical, or
 legal guidance. The ordered `footerActions` array defines visible buttons, labels, appearance and destinations. The demo
 alternatives action opens W22; the resolved action opens W24 without submitting anything. Back has a data-defined
-target. The optional shell advice action opens a bottom-sheet dialog without navigation below 768px. At 768px and wider
-it navigates to the original advice screen; widening an open mobile dialog dismisses it. It reuses the last acknowledged
-advice view and the same block renderer, supporting red-only and combined red/green advice. Localized labels come from
-the advice view. The sheet is capped below the measured app header, scrolls internally, locks the background, traps
+target. The optional `advice` payload contains the trigger label, locale, dialog labels and full ordered advice blocks
+(see `instructions-contract.md`). It is supplied with this page, not recovered from a previous page or global fallback.
+Omitting it hides the advice action. Below 768px it opens a bottom sheet; on desktop it opens a centered dialog,
+without navigation or a stepper. The same renderer supports red-only and combined red/green advice.
+The mobile sheet is capped below the measured app header; both presentations scroll internally, lock the background, trap
 focus and restores focus to its trigger. Escape, backdrop, close controls and acknowledgement dismiss it. Motion
 respects reduced-motion. Access guards only protect the local demonstration; server authorization and final command
 schema remain to be agreed. This document is not a claim that a backend API exists.

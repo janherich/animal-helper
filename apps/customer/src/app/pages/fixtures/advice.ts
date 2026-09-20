@@ -5,6 +5,11 @@ export type AdviceBlock = {
   title: string
   items: { id: string; title: string; description?: string }[]
 }
+export type AdvicePanel = {
+  locale: string
+  copy: { drawerTitle: string; closeAdvice: string; acknowledge: string }
+  blocks: AdviceBlock[]
+}
 export type AdviceView = {
   screen: 'W13' | 'W14'
   locale: string

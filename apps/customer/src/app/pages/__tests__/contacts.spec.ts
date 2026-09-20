@@ -12,6 +12,15 @@ import { selfHelpFixture } from '../fixtures/self-help'
 import PageContacts from '../page-contacts.vue'
 import PageInstructions from '../page-instructions.vue'
 const push = vi.hoisted(() => vi.fn())
+it('ships complete page-owned advice in every contact and self-help fixture', () => {
+  for (const view of [...contactFixtures, selfHelpFixture]) {
+    expect(view.advice?.triggerLabel).toBe('Rady')
+    expect(view.advice?.copy.drawerTitle).toBeTruthy()
+    expect(view.advice?.copy.closeAdvice).toBeTruthy()
+    expect(view.advice?.copy.acknowledge).toBeTruthy()
+    expect(view.advice?.blocks.length).toBeGreaterThan(0)
+  }
+})
 vi.mock('vue-router', () => ({ useRouter: () => ({ push }) }))
 
 it('renders every fixture variant and repeated cards without live example links', async () => {

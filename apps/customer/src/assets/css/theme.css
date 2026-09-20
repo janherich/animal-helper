@@ -1,6 +1,7 @@
 /* Source: Figma UI Kit Style Guide, node 2692:16570. */
 @theme {
   --font-sans: 'Roboto Variable', Roboto, ui-sans-serif, system-ui, sans-serif;
+  --font-form: 'Inter Variable', Inter, ui-sans-serif, system-ui, sans-serif;
 
   --color-primary: #454dce;
   --color-primary-light: #dadbf5;

@@ -22,3 +22,16 @@ alternatives to W22; self-help allows success to W24 and failure to W25. The old
 The server determines which blocks and actions are relevant. The client owns safe rendering, styling, accessibility and
 interaction. External URLs still pass the existing scheme checks. Content is escaped, never executed as HTML. See
 self-help-contract.md for rich text/images and contacts-contract.md for contact block details.
+# Page-owned advice payload
+
+Each contacts or self-help response can include `advice` with `triggerLabel`, `locale`,
+`copy: { drawerTitle, closeAdvice, acknowledge }`, and the complete ordered `blocks`
+array (`AdviceBlock[]`, including both `avoid` and `do` variants).
+The server sends this content with the page response, even if advice was already
+shown on the preceding advice page. The client must not reuse a previous page's
+advice or fall back to a global fixture. Omitting `advice` hides the trigger and panel.
+
+Opening advice is local presentation, not navigation: a bottom sheet on narrow
+screens and a centered dialog on desktop. Closing restores the originating page
+and focus. Both render exactly the current page's advice payload. Fixtures include
+the full nested payload today; sharing fixture source data is not an API dependency.

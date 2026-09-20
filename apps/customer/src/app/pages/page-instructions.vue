@@ -54,7 +54,6 @@ function act(action: InstructionAction) {
   header(class="px-5 pt-5 pb-3")
     h1(class="mb-1 text-heading-1") {{ view.copy.title }}
     p {{ view.copy.description }}
-  p(class="px-4 text-center text-small text-primary") {{ view.copy.preview }}
   .customer-contacts__blocks(class="flex flex-col gap-4 p-4")
     template(
       v-for="block in view.blocks",
@@ -197,7 +196,7 @@ function act(action: InstructionAction) {
       v-for="action in view.footerActions",
       :key="action.id",
       type="button",
-      class="w-full rounded-control p-4 text-button disabled:opacity-40",
+      class="ui-button w-full rounded-control p-4 text-button disabled:opacity-40",
       :class="action.appearance === 'primary' ? 'bg-primary-gradient text-white shadow-brand' : 'border border-primary bg-surface text-primary'",
       :disabled="!view.allowedActions.includes(action.id)",
       @click="act(action)"

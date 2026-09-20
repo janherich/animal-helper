@@ -4,6 +4,7 @@ export type ThankYouView = {
   locale: string
   layout: { showMenu: boolean }
   backTarget: string
+  submitTarget: string
   allowedActions: ('back' | 'submit')[]
   copy: { back: string; title: string; description: string; preview: string; submit: string; unavailable: string }
   fields: {
@@ -72,6 +73,7 @@ export const thankYouFixture: ThankYouView = {
   locale: 'sk',
   layout: { showMenu: false },
   backTarget: 'W15',
+  submitTarget: 'W01',
   allowedActions: ['back', 'submit'],
   copy: {
     back: 'Späť',

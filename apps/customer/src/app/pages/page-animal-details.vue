@@ -34,6 +34,7 @@ function selected(question: DetailQuestion, id: string) {
   return Array.isArray(value) ? value.includes(id) : value === id
 }
 function choose(question: DetailQuestion, id: string) {
+  if (question.disabled || question.options.find(option => option.id === id)?.disabled) return
   if (question.kind === 'single') answers.value[question.id] = id
   else {
     const current = answers.value[question.id]
@@ -51,6 +52,7 @@ function choose(question: DetailQuestion, id: string) {
 const valid = computed(() =>
   props.view.questions.every(
     question =>
+      question.disabled ||
       !question.required ||
       (question.kind === 'text'
         ? typeof answers.value[question.id] === 'string' && String(answers.value[question.id]).trim().length > 0
@@ -166,6 +168,7 @@ function edit() {
       fieldset(
         v-for="question in view.questions",
         :key="question.id",
+        :disabled="question.disabled",
         class="min-w-0 rounded-control border border-primary-light bg-surface py-4",
         :aria-labelledby="'question-' + question.id"
       )
@@ -195,11 +198,12 @@ function edit() {
             v-for="option in question.options",
             :key="option.id"
           )
-            label(class="flex items-start gap-2")
+            label(class="flex items-center gap-2")
               input(
                 :type="question.kind === 'multiple' ? 'checkbox' : 'radio'",
                 :name="question.id",
                 :value="option.id",
+                :disabled="question.disabled || option.disabled",
                 :checked="selected(question, option.id)",
                 class="size-6 shrink-0 accent-primary",
                 @change="choose(question, option.id)"
@@ -214,11 +218,10 @@ function edit() {
                   v-model="answers[question.id + ':' + option.id]",
                   :aria-label="option.description",
                   :placeholder="option.description",
-                  :disabled="!selected(question, option.id)",
+                  :disabled="question.disabled || option.disabled || !selected(question, option.id)",
                   rows="4",
                   class="w-full resize-none rounded-control border border-primary bg-surface p-3 outline-none focus-visible:shadow-[inset_0_0_0_2px_var(--color-primary-light)]"
                 )
-  p(class="px-4 py-5 text-center text-small text-primary") {{ failed ? view.copy.failedPreview : view.copy.preview }}
   div(class="sticky bottom-0 z-20 mt-auto bg-canvas p-4 pb-[max(1rem,env(safe-area-inset-bottom))]")
     div(
       aria-hidden="true",
@@ -227,7 +230,7 @@ function edit() {
     button(
       v-if="failed",
       type="button",
-      class="w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand",
+      class="ui-button w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand",
       @click="router.push({ name: view.manualTarget })"
     ) {{ view.copy.manual }}
     button(
@@ -235,6 +238,6 @@ function edit() {
       type="submit",
       form="animal-details-form",
       :disabled="!valid || !view.allowedActions.includes('confirm')",
-      class="w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:opacity-40"
+      class="ui-button w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:opacity-40"
     ) {{ view.copy.confirm }}
 </template>

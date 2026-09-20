@@ -268,7 +268,6 @@ function goBack() {
             class="w-full min-w-0 bg-transparent outline-none placeholder:text-muted",
             :placeholder="view.props.search",
             :aria-label="view.props.search",
-            aria-describedby="animal-groups-preview",
             :disabled="!view.allowedActions.includes('search')",
             autocomplete="off",
             @focus="focused = true",
@@ -365,7 +364,6 @@ function goBack() {
                 )
                   use(href="#icon-stray-animal")
             span(class="flex min-h-9 w-full items-center justify-center bg-primary-light px-2 py-2 text-center") {{ group.label }}
-    p#animal-groups-preview(class="px-4 pt-2 pb-6 text-center text-small text-primary") {{ view.props.preview }}
     p(
       v-if="completed",
       role="status",
@@ -415,7 +413,7 @@ function goBack() {
         span {{ view.copy.unknown }}
     button(
       type="button",
-      class="min-h-13 w-full rounded-control bg-primary-gradient p-4 text-button text-white disabled:opacity-40",
+      class="ui-button min-h-13 w-full rounded-control bg-primary-gradient p-4 text-button text-white disabled:opacity-40",
       :disabled="!choice || (choice === 'other' && !description.trim()) || !view.allowedActions.includes('confirm')",
       @click="confirm()"
     ) {{ view.copy.confirm }}

@@ -1,5 +1,4 @@
 import { ref } from 'vue'
-import type { AdviceView } from './pages/fixtures/advice'
 import type { LocationPoint } from './pages/fixtures/location'
 
 // In-memory fixture session only. Replace with a validated server view adapter.
@@ -14,7 +13,6 @@ export const previewSession = ref<{
   identificationFailed?: boolean
   adviceReady?: boolean
   thankYouReturnTarget?: 'W15' | 'W18' | 'W20' | 'W21' | 'W36' | 'W22' | 'W09'
-  adviceView?: AdviceView
   animalDetails?: Record<string, string | string[]>
   location?: LocationPoint
   media?: File[]

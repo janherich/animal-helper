@@ -2,12 +2,10 @@
 import { useRouter } from 'vue-router'
 import type { AdviceView } from './fixtures/advice'
 import AdviceBlocks from '../components/advice-blocks.vue'
-import { previewSession } from '../preview-flow'
 const props = defineProps<{ view: AdviceView }>()
 const router = useRouter()
 function acknowledge() {
   if (!props.view.allowedActions.includes('acknowledge')) return
-  if (previewSession.value) previewSession.value.adviceView = props.view
   void router.push({ name: props.view.confirmTarget })
 }
 </script>
@@ -44,7 +42,6 @@ function acknowledge() {
   header(class="px-5 pt-5 pb-3")
     h1(class="mb-1 text-heading-1") {{ view.copy.title }}
     p {{ view.copy.description }}
-  p(class="px-4 pt-2 text-center text-small text-primary") {{ view.copy.preview }}
   AdviceBlocks(:blocks="view.blocks")
   div(class="sticky bottom-0 z-20 mt-auto bg-canvas p-4 pb-[max(1rem,env(safe-area-inset-bottom))]")
     div(
@@ -53,7 +50,7 @@ function acknowledge() {
     )
     button(
       type="button",
-      class="w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:opacity-40",
+      class="ui-button w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:opacity-40",
       :disabled="!view.allowedActions.includes('acknowledge')",
       @click="acknowledge"
     ) {{ view.copy.acknowledge }}

@@ -59,7 +59,6 @@ function proceed() {
           v-for="item in view.instructions.items",
           :key="item.id"
         ) {{ item.text }}
-    p(class="text-center text-small text-primary") {{ view.copy.preview }}
   footer(class="sticky bottom-0 z-20 mt-auto flex flex-col gap-4 bg-canvas p-4 pb-[max(1rem,env(safe-area-inset-bottom))]")
     div(
       aria-hidden="true",
@@ -67,13 +66,13 @@ function proceed() {
     )
     button(
       type="button",
-      class="w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:opacity-40",
+      class="ui-button w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:opacity-40",
       :disabled="!view.allowedActions.includes('call')",
       @click="callPolice"
     ) {{ view.actions.call.label }}
     button(
       type="button",
-      class="w-full rounded-control border border-primary bg-surface p-4 text-button text-primary disabled:opacity-40",
+      class="ui-button w-full rounded-control border border-primary bg-surface p-4 text-button text-primary disabled:opacity-40",
       :disabled="!view.allowedActions.includes('continue')",
       @click="proceed"
     ) {{ view.actions.continue.label }}

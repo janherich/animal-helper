@@ -258,7 +258,7 @@ onUnmounted(() => items.value.forEach(item => URL.revokeObjectURL(item.url)))
             div(class="flex w-full flex-col gap-4")
               button(
                 type="button",
-                class="w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:opacity-50",
+                class="ui-button w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:opacity-50",
                 :disabled="!view.allowedActions.includes('pick')",
                 @click="gallery?.click()"
               ) {{ view.props.gallery }}
@@ -316,7 +316,6 @@ onUnmounted(() => items.value.forEach(item => URL.revokeObjectURL(item.url)))
                 class="size-14 rounded-full bg-canvas p-1"
               )
               span {{ view.props.add }}
-          p(class="mt-4 text-center text-small text-primary") {{ view.props.preview }}
       .customer-media__actions(
         ref="actions",
         class="sticky bottom-0 z-20 mt-auto shrink-0 bg-canvas p-4 pb-[max(1rem,env(safe-area-inset-bottom))]"
@@ -329,7 +328,7 @@ onUnmounted(() => items.value.forEach(item => URL.revokeObjectURL(item.url)))
           v-if="items.length",
           ref="confirmButton",
           type="button",
-          class="flex w-full items-center justify-center rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand",
+          class="ui-button flex w-full items-center justify-center rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand",
           :disabled="pending || !view.allowedActions.includes('confirm')",
           :aria-label="pending ? view.processing.title : view.props.confirm",
           :aria-busy="pending",
@@ -344,7 +343,7 @@ onUnmounted(() => items.value.forEach(item => URL.revokeObjectURL(item.url)))
         button(
           v-else,
           type="button",
-          class="w-full rounded-control border border-primary bg-surface p-4 text-button text-primary",
+          class="ui-button w-full rounded-control border border-primary bg-surface p-4 text-button text-primary",
           :disabled="!view.allowedActions.includes('manual')",
           @click="view.allowedActions.includes('manual') && router.push({ name: view.manualTarget })"
         ) {{ view.props.manual }}

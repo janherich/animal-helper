@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { nextTick, onUnmounted, ref } from 'vue'
-import { usePreferredReducedMotion, useScrollLock } from '@vueuse/core'
+import { useMediaQuery, usePreferredReducedMotion, useScrollLock } from '@vueuse/core'
 import AdviceBlocks from './advice-blocks.vue'
-import type { AdviceView } from '../pages/fixtures/advice'
-defineProps<{ view: AdviceView }>()
+import type { AdvicePanel } from '../pages/fixtures/advice'
+defineProps<{ view: AdvicePanel }>()
 const dialog = ref<HTMLDialogElement>()
 const panel = ref<HTMLElement>()
 let entrance: Animation | undefined
 const body = ref<HTMLElement | null>(null)
 const locked = useScrollLock(body)
 const reduced = usePreferredReducedMotion()
+const desktop = useMediaQuery('(min-width: 768px)')
 const closing = ref(false)
 const active = ref(false)
 let timer: ReturnType<typeof setTimeout> | undefined
@@ -33,12 +34,17 @@ async function open(opener?: EventTarget | null) {
   dialog.value.scrollTop = 0
   if (reduced.value !== 'reduce') {
     entrance = panel.value?.animate(
-      [
-        { transform: 'translateY(100%)', offset: 0, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' },
-        { transform: 'translateY(-4px)', offset: 0.75, easing: 'ease-in-out' },
-        { transform: 'translateY(0)', offset: 1 }
-      ],
-      { duration: 480, easing: 'linear' }
+      desktop.value
+        ? [
+            { transform: 'translateY(12px) scale(0.98)', opacity: 0 },
+            { transform: 'translateY(0) scale(1)', opacity: 1 }
+          ]
+        : [
+            { transform: 'translateY(100%)', offset: 0, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' },
+            { transform: 'translateY(-4px)', offset: 0.75, easing: 'ease-in-out' },
+            { transform: 'translateY(0)', offset: 1 }
+          ],
+      { duration: desktop.value ? 200 : 480, easing: desktop.value ? 'ease-out' : 'linear' }
     )
   }
 }
@@ -108,12 +114,11 @@ dialog.customer-advice-drawer(
           class="stroke-current [stroke-width:0.8]"
         )
     div(class="min-h-0 overflow-y-auto overscroll-contain")
-      p(class="px-4 text-center text-small text-primary") {{ view.copy.preview }}
       AdviceBlocks(:blocks="view.blocks")
     footer(class="shrink-0 p-4 pb-[max(1rem,env(safe-area-inset-bottom))]")
       button(
         type="button",
-        class="w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand",
+        class="ui-button w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand",
         @click="close()"
       ) {{ view.copy.acknowledge }}
 </template>
@@ -144,6 +149,19 @@ dialog.customer-advice-drawer(
 .customer-advice-drawer::backdrop {
   background: rgb(37 42 49 / 80%);
 }
+@media (min-width: 768px) {
+  .customer-advice-drawer[open] {
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+  }
+  .customer-advice-drawer__panel {
+    max-width: 640px;
+    max-height: calc(100dvh - 64px);
+    border-radius: 24px;
+    box-shadow: 0 16px 48px rgb(37 42 49 / 24%);
+  }
+}
 @media (prefers-reduced-motion: no-preference) {
   .customer-advice-drawer[open]::backdrop {
     animation: fade-in 150ms ease-out;
@@ -170,6 +188,17 @@ dialog.customer-advice-drawer(
   @keyframes fade-out {
     to {
       opacity: 0;
+    }
+  }
+}
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  .customer-advice-drawer.is-closing .customer-advice-drawer__panel {
+    animation: dialog-out 200ms ease-in forwards;
+  }
+  @keyframes dialog-out {
+    to {
+      opacity: 0;
+      transform: translateY(12px) scale(0.98);
     }
   }
 }

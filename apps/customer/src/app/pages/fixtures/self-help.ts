@@ -2,6 +2,7 @@ import catImage from '@/assets/demo/macka.png'
 import dogImage from '@/assets/demo/pes.png'
 import birdImage from '@/assets/demo/vtak.png'
 import type { InstructionsView } from './instructions'
+import { municipalityFixture } from './contacts'
 // Working presentation contract. Real instructions must be supplied and approved by the server.
 export type HelpImage = { id: string; src?: string; alt: string; caption: string }
 export type HelpText = { text: string; emphasis?: 'strong' | 'em'; href?: string }[]
@@ -23,7 +24,8 @@ export type SelfHelpView = Omit<InstructionsView, 'screen' | 'blocks' | 'footerA
 export const selfHelpFixture: SelfHelpView = {
   screen: 'W22',
   locale: 'sk',
-  layout: { showMenu: false, adviceAction: { label: 'Rady' } },
+  layout: { showMenu: false },
+  ...(municipalityFixture.advice ? { advice: structuredClone(municipalityFixture.advice) } : {}),
   backTarget: 'W15',
   footerActions: [
     { id: 'resolved', label: 'Podarilo sa pomôcť', appearance: 'primary', target: 'W24' },

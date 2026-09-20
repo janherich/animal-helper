@@ -62,7 +62,7 @@ async function requestAction(id: string) {
           v-for="action in view.props.draft.actions",
           :key="action.id",
           type="button",
-          class="min-h-13 min-w-0 flex-1 cursor-pointer rounded-control p-4 text-button disabled:cursor-not-allowed disabled:opacity-50",
+          class="ui-button min-h-13 min-w-0 flex-1 cursor-pointer rounded-control p-4 text-button disabled:cursor-not-allowed disabled:opacity-50",
           :class="action.appearance === 'primary' ? 'bg-primary-gradient text-white shadow-brand' : 'border border-primary bg-surface text-primary'",
           :disabled="!view.allowedActions.includes(action.id)",
           @click="requestAction(action.id)"
@@ -76,7 +76,7 @@ async function requestAction(id: string) {
         v-for="(item, index) in view.props.situations",
         :key="item.id",
         type="button",
-        class="flex w-full cursor-pointer items-center gap-4 rounded-control px-6 py-4 text-left text-button disabled:cursor-not-allowed disabled:opacity-50",
+        class="ui-button flex w-full cursor-pointer items-center gap-4 rounded-control px-6 py-4 text-left text-button disabled:cursor-not-allowed disabled:opacity-50",
         :class="item.appearance === 'secondary' ? 'border border-primary bg-surface text-primary' : [gradients[index % gradients.length], 'text-white shadow-brand']",
         :disabled="!view.allowedActions.includes(item.action)",
         @click="requestAction(item.action)"
@@ -91,7 +91,6 @@ async function requestAction(id: string) {
     )
       base-icon(name="notice-info")
       p {{ view.props.anonymousNotice }}
-    p.customer-home__preview(class="text-center text-small text-primary") {{ view.props.previewNotice }}
     p(
       class="text-center text-body text-primary empty:hidden",
       role="status",

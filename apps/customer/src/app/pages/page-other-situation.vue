@@ -33,7 +33,7 @@ function choose(choice: (typeof otherSituationFixture.choices)[number]) {
       v-for="choice in view.choices",
       :key="choice.id",
       type="button",
-      class="w-full rounded-control border border-primary bg-surface p-4 text-button text-primary",
+      class="ui-button w-full rounded-control border border-primary bg-surface p-4 text-button text-primary",
       @click="choose(choice)"
     ) {{ choice.label }}
 </template>

@@ -60,7 +60,7 @@ test('previews local media, preserves it on back and removes it', async ({ page 
   })
   expect(travel).toEqual({ left: -7, right: 7, returned: -7 })
   await page.emulateMedia({ reducedMotion: 'reduce' })
-  await expect(page.getByText('Lokálna ukážka čakania.', { exact: false })).toBeVisible()
+  await expect(page.getByText('Lokálna ukážka čakania.', { exact: false })).toHaveCount(0)
   await page.screenshot({ path: testInfo.outputPath('media-processing.png'), fullPage: true })
   await expect(page.getByText('Zviera sa nepodarilo identifikovať', { exact: true })).toBeVisible()
   const warning = page.locator('.customer-animal-details [role=status]')

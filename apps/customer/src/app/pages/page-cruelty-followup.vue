@@ -66,7 +66,7 @@ function proceed(action: CrueltyFollowupView['actions'][number]) {
           v-for="reason in view.reasons.options",
           :key="reason.id"
         )
-          label(class="flex items-start gap-2")
+          label(class="flex items-center gap-2")
             input(
               v-model="reasons",
               type="checkbox",
@@ -88,7 +88,6 @@ function proceed(action: CrueltyFollowupView['actions'][number]) {
                 rows="4",
                 class="w-full resize-none rounded-control border border-primary bg-surface p-3 placeholder:text-muted focus:shadow-[inset_0_0_0_1px_var(--color-primary)] focus:outline-none"
               )
-  p(class="px-5 py-4 text-center text-small text-primary") {{ view.copy.preview }}
   footer(class="sticky bottom-0 z-20 mt-auto flex flex-col gap-4 bg-canvas p-4 pb-[max(1rem,env(safe-area-inset-bottom))]")
     div(
       aria-hidden="true",
@@ -98,7 +97,7 @@ function proceed(action: CrueltyFollowupView['actions'][number]) {
       v-for="action in view.actions",
       :key="action.target",
       type="button",
-      class="w-full rounded-control p-4 text-button",
+      class="ui-button w-full rounded-control p-4 text-button",
       :class="action.primary ? 'bg-primary-gradient text-white shadow-brand' : 'border border-primary bg-surface text-primary'",
       @click="proceed(action)"
     ) {{ action.label }}

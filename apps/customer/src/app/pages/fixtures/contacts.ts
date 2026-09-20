@@ -1,4 +1,5 @@
 import type { InstructionsView } from './instructions'
+import { adviceFixture } from './advice'
 // Working presentation contract, not a live directory or a recommendation engine.
 export type ContactLink = { label: string; href?: string }
 export type ContactBlock =
@@ -27,7 +28,17 @@ export type ContactsView = Omit<InstructionsView, 'screen' | 'blocks' | 'footerA
 export const municipalityFixture: ContactsView = {
   screen: 'W15',
   locale: 'sk',
-  layout: { showMenu: false, adviceAction: { label: 'Rady' } },
+  layout: { showMenu: false },
+  advice: {
+    triggerLabel: 'Rady',
+    locale: adviceFixture.locale,
+    copy: {
+      drawerTitle: adviceFixture.copy.drawerTitle,
+      closeAdvice: adviceFixture.copy.closeAdvice,
+      acknowledge: adviceFixture.copy.acknowledge
+    },
+    blocks: structuredClone(adviceFixture.blocks)
+  },
   backTarget: 'W14',
   footerActions: [
     { id: 'resolved', label: 'Podarilo sa pomôcť', appearance: 'primary', target: 'W24' },

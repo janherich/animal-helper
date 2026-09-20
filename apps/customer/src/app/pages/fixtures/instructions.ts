@@ -1,4 +1,5 @@
 import type { ContactBlock } from './contacts'
+import type { AdvicePanel } from './advice'
 import type { SelfHelpBlock } from './self-help'
 
 export type InstructionBlock = ContactBlock | SelfHelpBlock
@@ -11,7 +12,8 @@ export type InstructionAction = {
 export type InstructionsView = {
   screen: 'W15' | 'W18' | 'W20' | 'W21' | 'W36' | 'W22'
   locale: string
-  layout: { showMenu: boolean; adviceAction?: { label: string } }
+  layout: { showMenu: boolean }
+  advice?: AdvicePanel & { triggerLabel: string }
   backTarget: string
   allowedActions: ('back' | InstructionAction['id'])[]
   footerActions: InstructionAction[]

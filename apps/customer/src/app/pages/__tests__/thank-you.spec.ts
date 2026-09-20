@@ -23,7 +23,7 @@ it('renders optional contact fields and opt-ins without submitting or persisting
   expect(wrapper.findAll('input[required]')).toHaveLength(0)
   expect(wrapper.findAll<HTMLInputElement>('input[type=checkbox]').every(input => !input.element.checked)).toBe(true)
   await wrapper.get('form').trigger('submit')
-  expect(wrapper.get('[role=status]').text()).toBe(thankYouFixture.copy.unavailable)
+  expect(push).toHaveBeenLastCalledWith({ name: thankYouFixture.submitTarget })
   await wrapper.get('input[type=email]').setValue('test@example.org')
   await wrapper.get('input[type=checkbox]').setValue(true)
   await wrapper.get('form').trigger('submit')

@@ -1,0 +1,65 @@
+/* Shared opt-in states for the UI kit's primary, secondary, help and advice buttons.
+ * Existing appearance utilities retain each default gradient and layout. */
+.ui-button {
+  --button-color: var(--color-primary);
+  /* Keep an opaque base when the gradient disappears on hover/press. Without
+   * it background-color interpolates from transparent and flashes the canvas. */
+  background-color: var(--button-color);
+}
+.ui-button.bg-surface {
+  background-color: var(--color-surface);
+}
+.ui-button.bg-accent-gradient {
+  --button-color: var(--color-accent);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ui-button {
+    transition:
+      background-color 120ms ease,
+      color 120ms ease,
+      border-color 120ms ease,
+      box-shadow 120ms ease;
+  }
+}
+@media (hover: hover) {
+  .ui-button:not(:disabled):not([aria-disabled='true']):hover {
+    background-image: none;
+    background-color: var(--button-color);
+  }
+  .ui-button.bg-surface:not(:disabled):not([aria-disabled='true']):hover {
+    background-color: var(--color-surface);
+    box-shadow: inset 0 0 0 1px var(--button-color);
+  }
+}
+.ui-button:not(:disabled):not([aria-disabled='true']):focus-visible {
+  background-image: none;
+  background-color: var(--button-color);
+}
+.ui-button.bg-surface:not(:disabled):not([aria-disabled='true']):focus-visible {
+  background-color: var(--color-surface);
+  box-shadow: inset 0 0 0 1px var(--button-color);
+}
+.ui-button:not(:disabled):not([aria-disabled='true']):active {
+  background-image: none;
+  background-color: var(--color-ink);
+  box-shadow: none;
+}
+.ui-button.bg-surface:not(:disabled):not([aria-disabled='true']):active {
+  background-color: var(--color-surface);
+  border-color: var(--color-ink);
+  color: var(--color-ink);
+}
+.ui-button:is(:disabled, [aria-disabled='true']) {
+  opacity: 1;
+  background-image: none;
+  background-color: var(--color-muted);
+  color: var(--color-surface);
+  box-shadow: 0 4px 1px rgb(233 236 239 / 50%);
+  cursor: not-allowed;
+}
+.ui-button.bg-surface:is(:disabled, [aria-disabled='true']) {
+  background-color: var(--color-surface);
+  border-color: var(--color-muted);
+  color: var(--color-muted);
+  box-shadow: none;
+}
