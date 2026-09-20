@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { ref, useId, watch } from 'vue'
+import { computed, ref, useId, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { previewSession } from '../preview-flow'
 import type { ThankYouView } from './fixtures/thank-you'
+import { completion } from '../completion'
 const props = defineProps<{ view: ThankYouView }>()
 const router = useRouter()
 const id = useId()
+const finishing = computed(() => !!completion.value)
 // Deliberately page-local: no persistence, logging, submission or preselected consent.
 const values = ref<Record<string, string>>({})
 const consents = ref<Record<string, boolean>>({})
@@ -21,7 +23,9 @@ watch(
   }
 )
 function submit() {
-  if (props.view.allowedActions.includes('submit')) void router.push({ name: props.view.submitTarget })
+  if (!finishing.value && props.view.allowedActions.includes('submit')) {
+    completion.value = { label: props.view.completionLabel, target: props.view.submitTarget }
+  }
 }
 </script>
 
@@ -29,6 +33,7 @@ function submit() {
 form.customer-thank-you(
   class="flex flex-1 flex-col",
   :lang="view.locale",
+  :inert="finishing",
   @submit.prevent="submit"
 )
   div(class="px-4 pt-5 pb-1")
@@ -146,6 +151,6 @@ form.customer-thank-you(
     button(
       type="submit",
       class="ui-button w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:opacity-40",
-      :disabled="!view.allowedActions.includes('submit')"
+      :disabled="finishing || !view.allowedActions.includes('submit')"
     ) {{ view.copy.submit }}
 </template>

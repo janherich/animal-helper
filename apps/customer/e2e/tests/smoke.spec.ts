@@ -7,7 +7,7 @@ test('shows the branded splash then the home shell', async ({ page }) => {
   const splash = page.getByRole('status', { name: 'Vitajte v Zverolinke' })
   await expect(splash).toBeVisible()
   await expect(splash.getByRole('img', { name: 'Zverolinka' })).toBeVisible()
-  await page.clock.runFor(800)
+  await page.clock.runFor(1700)
   await expect(splash).toHaveCount(0)
   await expect(page.getByRole('heading', { name: 'Čo sa stalo?' })).toBeVisible()
 })

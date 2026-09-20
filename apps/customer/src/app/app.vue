@@ -9,9 +9,11 @@ import { beginPreview } from './preview-flow'
 import AdviceDrawer from './components/advice-drawer.vue'
 import { previewContactView } from './pages/fixtures/preview-server'
 import ManagerToasts from './components/manager-toasts.vue'
+import CompletionAnimation from './components/completion-animation.vue'
+import { completion } from './completion'
 import { clearToasts } from './toasts'
 import logoOrange from '@/assets/brand/logo-orange.svg'
-import logoYellow from '@/assets/brand/logo-yellow.svg'
+import logoSplash from '@/assets/brand/logo-splash.svg?raw'
 import { usePageScrollbars } from '@/plugins/overlay-scrollbars'
 import { computed } from 'vue'
 import { contactFixtures } from './pages/fixtures/contacts'
@@ -22,6 +24,27 @@ onUnmounted(clearScreenScroll)
 usePageScrollbars()
 const route = useRoute()
 const router = useRouter()
+const completionElapsed = ref(false)
+const completionPageReady = ref(false)
+async function navigateUnderCompletion() {
+  completionElapsed.value = false
+  completionPageReady.value = false
+  const target = completion.value?.target
+  if (!target) return
+  try {
+    if (route.name === target) completionPageReady.value = true
+    const failure = await router.push({ name: target })
+    if (failure) completionPageReady.value = true
+  } catch {
+    completionPageReady.value = true
+  }
+}
+function finishCompletion() {
+  completion.value = null
+  completionElapsed.value = false
+  completionPageReady.value = false
+  void nextTick(() => document.getElementById('main-content')?.focus({ preventScroll: true }))
+}
 const pageAdvice = computed(() => {
   if (route.name === selfHelpFixture.screen) return selfHelpFixture.advice
   const view = contactFixtures.find(view => view.screen === route.name)
@@ -112,7 +135,7 @@ onMounted(() => {
     () => {
       starting.value = false
     },
-    reducedMotion.value === 'reduce' ? 0 : 700
+    reducedMotion.value === 'reduce' ? 0 : 1600
   )
 })
 onUnmounted(() => {
@@ -129,6 +152,14 @@ onUnmounted(() => {
   :lang="shell.locale"
 )
   ManagerToasts
+  CompletionAnimation(
+    v-if="completion",
+    :label="completion.label",
+    :reveal="completionElapsed && completionPageReady",
+    @covered="navigateUnderCompletion",
+    @elapsed="completionElapsed = true",
+    @complete="finishCompletion"
+  )
   AdviceDrawer(
     v-if="pageAdvice",
     ref="adviceDrawer",
@@ -137,7 +168,7 @@ onUnmounted(() => {
   )
   .customer-app__content(
     class="flex min-h-dvh flex-col",
-    :inert="starting"
+    :inert="starting || !!completion"
   )
     a.customer-app__skip(
       class="sr-only focus:not-sr-only focus:absolute focus:z-20 focus:bg-surface focus:p-4",
@@ -188,6 +219,7 @@ onUnmounted(() => {
           mode="out-in",
           @before-leave="holdScreenHeight",
           @enter="screenEntered"
+          @after-enter="completionPageReady = true"
         )
           component(
             :is="Component",
@@ -274,16 +306,15 @@ onUnmounted(() => {
           )
   .customer-app__splash(
     v-if="starting",
-    class="fixed inset-0 z-50 flex items-center justify-center bg-primary",
+    class="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-primary",
     role="status",
     :aria-label="shell.props.welcome"
   )
-    img(
-      :src="logoYellow",
-      :alt="shell.props.brand",
-      width="207",
-      height="134",
-      class="h-[134px] w-[207px] max-w-[70%] object-contain"
+    div(
+      role="img",
+      :aria-label="shell.props.brand",
+      class="h-[134px] w-[207px]",
+      v-html="logoSplash"
     )
 </template>
 
@@ -296,6 +327,13 @@ onUnmounted(() => {
   box-shadow: -12px 0 0 var(--color-surface);
 }
 @media (prefers-reduced-motion: no-preference) {
+  .customer-app__splash {
+    animation: splash-fade-out 180ms ease-out 1420ms both;
+  }
+  @keyframes splash-fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
   .screen-enter-active {
     transition:
       opacity 250ms ease-out,

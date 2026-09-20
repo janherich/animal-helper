@@ -1,8 +1,9 @@
 import BaseExpander from '@/libs/components/base-expander.vue'
 import BaseIcon from '@/libs/components/base-icon.vue'
-import { mount } from '@vue/test-utils'
+import { flushPromises, mount } from '@vue/test-utils'
 import { expect, it, vi } from 'vitest'
 import { previewSession } from '../../preview-flow'
+import { completion } from '../../completion'
 import {
   helpThankYouFixture,
   thankYouFixture,
@@ -14,19 +15,28 @@ const push = vi.hoisted(() => vi.fn())
 vi.mock('vue-router', () => ({ useRouter: () => ({ push }) }))
 
 it('renders optional contact fields and opt-ins without submitting or persisting', async () => {
+  push.mockClear()
   previewSession.value = { situation: 'test', fromDraft: false, thankYouReturnTarget: 'W22' }
   const wrapper = mount(PageThankYou, {
     props: { view: thankYouFixture },
-    global: { components: { BaseIcon, BaseExpander } }
+    global: { components: { BaseIcon, BaseExpander }, stubs: { CompletionAnimation: true } }
   })
   expect(wrapper.findAll('input:not([type=checkbox])')).toHaveLength(3)
   expect(wrapper.findAll('input[required]')).toHaveLength(0)
   expect(wrapper.findAll<HTMLInputElement>('input[type=checkbox]').every(input => !input.element.checked)).toBe(true)
   await wrapper.get('form').trigger('submit')
-  expect(push).toHaveBeenLastCalledWith({ name: thankYouFixture.submitTarget })
+  expect(push).not.toHaveBeenCalled()
+  expect(wrapper.get('button[type=submit]').attributes('disabled')).toBeDefined()
+  await wrapper.get('form').trigger('submit')
+  expect(completion.value).toEqual({ label: thankYouFixture.completionLabel, target: thankYouFixture.submitTarget })
+  completion.value = null
+  await flushPromises()
+  expect(push).not.toHaveBeenCalled()
   await wrapper.get('input[type=email]').setValue('test@example.org')
   await wrapper.get('input[type=checkbox]').setValue(true)
   await wrapper.get('form').trigger('submit')
+  completion.value = null
+  await flushPromises()
   expect(previewSession.value).toEqual({ situation: 'test', fromDraft: false, thankYouReturnTarget: 'W22' })
   await wrapper.get('button[type=button]').trigger('click')
   expect(push).toHaveBeenLastCalledWith({ name: 'W22' })

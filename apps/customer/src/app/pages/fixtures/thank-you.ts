@@ -5,6 +5,7 @@ export type ThankYouView = {
   layout: { showMenu: boolean }
   backTarget: string
   submitTarget: string
+  completionLabel: string
   allowedActions: ('back' | 'submit')[]
   copy: { back: string; title: string; description: string; preview: string; submit: string; unavailable: string }
   fields: {
@@ -74,6 +75,7 @@ export const thankYouFixture: ThankYouView = {
   layout: { showMenu: false },
   backTarget: 'W15',
   submitTarget: 'W01',
+  completionLabel: 'Ďakujeme za vašu pomoc',
   allowedActions: ['back', 'submit'],
   copy: {
     back: 'Späť',
