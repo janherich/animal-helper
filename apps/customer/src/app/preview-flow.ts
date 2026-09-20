@@ -6,6 +6,7 @@ import type { LocationPoint } from './pages/fixtures/location'
 export const previewSession = ref<{
   situation: string
   fromDraft: boolean
+  crueltyReport?: { outcome: 'reported' | 'not-reported'; reasons: string[]; description?: string }
   editingAnimal?: boolean
   identificationFailed?: boolean
   adviceReady?: boolean

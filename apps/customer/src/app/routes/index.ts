@@ -3,6 +3,7 @@ import { adviceFixture, warningsOnlyFixture } from '../pages/fixtures/advice'
 import { animalDetailsFixture, editAnimalFixture } from '../pages/fixtures/animal-details'
 import { animalGroupsFixture } from '../pages/fixtures/animal-groups'
 import { contactFixtures } from '../pages/fixtures/contacts'
+import { crueltyFixture } from '../pages/fixtures/cruelty'
 import { homeDraftFixture, homeFixture } from '../pages/fixtures/home'
 import { locationFixture } from '../pages/fixtures/location'
 import { mediaFixture } from '../pages/fixtures/media'
@@ -10,6 +11,41 @@ import { selfHelpFixture } from '../pages/fixtures/self-help'
 import { thankYouFixtures } from '../pages/fixtures/thank-you'
 import { previewSession } from '../preview-flow'
 export const routes: RouteRecordRaw[] = [
+  {
+    path: '/w27',
+    name: 'W27',
+    props: { view: crueltyFixture },
+    meta: crueltyFixture.layout,
+    beforeEnter: () => previewSession.value?.situation === 'cruelty' || { name: 'W01' },
+    component: () => import('../pages/page-cruelty.vue')
+  },
+  {
+    path: '/w28',
+    name: 'W28',
+    meta: { showMenu: false },
+    beforeEnter: () => previewSession.value?.situation === 'cruelty' || { name: 'W01' },
+    component: () => import('../pages/page-police-result.vue')
+  },
+  {
+    path: '/w29',
+    name: 'W29',
+    meta: { showMenu: false },
+    beforeEnter: () =>
+      previewSession.value?.situation !== 'cruelty'
+        ? { name: 'W01' }
+        : previewSession.value.crueltyReport?.outcome === 'reported' || { name: 'W28' },
+    component: () => import('../pages/page-police-reported.vue')
+  },
+  {
+    path: '/w30',
+    name: 'W30',
+    meta: { showMenu: false },
+    beforeEnter: () =>
+      previewSession.value?.situation !== 'cruelty'
+        ? { name: 'W01' }
+        : previewSession.value.crueltyReport?.outcome === 'not-reported' || { name: 'W28' },
+    component: () => import('../pages/page-police-failed.vue')
+  },
   ...thankYouFixtures.map(view => ({
     path: '/' + view.screen.toLowerCase(),
     name: view.screen,
@@ -45,7 +81,13 @@ export const routes: RouteRecordRaw[] = [
   {
     path: '/w03',
     name: 'W03',
-    props: { view: locationFixture },
+    props: () => ({
+      view: {
+        ...locationFixture,
+        backTarget: previewSession.value?.situation === 'cruelty' ? 'W27' : locationFixture.backTarget,
+        backHistoryTargets: previewSession.value?.situation === 'cruelty' ? ['W27', 'W29', 'W30'] : []
+      }
+    }),
     meta: locationFixture.layout,
     beforeEnter: () => previewSession.value !== null || { name: 'W01' },
     component: () => import('../pages/page-location.vue')

@@ -7,6 +7,7 @@ import { previewSession } from '../preview-flow'
 import { toastBottomOffset, useToasts } from '../toasts'
 import type { MediaView } from './fixtures/media'
 import PageProcessing from './page-processing.vue'
+import { backWithinFlow } from '../instruction-navigation'
 import { useDelayedPending } from '../use-delayed-pending'
 
 const props = defineProps<{ view: MediaView }>()
@@ -156,7 +157,7 @@ function remove(index: number) {
   syncFiles()
 }
 function goBack() {
-  if (props.view.allowedActions.includes('back')) void router.push({ name: props.view.backTarget })
+  if (props.view.allowedActions.includes('back')) backWithinFlow(router, props.view.backTarget, [props.view.backTarget])
 }
 function freezeLeavingTile(element: Element) {
   const tile = element as HTMLElement

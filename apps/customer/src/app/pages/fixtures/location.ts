@@ -61,4 +61,4 @@ export const locationFixture = {
     }
   ] satisfies (LocationPoint & { title: string; detail: string })[]
 }
-export type LocationView = typeof locationFixture
+export type LocationView = typeof locationFixture & { backHistoryTargets?: string[] }

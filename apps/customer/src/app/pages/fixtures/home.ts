@@ -10,7 +10,7 @@ export const homeFixture: HomeView = {
     'start-injured': { situation: 'injured', fromDraft: false, target: 'W03' },
     'start-stray': { situation: 'stray', fromDraft: false, target: 'W03' },
     'start-dead': { situation: 'dead', fromDraft: false, target: 'W03' },
-    'start-cruelty': { situation: 'cruelty', fromDraft: false, target: 'W03' },
+    'start-cruelty': { situation: 'cruelty', fromDraft: false, target: 'W27' },
     'start-other': { situation: 'other', fromDraft: false, target: 'W03' }
   },
   props: {

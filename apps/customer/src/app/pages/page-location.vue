@@ -5,6 +5,7 @@ import { scrollActiveOption } from '@/libs/scroll-active-option'
 import { useRouter } from 'vue-router'
 import type { LocationPoint, LocationView } from './fixtures/location'
 import { previewSession } from '../preview-flow'
+import { backWithinFlow } from '../instruction-navigation'
 
 const props = defineProps<{ view: LocationView }>()
 const router = useRouter()
@@ -129,6 +130,10 @@ function confirmLocation() {
 }
 function goBack() {
   if (!props.view.allowedActions.includes('back')) return
+  if (props.view.backHistoryTargets?.length) {
+    backWithinFlow(router, props.view.backTarget, props.view.backHistoryTargets)
+    return
+  }
   void router.push({ name: props.view.backTarget, query: previewSession.value?.fromDraft ? { fixture: 'draft' } : {} })
 }
 onUnmounted(() => {
