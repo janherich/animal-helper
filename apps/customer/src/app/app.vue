@@ -15,13 +15,16 @@ import logoYellow from '@/assets/brand/logo-yellow.svg'
 import { usePageScrollbars } from '@/plugins/overlay-scrollbars'
 import { computed, watch } from 'vue'
 import { contactFixtures } from './pages/fixtures/contacts'
+import { selfHelpFixture } from './pages/fixtures/self-help'
 import { holdScreenHeight, screenEntered, clearScreenScroll } from '@/providers/router/transition-scroll'
 onUnmounted(clearScreenScroll)
 
 usePageScrollbars()
 const route = useRoute()
 const router = useRouter()
-const adviceAction = computed(() => contactFixtures.find(view => view.screen === route.name)?.layout.adviceAction)
+const adviceAction = computed(
+  () => [...contactFixtures, selfHelpFixture].find(view => view.screen === route.name)?.layout.adviceAction
+)
 const adviceDrawer = ref<InstanceType<typeof AdviceDrawer>>()
 const desktopAdvice = useMediaQuery('(min-width: 768px)')
 watch(desktopAdvice, desktop => {

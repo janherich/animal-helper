@@ -6,8 +6,20 @@ import { contactFixtures } from '../pages/fixtures/contacts'
 import { homeDraftFixture, homeFixture } from '../pages/fixtures/home'
 import { locationFixture } from '../pages/fixtures/location'
 import { mediaFixture } from '../pages/fixtures/media'
+import { selfHelpFixture } from '../pages/fixtures/self-help'
 import { previewSession } from '../preview-flow'
 export const routes: RouteRecordRaw[] = [
+  {
+    path: '/w22',
+    name: 'W22',
+    props: { view: selfHelpFixture },
+    meta: selfHelpFixture.layout,
+    beforeEnter: () =>
+      (!!previewSession.value?.location &&
+        !!previewSession.value.animalIdentification &&
+        !!previewSession.value.adviceReady) || { name: 'W01' },
+    component: () => import('../pages/page-self-help.vue')
+  },
   {
     path: '/',
     name: 'W01',

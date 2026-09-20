@@ -11,7 +11,8 @@ telephone and navigation. Notices support `important` (pale yellow) and `critica
 supports the volunteer variant. All text is plain text, never injected HTML.
 
 Fixtures: W15 municipality, W18 multiple clinics and cost warning, W20 police and
-both notice levels, W21 volunteers, W36 motorway patrol. Self-help is out of scope.
+both notice levels, W21 volunteers, W36 motorway patrol. W22 self-help is described in
+[the self-help contract](self-help-contract.md).
 After completing the fixture flow and acknowledging advice, W15 opens a combined
 showcase by default: all supported blocks from the five fixtures, with namespaced IDs.
 The individual municipality fixture remains available separately for component tests.
@@ -21,7 +22,8 @@ Individual fixtures remain available for testing the supported variants in isola
 Phone links only allow tel numbers; other links only allow HTTP(S) without credentials.
 Fixtures intentionally have no live phone/navigation/volunteer links. Their wording
 and addresses are placeholders, not verified emergency, medical, or legal guidance.
-Footer actions currently show a localized unavailable message and submit nothing.
+The data-defined `actionTargets.alternatives` opens W22 through “Iné možnosti pomoci”.
+The successful-outcome action still shows a localized unavailable message and submits nothing.
 Back has a data-defined target. The optional shell advice action opens a bottom-sheet
 dialog without navigation below 768px. At 768px and wider it navigates to the original
 advice screen; widening an open mobile dialog dismisses it. It reuses the last acknowledged advice view and the same

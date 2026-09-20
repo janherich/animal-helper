@@ -19,6 +19,7 @@ export type ContactsView = {
   locale: string
   layout: { showMenu: boolean; adviceAction?: { label: string } }
   backTarget: string
+  actionTargets?: { alternatives?: 'W22' }
   allowedActions: ('back' | 'resolved' | 'alternatives')[]
   copy: {
     back: string
@@ -36,6 +37,7 @@ export const municipalityFixture: ContactsView = {
   locale: 'sk',
   layout: { showMenu: false, adviceAction: { label: 'Rady' } },
   backTarget: 'W14',
+  actionTargets: { alternatives: 'W22' },
   allowedActions: ['back', 'resolved', 'alternatives'],
   copy: {
     back: 'Späť',

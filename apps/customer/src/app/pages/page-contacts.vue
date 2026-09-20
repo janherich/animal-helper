@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { previewSession } from '../preview-flow'
 import { safeContactHref, type ContactsView } from './fixtures/contacts'
 const props = defineProps<{ view: ContactsView }>()
 const router = useRouter()
@@ -13,7 +14,13 @@ watch(
 )
 const tones = { open: 'text-success', closing: 'text-accent', closed: 'text-danger' }
 function act(action: 'resolved' | 'alternatives') {
-  if (props.view.allowedActions.includes(action)) notice.value = props.view.copy.unavailable
+  if (!props.view.allowedActions.includes(action)) return
+  if (action === 'alternatives' && props.view.actionTargets?.alternatives) {
+    if (previewSession.value) previewSession.value.selfHelpReturnTarget = props.view.screen
+    void router.push({ name: props.view.actionTargets.alternatives })
+    return
+  }
+  notice.value = props.view.copy.unavailable
 }
 </script>
 

@@ -9,6 +9,7 @@ export const previewSession = ref<{
   editingAnimal?: boolean
   identificationFailed?: boolean
   adviceReady?: boolean
+  selfHelpReturnTarget?: 'W15' | 'W18' | 'W20' | 'W21' | 'W36'
   adviceView?: AdviceView
   animalDetails?: Record<string, string | string[]>
   location?: LocationPoint
