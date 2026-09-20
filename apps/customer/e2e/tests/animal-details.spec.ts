@@ -62,26 +62,6 @@ test('details and edit identification round trip preserve answers', async ({ pag
   await page.screenshot({ path: testInfo.outputPath('thank-you-mobile.png'), fullPage: true })
   await page.setViewportSize({ width: 1280, height: 900 })
   await page.screenshot({ path: testInfo.outputPath('thank-you-desktop.png'), fullPage: true })
-  await page.emulateMedia({ reducedMotion: 'no-preference' })
-  await page.getByRole('button', { name: 'Odoslať a ukončiť' }).click()
-  const completion = page.getByRole('dialog', { name: 'Ďakujeme za vašu pomoc', exact: true })
-  await expect(completion).toBeVisible()
-  await expect(page.locator('.customer-app__content')).toHaveAttribute('inert')
-  await expect(page.locator('.completion-animation__fill')).toHaveCSS('animation-duration', '1.6s')
-  await page.evaluate(() => {
-    for (const animation of document.querySelector('.completion-animation')!.getAnimations({ subtree: true })) {
-      animation.pause()
-      animation.currentTime = 800
-    }
-  })
-  await page.screenshot({ path: testInfo.outputPath('completion-heart.png') })
-  await expect(page).toHaveURL(/\/$/)
-  await expect(page.locator('.customer-home')).toBeAttached()
-  await expect(completion).toBeVisible()
-  await expect(page.getByRole('heading', { name: 'Čo sa stalo?' })).toBeVisible()
-  await expect(completion).toHaveCount(0)
-  await page.emulateMedia({ reducedMotion: 'reduce' })
-  await page.goBack()
   await page.getByRole('button', { name: 'Späť', exact: true }).click()
   await page.getByRole('button', { name: 'Nepodarilo sa pomôcť', exact: true }).click()
   await expect(page.getByRole('heading', { name: 'Ďakujeme za vašu snahu' })).toBeVisible()

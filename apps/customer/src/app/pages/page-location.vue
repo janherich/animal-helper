@@ -5,7 +5,7 @@ import { computed, onUnmounted, ref, watch, useId } from 'vue'
 import { useAutocomplete } from '@/libs/use-autocomplete'
 import { useRouter } from 'vue-router'
 import type { LocationPoint, LocationView } from './fixtures/location'
-import { previewSession } from '../preview-flow'
+import { previewSession, confirmPreviewLocation } from '../preview-flow'
 import { backWithinFlow } from '../instruction-navigation'
 
 const props = defineProps<{ view: LocationView }>()
@@ -91,7 +91,7 @@ function locate() {
 }
 function confirmLocation() {
   if (!selected.value || !previewSession.value || !props.view.allowedActions.includes('confirm-location')) return
-  previewSession.value.location = { ...selected.value }
+  confirmPreviewLocation(selected.value)
   void router.push({ name: props.view.confirmTarget })
 }
 function goBack() {

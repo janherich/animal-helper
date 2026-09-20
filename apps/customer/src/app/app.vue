@@ -5,7 +5,7 @@ import { nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import { homeDraftFixture, homeFixture } from './pages/fixtures/home'
 import { shellFixture as shell } from './pages/fixtures/shell'
-import { beginPreview } from './preview-flow'
+import { beginPreview, finishPreview } from './preview-flow'
 import AdviceDrawer from './components/advice-drawer.vue'
 import { previewContactView } from './pages/fixtures/preview-server'
 import ManagerToasts from './components/manager-toasts.vue'
@@ -50,7 +50,8 @@ async function navigateUnderCompletion() {
   if (!target) return
   try {
     if (route.name === target) completionPageReady.value = true
-    const failure = await router.push({ name: target })
+    const failure = await router.replace({ name: target })
+    if (!failure && route.name === 'W01') finishPreview()
     if (failure) completionPageReady.value = true
   } catch {
     completionPageReady.value = true

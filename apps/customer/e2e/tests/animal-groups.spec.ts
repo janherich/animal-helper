@@ -1,5 +1,62 @@
 import { expect, test } from '@playwright/test'
 
+test('replaces many cards with fewer sequentially without collapsing the area', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Zviera je zranené', exact: true }).click()
+  await page.getByRole('button', { name: 'Ukážková mapa — vybrať Dolné Orešany' }).click()
+  await page.getByRole('button', { name: 'Potvrdiť polohu' }).click()
+  await page.getByRole('button', { name: 'Nemám fotografiu' }).click()
+  await expect(page.locator('.customer-animal-groups__grid')).toBeVisible()
+  await page.getByRole('button', { name: 'Domáce zvieratá', exact: true }).click()
+  await expect(page.getByRole('button', { name: 'Mačky', exact: true })).toBeVisible()
+  await expect(page.locator('.customer-animal-groups__grid')).toHaveCount(1)
+  const oldHeight = (await page.locator('.customer-animal-groups__cards').boundingBox())!.height
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
+  const frames = await page.evaluate(async () => {
+    document.querySelector<HTMLButtonElement>('.customer-animal-groups__grid button')!.click()
+    await new Promise<void>(resolve =>
+      requestAnimationFrame(() => requestAnimationFrame(() => requestAnimationFrame(() => resolve())))
+    )
+    return Array.from(document.querySelectorAll<HTMLElement>('.customer-animal-groups__grid')).map(grid => {
+      const animations = grid.getAnimations()
+      for (const animation of animations) {
+        animation.pause()
+        animation.currentTime = 60
+      }
+      return {
+        transform: getComputedStyle(grid).transform,
+        opacity: Number(getComputedStyle(grid).opacity),
+        count: animations.length
+      }
+    })
+  })
+  expect(frames).toHaveLength(1)
+  for (const frame of frames) {
+    expect(frame.transform).toBe('none')
+    expect(frame.count).toBe(1)
+    expect(frame.opacity).toBeGreaterThan(0)
+    expect(frame.opacity).toBeLessThan(1)
+  }
+  expect((await page.locator('.customer-animal-groups__cards').boundingBox())!.height).toBeCloseTo(oldHeight, 0)
+  await expect(page.getByRole('button', { name: 'Mačka domáca', exact: true })).toHaveCount(0)
+  await page.evaluate(() =>
+    document
+      .querySelectorAll('.customer-animal-groups__grid')
+      .forEach(grid => grid.getAnimations().forEach(animation => animation.finish()))
+  )
+  await expect(page.locator('.customer-animal-groups__grid')).toHaveCount(1)
+  await expect(page.getByRole('button', { name: 'Mačka domáca', exact: true })).toBeVisible()
+  await expect(page.locator('.customer-animal-groups__grid')).toHaveCSS('opacity', '1')
+  await expect(page.locator('.customer-animal-groups__cards')).not.toHaveAttribute('style', /height:/)
+  expect((await page.locator('.customer-animal-groups__cards').boundingBox())!.height).toBeLessThan(oldHeight)
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.getByRole('button', { name: 'Začať výber odznova' }).click()
+  await expect(page.getByRole('button', { name: 'Domáce zvieratá', exact: true })).toBeVisible()
+  await expect(page.locator('.customer-animal-groups__grid')).toHaveCount(1)
+  expect(await page.locator('.customer-animal-groups__grid').evaluate(grid => grid.getAnimations().length)).toBe(0)
+})
+
 test('opens the manual group fixture, selects a group and preserves it on return', async ({ page }, testInfo) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.setViewportSize({ width: 402, height: 874 })
@@ -97,13 +154,15 @@ test('opens the manual group fixture, selects a group and preserves it on return
   await page.setViewportSize({ width: 1280, height: 800 })
   await expect(grid).toHaveCount(1)
   const animationArea = await page.locator('.customer-animal-groups__cards').boundingBox()
-  expect(animationArea!.x).toBe(0)
-  expect(animationArea!.width).toBe(1280)
+  expect(animationArea!.x).toBe(320)
+  expect(animationArea!.width).toBe(640)
   expect((await grid.boundingBox())!.width).toBe(640)
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(1280)
   await page.screenshot({ path: testInfo.outputPath('manual-groups-desktop.png'), fullPage: true })
   await page.setViewportSize({ width: 402, height: 874 })
   await page.getByRole('button', { name: 'Domáce zvieratá', exact: true }).click()
+  await expect(page.getByRole('button', { name: 'Akváriové zvieratá', exact: true })).toBeVisible()
+  await expect(page.locator('.customer-animal-groups__cards')).not.toHaveAttribute('style', /height:/)
   await expect(grid).toHaveCount(1)
   const searchTop = (await search.boundingBox())!.y
   const gridTop = (await grid.boundingBox())!.y
@@ -114,6 +173,7 @@ test('opens the manual group fixture, selects a group and preserves it on return
   await expect(page.locator('.customer-animal-groups__top')).toHaveCSS('box-shadow', 'none')
   await expect(page.getByRole('button', { name: 'Potvrdiť voľbu' })).toBeVisible()
   await page.getByRole('button', { name: 'Akváriové zvieratá', exact: true }).click()
+  await expect(page.getByRole('button', { name: 'Ryby', exact: true })).toBeVisible()
   await expect(grid).toHaveCount(1)
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0)
   expect((await grid.boundingBox())!.y).toBe(gridTop)

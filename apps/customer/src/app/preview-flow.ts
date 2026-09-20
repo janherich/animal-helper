@@ -24,6 +24,24 @@ export function beginPreview(situation: string, fromDraft = false) {
   previewSession.value = { situation, fromDraft }
 }
 
+export function finishPreview() {
+  previewSession.value = null
+}
+
+export function confirmPreviewLocation(location: LocationPoint) {
+  const session = previewSession.value
+  if (!session) return
+  if (session.location?.lat !== location.lat || session.location?.lng !== location.lng) {
+    session.adviceReady = false
+    delete session.thankYouReturnTarget
+    delete session.otherReport
+    delete session.documentingOther
+    // Road contacts have their own availability guard, independent of adviceReady.
+    if (session.animalDetails) delete session.animalDetails.road
+  }
+  session.location = { ...location }
+}
+
 export function confirmAnimalIdentification(identification: AnimalIdentification) {
   const session = previewSession.value
   if (!session) return

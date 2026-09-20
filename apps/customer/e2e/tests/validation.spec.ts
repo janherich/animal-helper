@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-test('validation preview retains the draft and allows correction', async ({ page }) => {
+test('validation correction completes the case and prevents reopening through history', async ({ page }, testInfo) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('/')
   await page.getByRole('button', { name: 'Iné', exact: true }).click()
@@ -19,6 +19,30 @@ test('validation preview retains the draft and allows correction', async ({ page
   await email.fill('user@example.org')
   await expect(email).not.toHaveAttribute('aria-invalid')
   await expect(page.locator('input[name=name]')).toHaveValue('Testovacie meno')
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
   await page.getByRole('button', { name: 'Odoslať a ukončiť' }).click()
+  const completion = page.getByRole('dialog', { name: 'Ďakujeme za vašu pomoc', exact: true })
+  await expect(completion).toBeVisible()
+  await expect(page.locator('.customer-app__content')).toHaveAttribute('inert')
+  await expect(page.locator('.completion-animation__fill')).toHaveCSS('animation-duration', '1.6s')
+  await page.evaluate(() => {
+    for (const animation of document.querySelector('.completion-animation')!.getAnimations({ subtree: true })) {
+      animation.pause()
+      animation.currentTime = 800
+    }
+  })
+  await page.screenshot({ path: testInfo.outputPath('completion-heart.png') })
+  await expect(page).toHaveURL(/\/$/)
+  await expect(page.locator('.customer-home')).toBeAttached()
+  await expect(completion).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Čo sa stalo?' })).toBeVisible()
+  await expect(completion).toHaveCount(0)
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goBack()
   await expect(page).toHaveURL('/')
+  await expect(page.locator('.customer-thank-you')).toHaveCount(0)
+  await page.goBack()
+  await expect(page).toHaveURL('/')
+  await page.getByRole('button', { name: 'Zviera je zranené', exact: true }).click()
+  await expect(page).toHaveURL('/w03')
 })

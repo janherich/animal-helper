@@ -8,6 +8,7 @@ import { useRouter } from 'vue-router'
 import { previewSession } from '../preview-flow'
 import { backWithinFlow } from '../instruction-navigation'
 import { catalogueAnimals } from '../animal-catalogue'
+import { reconcileDetailAnswers } from '../detail-answers'
 import type { AnimalBranch } from './fixtures/animal-groups'
 import type { AnimalDetailsView, DetailQuestion } from './fixtures/animal-details'
 const props = defineProps<{ view: AnimalDetailsView; catalogue: AnimalBranch }>()
@@ -26,7 +27,25 @@ const animalLabel = computed(
       ? identification.value.description || props.view.copy.other
       : props.view.copy.unknown)
 )
-const answers = ref<Record<string, string | string[]>>({ ...props.view.values, ...previewSession.value?.animalDetails })
+const answers = ref(
+  reconcileDetailAnswers(props.view.questions, previewSession.value?.animalDetails ?? {}, props.view.values)
+)
+watch(
+  () => JSON.stringify(props.view.questions),
+  (_, previous) => {
+    const oldQuestions = JSON.parse(previous) as DetailQuestion[]
+    answers.value = reconcileDetailAnswers(props.view.questions, answers.value, props.view.values, oldQuestions)
+    for (const old of oldQuestions) {
+      const current = props.view.questions.find(question => question.id === old.id && question.kind === old.kind)
+      if (!current) validation.clear(old.id)
+      for (const option of old.options) {
+        if (!current?.options.some(item => item.id === option.id && item.description)) {
+          validation.clear(`${old.id}:${option.id}`)
+        }
+      }
+    }
+  }
+)
 watch(
   answers,
   value => {

@@ -3,7 +3,7 @@ import PageActions from '../components/page-actions.vue'
 import PageIntro from '../components/page-intro.vue'
 import ValidationMessage from '../components/validation-message.vue'
 import { useFormValidation } from '@/libs/use-form-validation'
-import { computed, ref, useId, watch } from 'vue'
+import { computed, ref, useId } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAutocomplete } from '@/libs/use-autocomplete'
 import { previewSession, confirmAnimalIdentification } from '../preview-flow'
@@ -17,7 +17,6 @@ const validation = useFormValidation(() => props.view.validation)
 const resultsId = useId()
 const query = ref('')
 const path = ref<string[]>([...(previewSession.value?.animalIdentification?.path ?? [])])
-const cardTransition = ref('animal-forward')
 const branches = computed(() => {
   const chain = [props.view.root]
   for (const id of path.value) {
@@ -29,13 +28,6 @@ const branches = computed(() => {
 })
 const branch = computed(() => branches.value[branches.value.length - 1]!)
 const cardsKey = computed(() => branches.value.map(item => item.id).join('/'))
-watch(
-  cardsKey,
-  () => {
-    window.scrollTo({ top: 0, behavior: 'instant' })
-  },
-  { flush: 'post' }
-)
 const searchFirst = ref('')
 const cards = computed(() => {
   const children = branch.value.children
@@ -46,8 +38,19 @@ const heading = computed(() => props.view.props.title)
 const intro = computed(() => props.view.props.description)
 const animals = computed(() => catalogueAnimals(props.view.root))
 function disableLeavingCards(element: Element) {
+  const container = element.parentElement
+  if (container) container.style.height = `${container.getBoundingClientRect().height}px`
   element.setAttribute('inert', '')
   element.setAttribute('aria-hidden', 'true')
+}
+function sizeEnteringCards(element: Element) {
+  if (element.parentElement) element.parentElement.style.height = `${element.getBoundingClientRect().height}px`
+}
+function releaseCardHeight(element: Element) {
+  if (element.parentElement) element.parentElement.style.height = ''
+}
+function cardsLeft() {
+  window.scrollTo({ top: 0, behavior: 'instant' })
 }
 const savedIdentification = previewSession.value?.animalIdentification
 const choice = ref(
@@ -61,7 +64,6 @@ function changeAlternative() {
 }
 function restartSelection() {
   if (!props.view.allowedActions.includes('select-group')) return
-  cardTransition.value = 'animal-backward'
   resetSelection()
   path.value = []
 }
@@ -95,7 +97,6 @@ function confirm() {
   void router.push({ name: props.view.confirmTarget })
 }
 function selectCard(id: string) {
-  cardTransition.value = 'animal-forward'
   const node = cards.value.find(item => item.id === id)
   if (!node || !props.view.allowedActions.includes(node.kind === 'branch' ? 'select-group' : 'select-animal')) return
   if (node.kind === 'branch') {
@@ -136,7 +137,6 @@ function titleParts(label: string) {
 }
 function selectAnimal(animal: CatalogueAnimal) {
   if (!props.view.allowedActions.includes('select-animal') || !previewSession.value) return
-  cardTransition.value = 'animal-forward'
   resetSelection()
   path.value = [...animal.path]
   choice.value = animal.id
@@ -245,8 +245,12 @@ function goBack() {
             ) {{ view.props.empty }}
     .customer-animal-groups__cards(class="relative overflow-hidden")
       Transition(
-        :name="cardTransition",
-        @before-leave="disableLeavingCards"
+        name="animal-cards",
+        mode="out-in",
+        @before-leave="disableLeavingCards",
+        @after-leave="cardsLeft",
+        @enter="sizeEnteringCards",
+        @after-enter="releaseCardHeight"
       )
         .customer-animal-groups__grid(
           :key="cardsKey",
@@ -354,34 +358,27 @@ function goBack() {
 </template>
 
 <style scoped>
-.customer-animal-groups__cards {
-  width: 100vw;
-  margin-inline: calc(50% - 50vw);
-}
-.animal-forward-leave-active,
-.animal-backward-leave-active {
-  position: absolute;
-  inset: 0;
+.animal-cards-leave-active {
   pointer-events: none;
 }
 @media (prefers-reduced-motion: no-preference) {
-  .animal-forward-enter-active,
-  .animal-forward-leave-active,
-  .animal-backward-enter-active,
-  .animal-backward-leave-active {
+  .customer-animal-groups__cards {
+    transition: height 180ms ease-out;
+  }
+  .animal-cards-enter-active {
     transition:
-      transform 280ms ease,
-      opacity 280ms ease;
+      opacity 180ms ease-out,
+      transform 180ms ease-out;
   }
-  .animal-forward-enter-from,
-  .animal-backward-leave-to {
-    transform: translateX(100vw);
+  .animal-cards-leave-active {
+    transition: opacity 90ms ease-in;
+  }
+  .animal-cards-enter-from,
+  .animal-cards-leave-to {
     opacity: 0;
   }
-  .animal-forward-leave-to,
-  .animal-backward-enter-from {
-    transform: translateX(-100vw);
-    opacity: 0;
+  .animal-cards-enter-from {
+    transform: translateY(6px);
   }
 }
 .animal-suggestions-leave-active {

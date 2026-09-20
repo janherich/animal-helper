@@ -75,6 +75,36 @@ it('supports text-only and empty server-shaped forms', async () => {
   expect(wrapper.findAll('fieldset')).toHaveLength(0)
   expect(wrapper.get('button[type=submit]').attributes('disabled')).toBeUndefined()
 })
+it('reconciles changed schemas but does not reset drafts for validation-only responses', async () => {
+  const wrapper = setup(detailsValidationFixture)
+  await wrapper.get('textarea').setValue('User draft')
+  const view = {
+    ...detailsValidationFixture,
+    validation: {},
+    questions: [
+      detailsValidationFixture.questions[0]!,
+      { id: 'notes', kind: 'text' as const, label: 'Notes', required: true, options: [] }
+    ],
+    values: { notes: 'New default', symptoms: ['bleeding'], 'symptoms:other': 'Do not replace draft' }
+  }
+  await wrapper.setProps({ view })
+  expect(wrapper.get('textarea[aria-label=Notes]').element).toHaveProperty('value', 'New default')
+  expect(previewSession.value!.animalDetails).toEqual({
+    symptoms: ['other'],
+    'symptoms:other': 'User draft',
+    notes: 'New default'
+  })
+  await wrapper.setProps({ view: { ...view, validation: { fieldErrors: { notes: ['Fix it'] } } } })
+  expect(wrapper.get('textarea[aria-label=Notes]').element).toHaveProperty('value', 'New default')
+  await wrapper.setProps({
+    view: { ...view, questions: [{ ...view.questions[0]!, options: [{ id: 'bleeding', label: 'Bleeding' }] }] }
+  })
+  expect(previewSession.value!.animalDetails).toEqual({ symptoms: [] })
+  await wrapper.get('input[value=bleeding]').setValue(true)
+  await wrapper.get('form').trigger('submit')
+  expect(previewSession.value!.animalDetails).toEqual({ symptoms: ['bleeding'] })
+  wrapper.unmount()
+})
 it('replaces the form with manual recovery after a simulated failure', async () => {
   const wrapper = setup()
   previewSession.value!.identificationFailed = true
