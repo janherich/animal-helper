@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import PageActions from '../components/page-actions.vue'
+import PageIntro from '../components/page-intro.vue'
 import { computed, nextTick, onUnmounted, ref, watchEffect } from 'vue'
 import { useElementBounding, useWindowSize } from '@vueuse/core'
 import { useRouter } from 'vue-router'
@@ -45,7 +47,7 @@ async function confirmMedia() {
   await nextTick()
   confirmButton.value?.focus({ preventScroll: true })
 }
-const actions = ref<HTMLElement>()
+const actions = ref<InstanceType<typeof PageActions>>()
 const actionBounds = useElementBounding(actions)
 const viewport = useWindowSize()
 watchEffect(() => {
@@ -191,33 +193,15 @@ onUnmounted(() => items.value.forEach(item => URL.revokeObjectURL(item.url)))
       :aria-busy="pending",
       :lang="view.locale"
     )
-      .customer-media__back(class="px-4 pt-5 pb-1")
-        button(
-          type="button",
-          class="mb-4 flex min-h-11 items-center gap-1 font-form text-back text-primary",
-          :disabled="!view.allowedActions.includes('back')",
-          @click="goBack"
-        )
-          base-icon(name="back")
-          span {{ view.props.back }}
-        hr(class="border-primary-light")
-      .customer-media__steps(class="px-4 pt-4 pb-2")
-        .customer-media__progress(
-          class="progress-track h-2 overflow-hidden rounded bg-primary-light",
-          role="progressbar",
-          :aria-label="view.props.step",
-          :aria-valuenow="view.props.progress",
-          aria-valuemin="0",
-          aria-valuemax="100"
-        )
-          div(
-            class="h-full rounded bg-primary-gradient",
-            :style="{ width: view.props.progress + '%' }"
-          )
-        p(class="mt-1 font-form text-body font-normal") {{ view.props.step }}
-      header(class="px-5 pt-5 pb-3")
-        h1(class="mb-1 text-heading-1") {{ view.props.title }}
-        p {{ view.props.description }}
+      PageIntro(
+        :back="view.props.back",
+        :back-disabled="!view.allowedActions.includes('back')",
+        :step="view.props.step",
+        :progress="view.props.progress",
+        :title="view.props.title",
+        :description="view.props.description",
+        @back="goBack"
+      )
       input(
         ref="gallery",
         type="file",
@@ -316,14 +300,11 @@ onUnmounted(() => items.value.forEach(item => URL.revokeObjectURL(item.url)))
                 class="size-14 rounded-full bg-canvas p-1"
               )
               span {{ view.props.add }}
-      .customer-media__actions(
+      PageActions.customer-media__actions(
         ref="actions",
-        class="sticky bottom-0 z-20 mt-auto shrink-0 bg-canvas p-4 pb-[max(1rem,env(safe-area-inset-bottom))]"
+        as="div",
+        class="shrink-0"
       )
-        div(
-          aria-hidden="true",
-          class="pointer-events-none absolute inset-x-0 bottom-full h-6 bg-linear-to-b from-transparent to-canvas"
-        )
         button(
           v-if="items.length",
           ref="confirmButton",

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageActions from '../components/page-actions.vue'
 import { computed, ref, useId, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { previewSession } from '../preview-flow'
@@ -143,11 +144,7 @@ form.customer-thank-you(
         class="size-5 shrink-0 accent-primary"
       )
       span {{ consent.label }}
-  footer(class="sticky bottom-0 z-20 mt-auto flex flex-col gap-4 bg-canvas p-4 pb-[max(1rem,env(safe-area-inset-bottom))]")
-    div(
-      aria-hidden="true",
-      class="pointer-events-none absolute inset-x-0 bottom-full h-6 bg-linear-to-b from-transparent to-canvas"
-    )
+  PageActions(class="flex flex-col gap-4")
     button(
       type="submit",
       class="ui-button w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:opacity-40",

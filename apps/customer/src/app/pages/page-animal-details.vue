@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageActions from '../components/page-actions.vue'
 import PageIntro from '../components/page-intro.vue'
 import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -205,11 +206,10 @@ function edit() {
                   rows="4",
                   class="w-full resize-none rounded-control border border-primary bg-surface p-3 outline-none focus-visible:shadow-[inset_0_0_0_2px_var(--color-primary-light)]"
                 )
-  div(class="sticky bottom-0 z-20 mt-auto bg-canvas p-4 pb-[max(1rem,env(safe-area-inset-bottom))]")
-    div(
-      aria-hidden="true",
-      class="pointer-events-none absolute inset-x-0 bottom-full h-6 bg-linear-to-b from-transparent to-canvas"
-    )
+  PageActions(
+    as="div",
+    class=""
+  )
     button(
       v-if="failed",
       type="button",

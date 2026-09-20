@@ -33,10 +33,10 @@ returns to root and clears only the local draft search, selection and descriptio
 top Back button always returns to media, regardless of tree depth. Forward/back card transitions leave the global search
 stationary and respect reduced motion.
 
-The confirmed identification, compatibility fields and advice readiness remain unchanged throughout manual editing,
-including reset, branch traversal, search selection and leaving without confirmation. Only confirmation replaces the
-saved identification and invalidates advice. Cancelling an edit therefore cannot invalidate access to the details or
-quick-edit page. This is local preview state today; the backend should apply the same commit-on-confirm boundary.
+The confirmed identification and advice readiness remain unchanged throughout manual editing, including reset, branch
+traversal, search selection and leaving without confirmation. Only confirmation replaces the saved identification and
+invalidates advice. Cancelling an edit therefore cannot invalidate access to the details or quick-edit page. This is
+local preview state today; the backend should apply the same commit-on-confirm boundary.
 
 The whole page scrolls beneath the main app header; search has no separate sticky section, blur or shadow. Changing a
 branch resets page scrolling to the top. The footer stays sticky with a soft gradient above it. The reset control keeps
@@ -49,15 +49,15 @@ zviera” reveals its required description through the shared BaseExpander. The 
 and an accessible name rather than a visible label. Blank or whitespace-only text blocks confirmation. Search and cards
 remain visible. Changing branch clears selection and description.
 
-Unknown requires confirmation, then records `kind: 'unknown'` and the current branch path (empty at the root), including
-available legacy group/category IDs. This is tentative context, not a confirmed species; previous species and
-description are not retained. Other species retains the current path (empty at the root) and required, trimmed
-description.
+Unknown requires confirmation, then records `kind: 'unknown'` and the current branch path (empty at the root). This is
+tentative context, not a confirmed species; previous species and description are not retained. Other species retains the
+current path (empty at the root) and required, trimmed description.
 
 Known-animal confirmation stores `kind`, full branch `path` and `speciesId` in memory. Other-animal confirmation stores
-`kind: 'other'`, `description` and the current branch path. The preview also keeps legacy `groupId` and `categoryId`
-fields for compatibility; the full path is authoritative for deeper nesting. Confirmation navigates to the target
-provided by the view, currently the details page. No real API submission is performed.
+`kind: 'other'`, `description` and the current branch path. `AnimalIdentification` in `src/app/animal-identification.ts`
+is the only stored result. Separate legacy group/category/species/path fields have been removed; group context can be
+derived from `path` when needed. Confirmation navigates to the target provided by the view, currently the details page.
+No real API submission is performed.
 
 ## Backend integration
 

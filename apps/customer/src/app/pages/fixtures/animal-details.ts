@@ -1,15 +1,7 @@
+import type { AnimalDetailsView, DetailQuestion, EditAnimalView } from '../../contracts/forms'
+export type { AnimalDetailsView, DetailQuestion, EditAnimalView } from '../../contracts/forms'
 // Presentation fixtures only. Server supplies translated questions, choices and actions later.
-export type DetailQuestion = {
-  id: string
-  label: string
-  hideLabel?: boolean
-  kind: 'multiple' | 'single' | 'text'
-  placeholder?: string
-  required: boolean
-  disabled?: boolean
-  options: { id: string; label: string; exclusive?: boolean; description?: string; disabled?: boolean }[]
-}
-export const animalDetailsFixture = {
+export const animalDetailsFixture: AnimalDetailsView = {
   screen: 'W09a',
   locale: 'sk',
   layout: { showMenu: false },
@@ -81,9 +73,8 @@ export const animalDetailsFixture = {
     }
   ] as DetailQuestion[]
 }
-export type AnimalDetailsView = typeof animalDetailsFixture & { showAnimal?: boolean }
 
-export const editAnimalFixture = {
+export const editAnimalFixture: EditAnimalView = {
   screen: 'W40',
   locale: 'sk',
   layout: { showMenu: false },
@@ -106,4 +97,3 @@ export const editAnimalFixture = {
     preview: 'Lokálna ukážka číselníka. AI rozpoznávanie zatiaľ nie je zapojené.'
   }
 }
-export type EditAnimalView = typeof editAnimalFixture

@@ -1,7 +1,8 @@
+import type { LocationPoint, LocationView } from '../../contracts/forms'
+export type { LocationPoint, LocationView } from '../../contracts/forms'
 // Temporary presentation data. Neither these actions nor the transition are API contracts.
 import mapImage from '@/assets/brand/location-preview.png'
-export type LocationPoint = { label: string; lat: number; lng: number; source: 'fixture' | 'device' }
-export const locationFixture = {
+export const locationFixture: LocationView = {
   screen: 'W03a',
   locale: 'sk',
   layout: { showMenu: false },
@@ -61,4 +62,3 @@ export const locationFixture = {
     }
   ] satisfies (LocationPoint & { title: string; detail: string })[]
 }
-export type LocationView = typeof locationFixture & { backHistoryTargets?: string[] }

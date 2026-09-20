@@ -72,8 +72,8 @@ it('traverses an arbitrarily deep tree and search opens the same leaf parent', a
   expect(previewSession.value?.location).toEqual(location)
   expect(previewSession.value?.media).toEqual([photo])
   expect(previewSession.value?.animalIdentification?.path).toEqual(expectedPath)
-  expect(previewSession.value?.animalGroup).toBe('branch-1')
-  expect(previewSession.value?.animalSpecies).toBe('target')
+  expect(previewSession.value?.animalIdentification?.path[0]).toBe('branch-1')
+  expect(previewSession.value?.animalIdentification?.speciesId).toBe('target')
   const search = wrapper.get('input[role="combobox"]')
   await search.setValue('Branch')
   await search.trigger('focus')
@@ -81,7 +81,7 @@ it('traverses an arbitrarily deep tree and search opens the same leaf parent', a
   await search.setValue('Test')
   await wrapper.get('[role="option"]').trigger('click')
   expect((search.element as HTMLInputElement).value).toBe('')
-  expect(previewSession.value?.animalPath).toEqual(expectedPath)
+  expect(previewSession.value?.animalIdentification?.path).toEqual(expectedPath)
   expect(wrapper.get('.customer-animal-groups__grid button').attributes('aria-pressed')).toBe('true')
   await click('Začať výber odznova')
   expect(wrapper.get('.customer-animal-groups__grid button').text()).toBe('Branch 1')
@@ -95,14 +95,8 @@ it('preserves confirmed identification and advice while an edit is reset, search
     animalIdentification: {
       kind: 'species',
       path: ['domestic', 'cats'],
-      groupId: 'domestic',
-      categoryId: 'cats',
       speciesId: 'cat-domestic'
     },
-    animalPath: ['domestic', 'cats'],
-    animalGroup: 'domestic',
-    animalCategory: 'cats',
-    animalSpecies: 'cat-domestic',
     adviceReady: true
   })
   const saved = JSON.parse(JSON.stringify(previewSession.value))
@@ -139,7 +133,7 @@ it('renders supplied labels and groups rather than a built-in catalogue', async 
   expect(wrapper.attributes('lang')).toBe('en')
   expect(wrapper.findAll('.customer-animal-groups__grid button')).toHaveLength(1)
   await wrapper.get('.customer-animal-groups__grid button').trigger('click')
-  expect(previewSession.value?.animalGroup).toBeUndefined()
+  expect(previewSession.value?.animalIdentification?.path[0]).toBeUndefined()
   await wrapper
     .findAll('button')
     .find(item => item.attributes('aria-label') === 'Začať výber odznova')!
@@ -177,9 +171,7 @@ it('keeps alternatives and confirmation in the footer on every branch', async ()
   await click('Potvrdiť voľbu')
   expect(previewSession.value?.animalIdentification).toEqual({
     kind: 'unknown',
-    path: ['farm', 'juvenile'],
-    groupId: 'farm',
-    categoryId: 'juvenile'
+    path: ['farm', 'juvenile']
   })
   await click('Začať výber odznova')
   await click('Domáce zvieratá')
@@ -205,12 +197,10 @@ it('keeps alternatives and confirmation in the footer on every branch', async ()
   await click('Potvrdiť voľbu')
   expect(previewSession.value?.animalIdentification).toEqual({
     kind: 'unknown',
-    path: ['domestic', 'cats'],
-    groupId: 'domestic',
-    categoryId: 'cats'
+    path: ['domestic', 'cats']
   })
-  expect(previewSession.value?.animalPath).toEqual(['domestic', 'cats'])
-  expect(previewSession.value?.animalSpecies).toBeUndefined()
+  expect(previewSession.value?.animalIdentification?.path).toEqual(['domestic', 'cats'])
+  expect(previewSession.value?.animalIdentification?.speciesId).toBeUndefined()
   await click('Mačka domáca')
   expect((wrapper.get('input[value="unknown"]').element as HTMLInputElement).checked).toBe(false)
   await click('Potvrdiť voľbu')

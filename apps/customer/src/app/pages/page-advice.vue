@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageActions from '../components/page-actions.vue'
 import PageIntro from '../components/page-intro.vue'
 import { useRouter } from 'vue-router'
 import type { AdviceView } from './fixtures/advice'
@@ -26,11 +27,10 @@ function acknowledge() {
     @back="router.push({ name: view.backTarget })"
   )
   AdviceBlocks(:blocks="view.blocks")
-  div(class="sticky bottom-0 z-20 mt-auto bg-canvas p-4 pb-[max(1rem,env(safe-area-inset-bottom))]")
-    div(
-      aria-hidden="true",
-      class="pointer-events-none absolute inset-x-0 bottom-full h-6 bg-linear-to-b from-transparent to-canvas"
-    )
+  PageActions(
+    as="div",
+    class=""
+  )
     button(
       type="button",
       class="ui-button w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:opacity-40",

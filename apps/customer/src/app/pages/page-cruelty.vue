@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageActions from '../components/page-actions.vue'
 import { previewSession } from '../preview-flow'
 import { useRouter } from 'vue-router'
 import { backWithinFlow } from '../instruction-navigation'
@@ -59,11 +60,7 @@ function proceed() {
           v-for="item in view.instructions.items",
           :key="item.id"
         ) {{ item.text }}
-  footer(class="sticky bottom-0 z-20 mt-auto flex flex-col gap-4 bg-canvas p-4 pb-[max(1rem,env(safe-area-inset-bottom))]")
-    div(
-      aria-hidden="true",
-      class="pointer-events-none absolute inset-x-0 bottom-full h-6 bg-linear-to-b from-transparent to-canvas"
-    )
+  PageActions(class="flex flex-col gap-4")
     button(
       type="button",
       class="ui-button w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:opacity-40",

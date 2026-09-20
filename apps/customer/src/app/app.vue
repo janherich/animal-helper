@@ -19,11 +19,28 @@ import { computed } from 'vue'
 import { contactFixtures } from './pages/fixtures/contacts'
 import { selfHelpFixture } from './pages/fixtures/self-help'
 import { holdScreenHeight, screenEntered, clearScreenScroll } from '@/providers/router/transition-scroll'
+import { focusPageContent } from '@/providers/router/navigation-focus'
 onUnmounted(clearScreenScroll)
 
 usePageScrollbars()
 const route = useRoute()
 const router = useRouter()
+let pendingPageFocus = false
+const stopNavigationFocus = router.afterEach((to, from, failure) => {
+  if (failure || !from.matched.length || to.path === from.path) return
+  if (to.matched.at(-1)?.components?.default === from.matched.at(-1)?.components?.default) {
+    const previousControl = document.activeElement
+    void nextTick(() => focusPageContent(previousControl))
+  } else pendingPageFocus = true
+})
+onUnmounted(stopNavigationFocus)
+function pageTransitionFinished() {
+  completionPageReady.value = true
+  if (pendingPageFocus) {
+    pendingPageFocus = false
+    focusPageContent()
+  }
+}
 const completionElapsed = ref(false)
 const completionPageReady = ref(false)
 async function navigateUnderCompletion() {
@@ -219,7 +236,7 @@ onUnmounted(() => {
           mode="out-in",
           @before-leave="holdScreenHeight",
           @enter="screenEntered",
-          @after-enter="completionPageReady = true"
+          @after-enter="pageTransitionFinished"
         )
           component(
             :is="Component",

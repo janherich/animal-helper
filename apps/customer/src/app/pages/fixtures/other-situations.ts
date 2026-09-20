@@ -3,7 +3,8 @@ import { patrolFixture } from './contacts'
 import { policeFailedFixture, type CrueltyFollowupView } from './cruelty-followup'
 import type { InstructionsView } from './instructions'
 
-export const otherSituationFixture = {
+import type { OtherSituationView } from '../../contracts/other-situation'
+export const otherSituationFixture: OtherSituationView = {
   screen: 'W32',
   locale: 'sk',
   layout: { showMenu: false },

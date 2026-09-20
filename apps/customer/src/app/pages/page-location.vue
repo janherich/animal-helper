@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { autoUpdate, offset, shift, size, useFloating } from '@floating-ui/vue'
-import { computed, nextTick, onUnmounted, ref, watch, useId } from 'vue'
-import { scrollActiveOption } from '@/libs/scroll-active-option'
+import PageActions from '../components/page-actions.vue'
+import PageIntro from '../components/page-intro.vue'
+import { computed, onUnmounted, ref, watch, useId } from 'vue'
+import { useAutocomplete } from '@/libs/use-autocomplete'
 import { useRouter } from 'vue-router'
 import type { LocationPoint, LocationView } from './fixtures/location'
 import { previewSession } from '../preview-flow'
@@ -10,31 +11,8 @@ import { backWithinFlow } from '../instruction-navigation'
 const props = defineProps<{ view: LocationView }>()
 const router = useRouter()
 const query = ref('')
-const search = ref<HTMLElement>()
-const results = ref<HTMLElement>()
-const focused = ref(false)
-const activeIndex = ref(-1)
 const resultsId = useId()
-const open = computed(() => focused.value && !!query.value && !selected.value)
-const { floatingStyles } = useFloating(search, results, {
-  open,
-  placement: 'bottom-start',
-  strategy: 'fixed',
-  middleware: [
-    offset(6),
-    shift({ padding: 8 }),
-    size({
-      padding: 8,
-      apply({ rects, availableHeight, elements }) {
-        Object.assign(elements.floating.style, {
-          width: `${rects.reference.width}px`,
-          maxHeight: `${Math.max(0, Math.min(280, availableHeight))}px`
-        })
-      }
-    })
-  ],
-  whileElementsMounted: autoUpdate
-})
+
 const selected = ref<LocationPoint | undefined>(previewSession.value?.location)
 const locating = ref(false)
 const message = ref('')
@@ -47,6 +25,20 @@ const normalized = (value: string) =>
 const matches = computed(() =>
   props.view.places.filter(place => normalized(place.title + ' ' + place.detail).includes(normalized(query.value)))
 )
+const {
+  setAnchor,
+  setResults,
+  focused,
+  activeIndex: activeIndex,
+  open,
+  floatingStyles,
+  keydown: onSearchKeydown
+} = useAutocomplete({
+  query,
+  matches,
+  enabled: () => !selected.value,
+  select: selectPlace
+})
 function titleParts(title: string) {
   const needle = normalized(query.value)
   const index = normalized(title).indexOf(needle)
@@ -58,7 +50,6 @@ function titleParts(title: string) {
   }
 }
 watch(query, () => {
-  activeIndex.value = -1
   selected.value = undefined
   message.value = ''
   requestId++
@@ -70,31 +61,6 @@ function selectPlace(place: LocationPoint) {
   locating.value = false
   selected.value = place
   message.value = ''
-}
-async function onSearchKeydown(event: KeyboardEvent) {
-  if (event.isComposing) return
-  if (event.key === 'Escape') {
-    focused.value = false
-    activeIndex.value = -1
-  } else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-    event.preventDefault()
-    focused.value = true
-    const count = matches.value.length
-    if (count) {
-      activeIndex.value =
-        activeIndex.value < 0
-          ? event.key === 'ArrowDown'
-            ? 0
-            : count - 1
-          : (activeIndex.value + (event.key === 'ArrowDown' ? 1 : -1) + count) % count
-      await nextTick()
-      scrollActiveOption(results.value, activeIndex.value)
-    }
-  } else if (event.key === 'Enter' && open.value && activeIndex.value >= 0) {
-    event.preventDefault()
-    const place = matches.value[activeIndex.value]
-    if (place) selectPlace(place)
-  }
 }
 function locate() {
   const token = ++requestId
@@ -143,36 +109,18 @@ onUnmounted(() => {
 
 <template lang="pug">
 .customer-location(:lang="view.locale")
-  .customer-location__back(class="px-4 pt-5 pb-1")
-    button(
-      type="button",
-      class="mb-4 flex min-h-11 items-center gap-1 font-form text-back text-primary",
-      :disabled="!view.allowedActions.includes('back')",
-      @click="goBack"
-    )
-      base-icon(name="back")
-      span {{ view.props.back }}
-    hr(class="border-primary-light")
-  .customer-location__steps(class="px-4 pt-4 pb-2")
-    .customer-location__progress(
-      class="progress-track h-2 overflow-hidden rounded bg-primary-light",
-      role="progressbar",
-      :aria-label="view.props.step",
-      :aria-valuenow="view.props.progress",
-      :aria-valuemin="0",
-      :aria-valuemax="100"
-    )
-      .customer-location__progress-fill(
-        class="h-full rounded bg-primary-gradient",
-        :style="{ width: `${view.props.progress}%` }"
-      )
-    p(class="mt-1 font-form text-body font-normal") {{ view.props.step }}
-  header(class="px-5 pt-5 pb-3")
-    h1(class="mb-1 text-heading-1") {{ view.props.title }}
-    p {{ view.props.description }}
+  PageIntro(
+    :back="view.props.back",
+    :back-disabled="!view.allowedActions.includes('back')",
+    :step="view.props.step",
+    :progress="view.props.progress",
+    :title="view.props.title",
+    :description="view.props.description",
+    @back="goBack"
+  )
   .customer-location__selector(class="flex flex-col gap-3.5 bg-surface px-4 py-5 [@media(width>640px)]:rounded-control")
     .customer-location__search(
-      ref="search",
+      :ref="setAnchor",
       class="flex items-center gap-2 rounded-control border border-primary px-3 py-1 shadow-[0_2px_6px_rgb(37_42_49/16%)]"
     )
       base-icon(
@@ -211,7 +159,7 @@ onUnmounted(() => {
       ul.customer-location__results(
         v-if="open",
         :id="resultsId",
-        ref="results",
+        :ref="setResults",
         role="listbox",
         :style="floatingStyles",
         :aria-label="view.props.results",
@@ -282,13 +230,10 @@ onUnmounted(() => {
       v-if="selected",
       class="rounded-control bg-primary-light p-3 text-primary"
     ) {{ view.props.selected }}: {{ selected.label }} ({{ selected.lat.toFixed(5) }}, {{ selected.lng.toFixed(5) }})
-  .customer-location__actions(
-    class="sticky bottom-0 z-20 mt-auto shrink-0 bg-canvas p-4 pb-[max(1rem,env(safe-area-inset-bottom))]"
+  PageActions.customer-location__actions(
+    as="div",
+    class="shrink-0"
   )
-    div(
-      aria-hidden="true",
-      class="pointer-events-none absolute inset-x-0 bottom-full h-6 bg-linear-to-b from-transparent to-canvas"
-    )
     button(
       type="button",
       class="ui-button w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:cursor-not-allowed disabled:opacity-50",

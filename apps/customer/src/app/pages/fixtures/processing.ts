@@ -1,5 +1,6 @@
 // Presentation-only fixture; replace the simulated operation when the API is ready.
-export const processingFixture = {
+import type { ProcessingView } from '../../contracts/forms'
+export const processingFixture: ProcessingView = {
   screen: 'W41',
   thresholdMs: 600,
   demoDurationMs: 4000,

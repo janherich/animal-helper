@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageActions from '../components/page-actions.vue'
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import HelpText from '../components/help-text.vue'
@@ -184,14 +185,10 @@ function act(action: InstructionAction) {
             :key="item.id"
           )
             HelpText(:content="item.content")
-  footer(
+  PageActions(
     v-if="view.footerActions.length",
-    class="sticky bottom-0 z-20 mt-auto flex flex-col gap-4 bg-canvas p-4 pb-[max(1rem,env(safe-area-inset-bottom))]"
+    class="flex flex-col gap-4"
   )
-    div(
-      aria-hidden="true",
-      class="pointer-events-none absolute inset-x-0 bottom-full h-6 bg-linear-to-b from-transparent to-canvas"
-    )
     button(
       v-for="action in view.footerActions",
       :key="action.id",

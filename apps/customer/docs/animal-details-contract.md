@@ -1,5 +1,8 @@
 # Step 3 — draft presentation contract (not an API)
 
+Types are declared independently in `src/app/contracts/forms.ts`; fixtures are checked against those types rather than
+defining them through inference. These are compile-time presentation types, not runtime validation of server responses.
+
 One `page-animal-details.vue` renders the W09 family. Figma variants are states/data, not independent implementations.
 W40 edits identification via global leaf search, media, or manual selection. Successful manual/search selection returns
 to W09. Answers remain in the in-memory session when editing identification. The backend must later decide which answers

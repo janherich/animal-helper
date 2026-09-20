@@ -1,19 +1,16 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, useId, watch } from 'vue'
-import { autoUpdate, offset, shift, size, useFloating } from '@floating-ui/vue'
+import PageActions from '../components/page-actions.vue'
+import PageIntro from '../components/page-intro.vue'
+import { computed, ref, useId, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { scrollActiveOption } from '@/libs/scroll-active-option'
-import { previewSession } from '../preview-flow'
+import { useAutocomplete } from '@/libs/use-autocomplete'
+import { previewSession, confirmAnimalIdentification } from '../preview-flow'
 import { catalogueAnimals, searchAnimals, normalizeAnimalSearch, type CatalogueAnimal } from '../animal-catalogue'
 import type { AnimalGroupsView } from './fixtures/animal-groups'
 
 const props = defineProps<{ view: AnimalGroupsView }>()
 const router = useRouter()
-const search = ref<HTMLElement>()
-const results = ref<HTMLElement>()
 const resultsId = useId()
-const focused = ref(false)
-const activeIndex = ref(-1)
 const query = ref('')
 const path = ref<string[]>([...(previewSession.value?.animalIdentification?.path ?? [])])
 const cardTransition = ref('animal-forward')
@@ -60,16 +57,6 @@ function restartSelection() {
   resetSelection()
   path.value = []
 }
-function syncPath() {
-  const session = previewSession.value
-  if (!session) return
-  session.animalPath = [...path.value]
-  if (path.value[0]) session.animalGroup = path.value[0]
-  else delete session.animalGroup
-  if (path.value[1]) session.animalCategory = path.value[1]
-  else delete session.animalCategory
-  delete session.animalSpecies
-}
 function resetSelection() {
   searchFirst.value = ''
   choice.value = ''
@@ -82,21 +69,15 @@ function confirm() {
   const session = previewSession.value
   if (!session || !props.view.allowedActions.includes('confirm') || !choice.value) return
   if (choice.value === 'other' && !description.value.trim()) return
-  syncPath()
-  const selectedKind = choice.value === 'unknown' ? 'unknown' : choice.value === 'other' ? 'other' : 'species'
-  if (selectedKind === 'species') session.animalSpecies = choice.value
-  session.animalIdentification = {
-    kind: selectedKind,
-    ...(session.animalGroup ? { groupId: session.animalGroup } : {}),
-    path: [...path.value],
-    ...(path.value[1] ? { categoryId: path.value[1] } : {}),
-    ...(selectedKind === 'species' ? { speciesId: choice.value } : {}),
-    ...(selectedKind === 'other' ? { description: description.value.trim() } : {})
-  }
+  const context = { path: [...path.value] }
+  confirmAnimalIdentification(
+    choice.value === 'unknown'
+      ? { ...context, kind: 'unknown' }
+      : choice.value === 'other'
+        ? { ...context, kind: 'other', description: description.value.trim() }
+        : { ...context, kind: 'species', speciesId: choice.value }
+  )
   completed.value = true
-  session.editingAnimal = false
-  session.identificationFailed = false
-  session.adviceReady = false
   void router.push({ name: props.view.confirmTarget })
 }
 function selectCard(id: string) {
@@ -112,28 +93,20 @@ function selectCard(id: string) {
   }
 }
 const matches = computed(() => searchAnimals(animals.value, query.value))
-const open = computed(() => focused.value && !!query.value.trim() && props.view.allowedActions.includes('search'))
-const { floatingStyles } = useFloating(search, results, {
+
+const {
+  setAnchor,
+  setResults,
+  focused,
+  activeIndex: activeIndex,
   open,
-  placement: 'bottom-start',
-  strategy: 'fixed',
-  middleware: [
-    offset(6),
-    shift({ padding: 8 }),
-    size({
-      padding: 8,
-      apply({ rects, availableHeight, elements }) {
-        Object.assign(elements.floating.style, {
-          width: `${rects.reference.width}px`,
-          maxHeight: `${Math.max(0, Math.min(280, availableHeight))}px`
-        })
-      }
-    })
-  ],
-  whileElementsMounted: autoUpdate
-})
-watch(query, () => {
-  activeIndex.value = -1
+  floatingStyles,
+  keydown: onSearchKeydown
+} = useAutocomplete({
+  query,
+  matches,
+  enabled: () => props.view.allowedActions.includes('search'),
+  select: selectAnimal
 })
 function titleParts(label: string) {
   const needle = normalizeAnimalSearch(query.value.trim())
@@ -153,31 +126,6 @@ function selectAnimal(animal: CatalogueAnimal) {
   choice.value = animal.id
   searchFirst.value = animal.id
 }
-async function onSearchKeydown(event: KeyboardEvent) {
-  if (event.isComposing) return
-  if (event.key === 'Escape') {
-    focused.value = false
-    activeIndex.value = -1
-  } else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-    event.preventDefault()
-    focused.value = true
-    const count = matches.value.length
-    if (count) {
-      activeIndex.value =
-        activeIndex.value < 0
-          ? event.key === 'ArrowDown'
-            ? 0
-            : count - 1
-          : (activeIndex.value + (event.key === 'ArrowDown' ? 1 : -1) + count) % count
-      await nextTick()
-      scrollActiveOption(results.value, activeIndex.value)
-    }
-  } else if (event.key === 'Enter' && open.value && activeIndex.value >= 0) {
-    event.preventDefault()
-    const animal = matches.value[activeIndex.value]
-    if (animal) selectAnimal(animal)
-  }
-}
 function goBack() {
   if (!props.view.allowedActions.includes('back')) return
   void router.push({ name: props.view.backTarget })
@@ -191,38 +139,20 @@ function goBack() {
 )
   .customer-animal-groups__content(class="flex-1")
     .customer-animal-groups__top
-      .customer-animal-groups__back(class="px-4 pt-5 pb-1")
-        button(
-          type="button",
-          class="mb-4 flex min-h-11 items-center gap-1 font-form text-back text-primary",
-          :disabled="!view.allowedActions.includes('back')",
-          @click="goBack"
-        )
-          base-icon(name="back")
-          span {{ view.props.back }}
-        hr(class="border-primary-light")
-      .customer-animal-groups__steps(class="px-4 pt-4 pb-2")
-        .customer-animal-groups__progress(
-          class="progress-track h-2 overflow-hidden rounded bg-primary-light",
-          role="progressbar",
-          :aria-label="view.props.step",
-          :aria-valuenow="view.props.progress",
-          aria-valuemin="0",
-          aria-valuemax="100"
-        )
-          div(
-            class="h-full rounded bg-primary-gradient",
-            :style="{ width: view.props.progress + '%' }"
-          )
-        p(class="mt-1 font-form text-body font-normal") {{ view.props.step }}
-      header(class="px-5 pt-5 pb-3")
-        h1(class="mb-1 text-heading-1") {{ heading }}
-        p {{ intro }}
+      PageIntro(
+        :back="view.props.back",
+        :back-disabled="!view.allowedActions.includes('back')",
+        :step="view.props.step",
+        :progress="view.props.progress",
+        :title="heading",
+        :description="intro",
+        @back="goBack"
+      )
       div(class="px-4 py-2")
         hr(class="border-primary-light")
       .customer-animal-groups__search(class="flex items-center gap-2 px-4 pt-2 pb-2")
         div(
-          ref="search",
+          :ref="setAnchor",
           class="flex min-h-11 min-w-0 flex-1 items-center gap-2 rounded-control border border-primary bg-surface pr-1 pl-3 shadow-md"
         )
           base-icon(
@@ -263,7 +193,7 @@ function goBack() {
           ul.customer-animal-groups__results(
             v-if="open",
             :id="resultsId",
-            ref="results",
+            :ref="setResults",
             role="listbox",
             :aria-label="view.props.results",
             :style="floatingStyles",
@@ -341,13 +271,10 @@ function goBack() {
       role="status",
       class="px-4 py-3 text-center text-primary"
     ) {{ view.copy.completed }}
-  .customer-animal-groups__actions(
-    class="sticky bottom-0 z-20 mt-auto flex shrink-0 flex-col gap-3 bg-canvas p-4 pb-[max(1rem,env(safe-area-inset-bottom))]"
+  PageActions.customer-animal-groups__actions(
+    as="div",
+    class="flex shrink-0 flex-col gap-3"
   )
-    div(
-      aria-hidden="true",
-      class="pointer-events-none absolute inset-x-0 bottom-full h-6 bg-linear-to-b from-transparent to-canvas"
-    )
     fieldset.customer-animal-groups__other(class="rounded-control border border-primary-light bg-surface p-4")
       legend(class="px-1 font-semibold") {{ view.copy.alternatives }}
       label(class="flex items-center gap-2")

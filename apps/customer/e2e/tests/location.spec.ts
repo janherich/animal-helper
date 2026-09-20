@@ -26,7 +26,7 @@ test('guards direct entry and previews location selection without submitting', a
   await page.getByRole('button', { name: 'Zviera je zranené', exact: true }).click()
   await expect(page).toHaveURL(/\/w03$/)
   expect(await page.locator('.customer-app__header').boundingBox()).toEqual(homeHeader)
-  const back = await page.locator('.customer-location__back button').boundingBox()
+  const back = await page.getByRole('button', { name: 'Späť', exact: true }).boundingBox()
   expect(homeTitle!.y + homeTitle!.height / 2).toBeCloseTo(back!.y + back!.height / 2, 1)
   await expect(page.locator('.customer-location__selector')).toHaveCSS('border-top-left-radius', '0px')
   await page.setViewportSize({ width: 1280, height: 900 })

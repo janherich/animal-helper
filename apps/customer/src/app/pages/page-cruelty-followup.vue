@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageActions from '../components/page-actions.vue'
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { backWithinFlow } from '../instruction-navigation'
@@ -88,11 +89,7 @@ function proceed(action: CrueltyFollowupView['actions'][number]) {
                 rows="4",
                 class="w-full resize-none rounded-control border border-primary bg-surface p-3 placeholder:text-muted focus:shadow-[inset_0_0_0_1px_var(--color-primary)] focus:outline-none"
               )
-  footer(class="sticky bottom-0 z-20 mt-auto flex flex-col gap-4 bg-canvas p-4 pb-[max(1rem,env(safe-area-inset-bottom))]")
-    div(
-      aria-hidden="true",
-      class="pointer-events-none absolute inset-x-0 bottom-full h-6 bg-linear-to-b from-transparent to-canvas"
-    )
+  PageActions(class="flex flex-col gap-4")
     button(
       v-for="action in view.actions",
       :key="action.target",

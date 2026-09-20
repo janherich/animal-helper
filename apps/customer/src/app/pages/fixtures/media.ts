@@ -1,6 +1,8 @@
+import type { MediaView } from '../../contracts/forms'
+export type { MediaView } from '../../contracts/forms'
 // Temporary presentation contract and local limits, pending backend agreement.
 import { processingFixture } from './processing'
-export const mediaFixture = {
+export const mediaFixture: MediaView = {
   screen: 'W04',
   locale: 'sk',
   layout: { showMenu: false },
@@ -43,4 +45,3 @@ export const mediaFixture = {
     unsupportedPreview: 'Náhľad tohto súboru sa nepodarilo zobraziť.'
   }
 }
-export type MediaView = typeof mediaFixture

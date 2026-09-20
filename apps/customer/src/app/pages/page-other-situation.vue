@@ -2,10 +2,10 @@
 import { useRouter } from 'vue-router'
 import { beginPreview, previewSession } from '../preview-flow'
 import { backWithinFlow } from '../instruction-navigation'
-import type { otherSituationFixture } from './fixtures/other-situations'
-defineProps<{ view: typeof otherSituationFixture }>()
+import type { OtherSituationView, OtherSituationChoice } from '../contracts/other-situation'
+defineProps<{ view: OtherSituationView }>()
 const router = useRouter()
-function choose(choice: (typeof otherSituationFixture.choices)[number]) {
+function choose(choice: OtherSituationChoice) {
   // A changed branch starts a fresh local draft; same-branch back preserves it.
   if (previewSession.value?.otherSituation !== choice.id) beginPreview('other')
   if (previewSession.value) previewSession.value.otherSituation = choice.id
