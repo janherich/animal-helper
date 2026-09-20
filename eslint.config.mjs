@@ -16,7 +16,6 @@ export default defineConfig(
       "**/test-results/**",
       "**/playwright-report/**",
       "apps/backoffice/**/*.vue",
-      "apps/customer-backup/**",
     ],
   },
   {

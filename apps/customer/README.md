@@ -57,8 +57,8 @@ serve index.html for unknown URLs to support Vue Router history mode.
 | `src/types`     | Global component declarations                                      |
 
 Create additional folders only when needed. The `@` alias points to `src`. Pinia, i18n, API clients, form libraries, PWA
-and server-driven navigation are intentionally absent. VueUse core is available. The previous implementation lives in
-`../customer-backup`; never import runtime code from that reference archive.
+and live server-driven navigation are intentionally absent. VueUse core is available. The previous implementation is
+available in Git history; the current preview flows are described in [fixture-flow.md](docs/fixture-flow.md).
 
 ## Component conventions
 
