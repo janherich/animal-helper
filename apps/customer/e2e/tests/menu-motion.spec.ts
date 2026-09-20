@@ -1,0 +1,23 @@
+import { expect, test } from '@playwright/test'
+
+test('keeps menu modal during its exit and restores focus afterwards', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
+  await page.goto('/')
+  const trigger = page.getByRole('button', { name: 'Otvoriť menu' })
+  await trigger.click()
+  const drawer = page.locator('.customer-app__drawer')
+  await expect(drawer).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, 0)')
+  await page.keyboard.press('Escape')
+  const dialog = page.locator('#app-menu')
+  await expect(dialog).toHaveClass(/is-closing/)
+  await expect(dialog).toHaveAttribute('open', '')
+  await expect(drawer).toHaveCSS('animation-name', /drawer-exit/)
+  const backdrop = await dialog.evaluate(el => getComputedStyle(el, '::backdrop').animationName)
+  expect(backdrop).toContain('backdrop-exit')
+  await expect(dialog).toBeHidden()
+  await expect(trigger).toBeFocused()
+  await trigger.click()
+  await expect(dialog).not.toHaveClass(/is-closing/)
+  await dialog.getByRole('button', { name: 'Zatvoriť menu' }).click()
+  await expect(dialog).toBeHidden()
+})

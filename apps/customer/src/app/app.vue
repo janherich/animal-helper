@@ -58,17 +58,28 @@ const starting = ref(true)
 const menu = ref<HTMLDialogElement>()
 const menuTrigger = ref<HTMLButtonElement>()
 const menuOpen = ref(false)
+const menuClosing = ref(false)
+let menuCloseTimer: ReturnType<typeof setTimeout> | undefined
 const notice = ref('')
 const body = ref<HTMLElement | null>(null)
 const scrollLocked = useScrollLock(body)
 let splashTimer: ReturnType<typeof setTimeout> | undefined
 function openMenu() {
+  clearTimeout(menuCloseTimer)
+  menuClosing.value = false
   menu.value?.showModal()
   menuOpen.value = true
   scrollLocked.value = true
 }
 function closeMenu() {
-  menu.value?.close()
+  if (!menu.value?.open || menuClosing.value) return
+  if (reducedMotion.value === 'reduce') {
+    menu.value.close()
+    return
+  }
+  menuClosing.value = true
+  // Keep the native modal and scroll lock until both exit animations finish.
+  menuCloseTimer = setTimeout(() => menu.value?.close(), 380)
 }
 function onMenuKeydown(event: KeyboardEvent) {
   if (event.key !== 'Tab') return
@@ -85,6 +96,8 @@ function onMenuKeydown(event: KeyboardEvent) {
   }
 }
 function onMenuClosed() {
+  clearTimeout(menuCloseTimer)
+  menuClosing.value = false
   menuOpen.value = false
   scrollLocked.value = false
   menuTrigger.value?.focus({ preventScroll: true })
@@ -107,6 +120,7 @@ onMounted(() => {
 })
 onUnmounted(() => {
   clearTimeout(splashTimer)
+  clearTimeout(menuCloseTimer)
   menu.value?.close()
   scrollLocked.value = false
 })
@@ -190,11 +204,13 @@ onUnmounted(() => {
     ref="menu",
     class="fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none overflow-hidden border-0 bg-transparent p-0 text-ink",
     :aria-label="shell.props.menu",
+    :class="{ 'is-closing': menuClosing }",
+    @cancel.prevent="closeMenu",
     @click.self="closeMenu",
     @keydown="onMenuKeydown",
     @close="onMenuClosed"
   )
-    .customer-app__drawer(class="flex h-full w-[calc(100%-48px)] max-w-[324px] flex-col overflow-hidden bg-surface")
+    .customer-app__drawer(class="flex h-full w-[calc(100%-48px)] max-w-[324px] flex-col overflow-hidden rounded-r-control bg-surface")
       .customer-app__drawer-header(
         class="flex shrink-0 items-center justify-between border-b border-primary-light px-[15px] pt-[max(16px,env(safe-area-inset-top))] pb-5"
       )
@@ -275,6 +291,10 @@ onUnmounted(() => {
 .customer-app__menu::backdrop {
   background: rgb(37 42 49 / 80%);
 }
+.customer-app__drawer {
+  /* Extend the surface beyond the viewport during the small rightward overshoot. */
+  box-shadow: -12px 0 0 var(--color-surface);
+}
 @media (prefers-reduced-motion: no-preference) {
   .screen-enter-active {
     transition:
@@ -293,10 +313,37 @@ onUnmounted(() => {
     opacity: 0;
   }
   .customer-app__menu[open] .customer-app__drawer {
-    animation: drawer-enter 300ms cubic-bezier(0.22, 1, 0.36, 1);
+    animation: drawer-enter 460ms both;
   }
   .customer-app__menu[open]::backdrop {
     animation: backdrop-enter 150ms ease-out;
+  }
+  .customer-app__menu[open].is-closing .customer-app__drawer {
+    animation: drawer-exit 360ms forwards;
+  }
+  .customer-app__menu[open].is-closing::backdrop {
+    animation: backdrop-exit 360ms ease-in forwards;
+  }
+  @keyframes drawer-exit {
+    from {
+      transform: translateX(0);
+      animation-timing-function: ease-out;
+    }
+    25% {
+      transform: translateX(6px);
+      animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  }
+  @keyframes backdrop-exit {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
   }
   @keyframes backdrop-enter {
     from {
@@ -309,6 +356,11 @@ onUnmounted(() => {
   @keyframes drawer-enter {
     from {
       transform: translateX(-100%);
+      animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    72% {
+      transform: translateX(6px);
+      animation-timing-function: cubic-bezier(0.2, 0, 0.2, 1);
     }
     to {
       transform: translateX(0);
