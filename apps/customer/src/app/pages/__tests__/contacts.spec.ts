@@ -8,7 +8,9 @@ import {
   policeFixture,
   safeContactHref
 } from '../fixtures/contacts'
+import { selfHelpFixture } from '../fixtures/self-help'
 import PageContacts from '../page-contacts.vue'
+import PageInstructions from '../page-instructions.vue'
 const push = vi.hoisted(() => vi.fn())
 vi.mock('vue-router', () => ({ useRouter: () => ({ push }) }))
 
@@ -20,7 +22,7 @@ it('renders every fixture variant and repeated cards without live example links'
     expect(wrapper.findAll('.customer-contact-card')).toHaveLength(
       view.blocks.filter(block => block.kind === 'contact').length
     )
-    expect(wrapper.findAll('a')).toHaveLength(0)
+    expect(wrapper.findAll('a[href^="tel:"]')).toHaveLength(0)
   }
   await wrapper.setProps({ view: clinicFixture })
   expect(wrapper.findAll('.customer-contact-card')).toHaveLength(3)
@@ -36,6 +38,31 @@ it('renders every fixture variant and repeated cards without live example links'
   await wrapper.setProps({ view: { ...municipalityFixture, allowedActions: [] } })
   expect(wrapper.find('[role=status]').exists()).toBe(false)
   expect(wrapper.findAll('button').every(button => button.attributes('disabled') !== undefined)).toBe(true)
+})
+
+it('combines all instruction blocks and renders only the ordered footer actions supplied by data', async () => {
+  const wrapper = mount(PageInstructions, {
+    props: {
+      view: {
+        ...contactFixtures[0]!,
+        blocks: [...contactFixtures[0]!.blocks, ...selfHelpFixture.blocks],
+        footerActions: [{ id: 'unresolved', label: 'Custom next step', appearance: 'secondary', target: 'W25' }],
+        allowedActions: ['back', 'unresolved']
+      }
+    },
+    global: { components: { BaseIcon } }
+  })
+  expect(wrapper.findAll('.customer-contact-card')).toHaveLength(6)
+  expect(wrapper.findAll('figure')).toHaveLength(4)
+  expect(wrapper.find('ol').exists()).toBe(true)
+  expect(wrapper.find('.bg-danger-light').exists()).toBe(true)
+  expect(wrapper.find('.bg-warning').exists()).toBe(true)
+  expect(wrapper.findAll('footer button')).toHaveLength(1)
+  expect(wrapper.get('footer button').text()).toBe('Custom next step')
+  await wrapper.get('footer button').trigger('click')
+  expect(push).toHaveBeenLastCalledWith({ name: 'W25' })
+  await wrapper.setProps({ view: { ...municipalityFixture, footerActions: [] } })
+  expect(wrapper.findAll('footer button')).toHaveLength(0)
 })
 
 it('supports localized, ordered server content and safe links', () => {

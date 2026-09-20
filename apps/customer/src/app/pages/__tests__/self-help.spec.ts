@@ -1,6 +1,7 @@
 import BaseIcon from '@/libs/components/base-icon.vue'
 import { mount } from '@vue/test-utils'
 import { expect, it, vi } from 'vitest'
+import HelpImage from '../../components/help-image.vue'
 import HelpText from '../../components/help-text.vue'
 import { previewSession } from '../../preview-flow'
 import { municipalityFixture } from '../fixtures/contacts'
@@ -8,7 +9,7 @@ import { selfHelpFixture } from '../fixtures/self-help'
 import PageContacts from '../page-contacts.vue'
 import PageSelfHelp from '../page-self-help.vue'
 const push = vi.hoisted(() => vi.fn())
-vi.mock('vue-router', () => ({ useRouter: () => ({ push }) }))
+vi.mock('vue-router', () => ({ useRouter: () => ({ push, replace: push }) }))
 
 it('opens self help through a data-defined action and returns to the source', async () => {
   previewSession.value = { situation: 'test', fromDraft: false }
@@ -24,8 +25,11 @@ it('opens self help through a data-defined action and returns to the source', as
   expect(page.findAll('ul li')).toHaveLength(1)
   expect(page.find('.bg-danger-light').exists()).toBe(true)
   expect(page.find('.bg-warning-light').exists()).toBe(true)
+  expect(page.findAll('figure')).toHaveLength(4)
+  expect(page.findAll('img')).toHaveLength(3)
+  expect(page.get('a').attributes('href')).toBe('https://openmoji.org/')
   await page.get('button').trigger('click')
-  expect(push).toHaveBeenLastCalledWith({ name: 'W18' })
+  expect(push).toHaveBeenLastCalledWith({ name: 'W15' })
   await page.get('footer button').trigger('click')
   expect(push).toHaveBeenLastCalledWith({ name: 'W24' })
   expect(previewSession.value?.thankYouReturnTarget).toBe('W22')
@@ -34,6 +38,31 @@ it('opens self help through a data-defined action and returns to the source', as
   await page.setProps({ view: { ...selfHelpFixture, allowedActions: [] } })
   expect(page.findAll('button').every(button => button.attributes('disabled') !== undefined)).toBe(true)
   previewSession.value = null
+})
+
+it('handles missing, unsafe and failed image sources and recovers on source change', async () => {
+  const image = mount(HelpImage, {
+    props: { image: { id: 'test', alt: 'Test illustration', caption: 'Caption', src: 'javascript:alert(1)' } },
+    global: { components: { BaseIcon } }
+  })
+  expect(image.find('img').exists()).toBe(false)
+  expect(image.get('[role="img"]').attributes('aria-label')).toBe('Test illustration')
+  await image.setProps({
+    image: { id: 'test', alt: 'Test illustration', caption: 'Caption', src: 'https://example.org/image.png' }
+  })
+  await image.get('img').trigger('error')
+  expect(image.find('img').exists()).toBe(false)
+  await image.setProps({ image: { id: 'test', alt: 'Test illustration', caption: 'Caption', src: '/new-image.png' } })
+  expect(image.get('img').attributes('src')).toBe('/new-image.png')
+  for (const src of [
+    '//example.org/image.png',
+    'data:image/svg+xml,test',
+    'https://user:pass@example.org/image.png',
+    '/\\example.org/image.png'
+  ]) {
+    await image.setProps({ image: { id: 'test', alt: 'Test', caption: 'Caption', src } })
+    expect(image.find('img').exists()).toBe(false)
+  }
 })
 
 it('renders formatted text without interpreting HTML or unsafe URLs', () => {

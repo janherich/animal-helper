@@ -33,6 +33,15 @@ test('details and edit identification round trip preserve answers', async ({ pag
   await expect(page.getByRole('heading', { name: 'Pomôžte sami', exact: true })).toBeVisible()
   await expect(page.locator('.customer-self-help ol li')).toHaveCount(2)
   await expect(page.locator('.customer-self-help .bg-danger-light')).toBeVisible()
+  await expect(page.locator('.customer-self-help figure')).toHaveCount(4)
+  for (const image of await page.locator('.customer-self-help figure img').all()) {
+    await image.scrollIntoViewIfNeeded()
+    await expect.poll(() => image.evaluate(node => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0)
+  }
+  await expect(page.getByRole('link', { name: 'OpenMoji', exact: true })).toHaveAttribute(
+    'href',
+    'https://openmoji.org/'
+  )
   await page.screenshot({ path: testInfo.outputPath('self-help-mobile.png'), fullPage: true })
   await page.getByRole('button', { name: 'Rady', exact: true }).click()
   await expect(page.getByRole('dialog', { name: 'Rady na pomoc' })).toBeVisible()
@@ -216,6 +225,18 @@ test('details and edit identification round trip preserve answers', async ({ pag
     await expect(page.locator('.customer-contacts a[href^="tel:"]')).toHaveCount(0)
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
     await page.screenshot({ path: testInfo.outputPath(path.slice(1) + '-contacts.png'), fullPage: true })
+    await expect(page.getByRole('button', { name: 'Nepodarilo sa pomôcť', exact: true })).toHaveCount(0)
+    await expect(page.locator('.customer-contacts figure')).toHaveCount(0)
+    await page.getByRole('button', { name: 'Iné možnosti pomoci', exact: true }).click()
+    await expect(page).toHaveURL(/\/w22$/)
+    const historyLength = await page.evaluate(() => history.length)
+    await page.getByRole('button', { name: 'Späť', exact: true }).click()
+    await expect(page).toHaveURL(new RegExp(path + '$'))
+    expect(await page.evaluate(() => history.length)).toBe(historyLength)
+    await page.goForward()
+    await expect(page).toHaveURL(/\/w22$/)
+    await page.goBack()
+    await expect(page).toHaveURL(new RegExp(path + '$'))
   }
   await expect(page.getByRole('combobox')).toHaveCount(0)
   await expect(page.locator('.customer-contact-notice')).toHaveCount(3)
