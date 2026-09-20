@@ -11,7 +11,7 @@ export type CrueltyFollowupView = {
   actions: { label: string; target: 'W29' | 'W30' | 'W03'; outcome?: 'reported' | 'not-reported'; primary: boolean }[]
 }
 const common = { locale: 'sk', layout: { showMenu: false } }
-const preview = 'Lokálna ukážka. Hovor ani odoslanie prípadu sa nevykonávajú.'
+const preview = 'Lokálna ukážka evidencie prípadu. Odoslanie prípadu zatiaľ nie je zapojené.'
 export const policeResultFixture: CrueltyFollowupView = {
   ...common,
   screen: 'W28',

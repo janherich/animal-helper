@@ -3,13 +3,16 @@ import { previewSession } from '../preview-flow'
 import { useRouter } from 'vue-router'
 import { backWithinFlow } from '../instruction-navigation'
 import type { CrueltyView } from './fixtures/cruelty'
+import { requestMobileCall } from '@/libs/mobile-call'
 const props = defineProps<{ view: CrueltyView }>()
 const router = useRouter()
 function goBack() {
   if (props.view.allowedActions.includes('back')) backWithinFlow(router, props.view.backTarget, ['W01'])
 }
-function callPreview() {
-  if (props.view.allowedActions.includes('call')) void router.push({ name: props.view.actions.call.target })
+function callPolice() {
+  if (!props.view.allowedActions.includes('call')) return
+  requestMobileCall(props.view.actions.call.href)
+  void router.push({ name: props.view.actions.call.target })
 }
 function proceed() {
   if (!props.view.allowedActions.includes('continue')) return
@@ -66,7 +69,7 @@ function proceed() {
       type="button",
       class="w-full rounded-control bg-primary-gradient p-4 text-button text-white shadow-brand disabled:opacity-40",
       :disabled="!view.allowedActions.includes('call')",
-      @click="callPreview"
+      @click="callPolice"
     ) {{ view.actions.call.label }}
     button(
       type="button",

@@ -1,4 +1,4 @@
-// Working server presentation contract. Calling and submission are simulated locally.
+// Working server presentation contract. Mobile calling uses the OS; submission remains local.
 export type CrueltyView = {
   screen: 'W27'
   locale: string
@@ -9,7 +9,7 @@ export type CrueltyView = {
   safety: { title: string; paragraphs: string[] }
   instructions: { title: string; items: { id: string; text: string }[] }
   actions: {
-    call: { label: string; target: 'W28' }
+    call: { label: string; href: string; target: 'W28' }
     continue: { label: string; target: 'W03' }
   }
 }
@@ -24,7 +24,8 @@ export const crueltyFixture: CrueltyView = {
     title: 'Prebieha útok na zviera práve teraz?',
     description: 'Ak niekto pred vami zviera násilne bije, dusí, kope, ťahá za autom alebo naň aktívne útočí,',
     urgent: 'okamžite volajte políciu na číslo 158!',
-    preview: 'Lokálna ukážka. Tlačidlo volania nespustí hovor ani neodošle hlásenie.'
+    preview:
+      'Na mobile tlačidlo otvorí systémové volanie. Na desktope pokračuje na ďalšiu obrazovku. Hlásenie sa zatiaľ neodosiela.'
   },
   safety: {
     title: 'BEZPEČNOSŤ:',
@@ -45,6 +46,7 @@ export const crueltyFixture: CrueltyView = {
   actions: {
     call: {
       label: 'Volať na políciu – 158',
+      href: 'tel:158',
       target: 'W28'
     },
     continue: { label: 'Nejde o akútny prípad', target: 'W03' }
