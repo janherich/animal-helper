@@ -32,5 +32,6 @@ function choose(choice: OtherSituationChoice) {
       type="button",
       class="ui-button w-full rounded-control border border-primary bg-surface p-4 text-button text-primary",
       @click="choose(choice)"
-    ) {{ choice.label }}
+    )
+      span(class="mx-auto block max-w-[40ch] text-balance") {{ choice.label }}
 </template>
