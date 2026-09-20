@@ -5,6 +5,7 @@ import { animalGroupsFixture } from './fixtures/animal-groups'
 </script>
 <template lang="pug">
 PageAnimalDetails(
+  answer-scope="roadDetails",
   :view="roadDetailsFixture",
   :catalogue="animalGroupsFixture.root"
 )

@@ -11,7 +11,14 @@ import { catalogueAnimals } from '../animal-catalogue'
 import { reconcileDetailAnswers } from '../detail-answers'
 import type { AnimalBranch } from './fixtures/animal-groups'
 import type { AnimalDetailsView, DetailQuestion } from './fixtures/animal-details'
-const props = defineProps<{ view: AnimalDetailsView; catalogue: AnimalBranch }>()
+const props = withDefaults(
+  defineProps<{
+    view: AnimalDetailsView
+    catalogue: AnimalBranch
+    answerScope?: 'animalDetails' | 'roadDetails'
+  }>(),
+  { answerScope: 'animalDetails' }
+)
 const router = useRouter()
 const form = ref<HTMLFormElement>()
 const validation = useFormValidation(() => props.view.validation)
@@ -28,7 +35,7 @@ const animalLabel = computed(
       : props.view.copy.unknown)
 )
 const answers = ref(
-  reconcileDetailAnswers(props.view.questions, previewSession.value?.animalDetails ?? {}, props.view.values)
+  reconcileDetailAnswers(props.view.questions, previewSession.value?.[props.answerScope] ?? {}, props.view.values)
 )
 watch(
   () => JSON.stringify(props.view.questions),
@@ -49,7 +56,7 @@ watch(
 watch(
   answers,
   value => {
-    if (previewSession.value) previewSession.value.animalDetails = { ...value }
+    if (previewSession.value) previewSession.value[props.answerScope] = { ...value }
     if (previewSession.value) previewSession.value.adviceReady = false
   },
   { deep: true }
@@ -94,7 +101,7 @@ function confirm() {
     validation.focusFirstError(form.value)
     return
   }
-  previewSession.value.animalDetails = { ...answers.value }
+  previewSession.value[props.answerScope] = { ...answers.value }
   previewSession.value.adviceReady = true
   if (props.view.confirmTarget === 'W39') previewSession.value.thankYouReturnTarget = 'W09'
   void router.push({ name: props.view.confirmTarget })

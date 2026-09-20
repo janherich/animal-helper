@@ -15,6 +15,7 @@ export const previewSession = ref<{
   adviceReady?: boolean
   thankYouReturnTarget?: 'W15' | 'W18' | 'W20' | 'W21' | 'W36' | 'W22' | 'W09'
   animalDetails?: Record<string, string | string[]>
+  roadDetails?: Record<string, string | string[]>
   location?: LocationPoint
   media?: File[]
   animalIdentification?: AnimalIdentification
@@ -37,7 +38,7 @@ export function confirmPreviewLocation(location: LocationPoint) {
     delete session.otherReport
     delete session.documentingOther
     // Road contacts have their own availability guard, independent of adviceReady.
-    if (session.animalDetails) delete session.animalDetails.road
+    delete session.roadDetails
   }
   session.location = { ...location }
 }

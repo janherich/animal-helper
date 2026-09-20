@@ -49,6 +49,22 @@ test('road case skips identification, supports failure details and documents the
   await identify(page)
   await page.getByRole('button', { name: 'Potvrdiť', exact: true }).click()
   await expect(page).toHaveURL(/\/w39$/)
+  // Revisit media through history after W09 has reconciled its empty schema.
+  await page.goBack()
+  await expect(page).toHaveURL(/\/w09$/)
+  await page.goBack()
+  await expect(page).toHaveURL(/\/w06$/)
+  await page.goBack()
+  await expect(page).toHaveURL(/\/w04$/)
+  await page.getByRole('button', { name: 'Späť', exact: true }).click()
+  await expect(page).toHaveURL(/\/w37$/)
+  await expect(page.getByRole('textbox')).toHaveValue('Testovací popis')
+  await expect(page.getByRole('checkbox', { name: 'Nedvihli mi', exact: true })).toBeChecked()
+  await page.getByRole('button', { name: 'Späť', exact: true }).click()
+  await expect(page).toHaveURL(/\/w36$/)
+  await page.getByRole('button', { name: 'Späť', exact: true }).click()
+  await expect(page).toHaveURL(/\/w33$/)
+  await expect(page.getByRole('radio', { name: 'Pohybuje sa na alebo pri diaľnici', exact: true })).toBeChecked()
 })
 
 test('human activity uses identification and situation radios before advice', async ({ page }) => {

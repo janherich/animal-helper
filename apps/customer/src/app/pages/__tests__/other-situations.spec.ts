@@ -1,9 +1,13 @@
 import { mount } from '@vue/test-utils'
 import { beforeEach, expect, it, vi } from 'vitest'
 import { beginPreview, previewSession } from '../../preview-flow'
-import { otherFailedFixture, otherSituationFixture } from '../fixtures/other-situations'
+import { animalGroupsFixture } from '../fixtures/animal-groups'
+import { otherDetailsFixture, otherFailedFixture, otherSituationFixture } from '../fixtures/other-situations'
+import { previewAccess } from '../fixtures/preview-server'
+import PageAnimalDetails from '../page-animal-details.vue'
 import PageCrueltyFollowup from '../page-cruelty-followup.vue'
 import PageOtherSituation from '../page-other-situation.vue'
+import PageRoadDetails from '../page-road-details.vue'
 const push = vi.hoisted(() => vi.fn())
 vi.mock('vue-router', () => ({ useRouter: () => ({ push, replace: vi.fn() }) }))
 beforeEach(() => {
@@ -14,14 +18,43 @@ const global = { stubs: { BaseIcon: true, BaseExpander: { template: '<div><slot 
 
 it('resets stale data on branch change but preserves same-branch answers', async () => {
   previewSession.value!.otherSituation = 'road'
-  previewSession.value!.animalDetails = { road: 'near-highway' }
+  previewSession.value!.roadDetails = { road: 'near-highway' }
   const page = mount(PageOtherSituation, { props: { view: otherSituationFixture }, global })
   await page.findAll('button')[1]!.trigger('click')
-  expect(previewSession.value!.animalDetails).toEqual({ road: 'near-highway' })
+  expect(previewSession.value!.roadDetails).toEqual({ road: 'near-highway' })
   await page.findAll('button')[2]!.trigger('click')
   expect(previewSession.value!.otherSituation).toBe('human')
-  expect(previewSession.value!.animalDetails).toBeUndefined()
+  expect(previewSession.value!.roadDetails).toBeUndefined()
   expect(push).toHaveBeenLastCalledWith({ name: 'W03' })
+})
+
+it('keeps road answers and return access after confirming the documentation form', async () => {
+  const session = previewSession.value!
+  session.otherSituation = 'road'
+  session.location = { lat: 48, lng: 17, label: 'A', source: 'fixture' }
+  const road = mount(PageRoadDetails, { global })
+  await road.get('input[value=other]').setValue(true)
+  await road.get('textarea').setValue('Situácia na ceste')
+  await road.get('form').trigger('submit')
+  const expected = { road: 'other', 'road:other': 'Situácia na ceste' }
+  expect(session.roadDetails).toEqual(expected)
+  expect(session.animalDetails).toBeUndefined()
+  road.unmount()
+
+  const details = mount(PageAnimalDetails, {
+    props: { view: otherDetailsFixture, catalogue: animalGroupsFixture.root },
+    global
+  })
+  await details.get('form').trigger('submit')
+  expect(session.animalDetails).toEqual({})
+  expect(session.roadDetails).toEqual(expected)
+  expect(previewAccess('W37')).toBe(true)
+  details.unmount()
+
+  const restored = mount(PageRoadDetails, { global })
+  expect((restored.get('input[value=other]').element as HTMLInputElement).checked).toBe(true)
+  expect((restored.get('textarea').element as HTMLTextAreaElement).value).toBe('Situácia na ceste')
+  restored.unmount()
 })
 
 it('keeps failure reasons separate from police reporting and omits unchecked Other text', async () => {

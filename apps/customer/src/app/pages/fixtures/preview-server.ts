@@ -49,7 +49,7 @@ export function previewAccess(screen: string): true | { name: string } {
     case 'W33':
       return (isRoadFlow() && located) || home
     case 'W37':
-      return (isRoadFlow() && located && !!session.animalDetails?.road) || home
+      return (isRoadFlow() && located && !!session.roadDetails?.road) || home
     case 'W27':
     case 'W28':
       return session.situation === 'cruelty' || home
@@ -69,7 +69,7 @@ export function previewAccess(screen: string): true | { name: string } {
     case 'W24':
       return (located && (identified || isRoadFlow()) && !!session.adviceReady) || home
     case 'W36':
-      return (isRoadFlow() && located && !!session.animalDetails?.road) || ready || home
+      return (isRoadFlow() && located && !!session.roadDetails?.road) || ready || home
     default:
       return ready || home
   }

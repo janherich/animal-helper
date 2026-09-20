@@ -25,17 +25,21 @@ it('invalidates location-dependent results only when coordinates change', () => 
   const point = { lat: 48, lng: 17, label: 'A', source: 'fixture' as const }
   confirmPreviewLocation(point)
   confirmAnimalIdentification({ kind: 'unknown', path: ['domestic'] })
-  session.animalDetails = { road: 'highway', notes: 'Retain' }
+  session.animalDetails = { notes: 'Retain' }
+  session.roadDetails = { road: 'other', 'road:other': 'Road context' }
   session.adviceReady = true
   session.thankYouReturnTarget = 'W36'
   confirmPreviewLocation({ ...point, label: 'Renamed' })
   expect(session.adviceReady).toBe(true)
+  expect(session.roadDetails).toEqual({ road: 'other', 'road:other': 'Road context' })
   confirmPreviewLocation({ ...point, lat: 49 })
   expect(session.adviceReady).toBe(false)
   expect(session.animalIdentification?.kind).toBe('unknown')
   expect(session.animalDetails).toEqual({ notes: 'Retain' })
+  expect(session.roadDetails).toBeUndefined()
   expect(session.thankYouReturnTarget).toBeUndefined()
   expect(previewAccess('W36')).toEqual({ name: 'W01' })
+  expect(previewAccess('W37')).toEqual({ name: 'W01' })
 })
 it('replaces the complete result and copies its path only at confirmation', () => {
   beginPreview('injured')
