@@ -53,13 +53,25 @@ test('previews local media, preserves it on back and removes it', async ({ page 
     const left = new DOMMatrix(getComputedStyle(element).transform).m41
     animation.currentTime = 1200
     const right = new DOMMatrix(getComputedStyle(element).transform).m41
-    animation.currentTime = 2400
+    animation.currentTime = 3000
     const returned = new DOMMatrix(getComputedStyle(element).transform).m41
     animation.play()
     return { left, right, returned }
   })
-  expect(travel).toEqual({ left: -7, right: 7, returned: -7 })
+  expect(travel).toEqual({ left: -10, right: 10, returned: -10 })
+  await page.locator('.customer-processing__graphic').evaluate(element => {
+    for (const animation of element.getAnimations({ subtree: true })) {
+      animation.pause()
+      animation.currentTime = 2340
+    }
+  })
+  await expect(pupil).toHaveCSS('opacity', '0')
+  await expect(page.locator('.customer-processing__closed')).toHaveCSS('opacity', '1')
+  await expect(page.locator('.customer-processing__eye')).toHaveCSS('opacity', '0')
   await page.emulateMedia({ reducedMotion: 'reduce' })
+  await expect(pupil).toHaveCSS('transform', 'none')
+  await expect(pupil).toHaveCSS('opacity', '1')
+  await expect(page.locator('.customer-processing__closed')).toHaveCSS('opacity', '0')
   await expect(page.getByText('Lokálna ukážka čakania.', { exact: false })).toHaveCount(0)
   await page.screenshot({ path: testInfo.outputPath('media-processing.png'), fullPage: true })
   await expect(page.getByText('Zviera sa nepodarilo identifikovať', { exact: true })).toBeVisible()
