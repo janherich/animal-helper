@@ -146,7 +146,7 @@ onUnmounted(() => {
   .customer-location__back(class="px-4 pt-5 pb-1")
     button(
       type="button",
-      class="mb-4 flex min-h-11 items-center gap-1 text-heading-2 text-primary",
+      class="mb-4 flex min-h-11 items-center gap-1 font-form text-back text-primary",
       :disabled="!view.allowedActions.includes('back')",
       @click="goBack"
     )
@@ -155,7 +155,7 @@ onUnmounted(() => {
     hr(class="border-primary-light")
   .customer-location__steps(class="px-4 pt-4 pb-2")
     .customer-location__progress(
-      class="h-2 overflow-hidden rounded bg-primary-light",
+      class="progress-track h-2 overflow-hidden rounded bg-primary-light",
       role="progressbar",
       :aria-label="view.props.step",
       :aria-valuenow="view.props.progress",
@@ -166,7 +166,7 @@ onUnmounted(() => {
         class="h-full rounded bg-primary-gradient",
         :style="{ width: `${view.props.progress}%` }"
       )
-    p(class="mt-1") {{ view.props.step }}
+    p(class="mt-1 font-form text-body font-normal") {{ view.props.step }}
   header(class="px-5 pt-5 pb-3")
     h1(class="mb-1 text-heading-1") {{ view.props.title }}
     p {{ view.props.description }}

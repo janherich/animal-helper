@@ -25,3 +25,33 @@ test('applies Figma foundations and generates theme utilities', async ({ page })
   )
   expect(fontLoaded).toBe(true)
 })
+
+test('matches audited navigation typography, progress shadow and footer headings', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goto('/')
+  const headings = page.locator('.customer-home__section > summary')
+  await expect(headings).toHaveCount(3)
+  for (const heading of await headings.all()) await expect(heading).toHaveCSS('line-height', '28px')
+  await page.getByRole('button', { name: 'Zviera je zranené', exact: true }).click()
+  async function checkNavigation(step: string) {
+    const back = page.getByRole('button', { name: 'Späť', exact: true })
+    await expect(back).toHaveCSS('font-family', /Inter Variable/)
+    await expect(back).toHaveCSS('font-size', '18px')
+    await expect(back).toHaveCSS('line-height', '26px')
+    await expect(back).toHaveCSS('font-weight', '600')
+    await expect(back).toHaveCSS('letter-spacing', '-0.24px')
+    await expect(page.getByText(step, { exact: true })).toHaveCSS('font-family', /Inter Variable/)
+    await expect(page.getByText(step, { exact: true })).toHaveCSS('line-height', '20px')
+    const track = page.getByRole('progressbar')
+    await expect(track).toHaveCSS('height', '8px')
+    expect(await track.evaluate(el => getComputedStyle(el, '::after').boxShadow)).toBe(
+      'rgba(83, 71, 155, 0.16) 0px 2px 4px 0px inset'
+    )
+  }
+  await checkNavigation('Krok 1 z 4')
+  await page.getByRole('button', { name: 'Ukážková mapa — vybrať Dolné Orešany' }).click()
+  await page.getByRole('button', { name: 'Potvrdiť polohu' }).click()
+  await checkNavigation('Krok 2 z 4')
+  await page.getByRole('button', { name: 'Nemám fotografiu' }).click()
+  await checkNavigation('Krok 2 z 4')
+})

@@ -32,7 +32,7 @@ async function requestAction(id: string) {
       class="mt-2 flex flex-col gap-6 rounded-control bg-surface px-4 pt-6 pb-4 shadow-[0_2px_6px_rgb(37_42_49/16%)]"
     )
       .customer-home__progress(
-        class="h-2 overflow-hidden rounded bg-primary-light shadow-[inset_0_2px_4px_rgb(83_71_155/16%)]",
+        class="progress-track h-2 overflow-hidden rounded bg-primary-light",
         role="progressbar",
         :aria-label="view.props.draft.progressLabel",
         :aria-valuenow="Math.max(0, Math.min(100, view.props.draft.progress))",
@@ -108,7 +108,7 @@ async function requestAction(id: string) {
         class="group border-t border-primary-light py-2"
       )
         summary(
-          class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-2 px-1 text-heading-1 [&::-webkit-details-marker]:hidden"
+          class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-2 px-1 text-heading-1 leading-7 [&::-webkit-details-marker]:hidden"
         )
           span {{ section.title }}
           base-icon(

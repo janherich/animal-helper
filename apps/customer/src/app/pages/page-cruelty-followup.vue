@@ -43,7 +43,7 @@ function proceed(action: CrueltyFollowupView['actions'][number]) {
   div(class="px-4 pt-5 pb-1")
     button(
       type="button",
-      class="mb-4 flex min-h-11 items-center gap-1 text-heading-2 text-primary",
+      class="mb-4 flex min-h-11 items-center gap-1 font-form text-back text-primary",
       @click="goBack"
     )
       base-icon(name="back")
