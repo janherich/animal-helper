@@ -15,6 +15,11 @@ watch(
 const tones = { open: 'text-success', closing: 'text-accent', closed: 'text-danger' }
 function act(action: 'resolved' | 'alternatives') {
   if (!props.view.allowedActions.includes(action)) return
+  if (action === 'resolved' && props.view.actionTargets?.resolved) {
+    if (previewSession.value) previewSession.value.thankYouReturnTarget = props.view.screen
+    void router.push({ name: props.view.actionTargets.resolved })
+    return
+  }
   if (action === 'alternatives' && props.view.actionTargets?.alternatives) {
     if (previewSession.value) previewSession.value.selfHelpReturnTarget = props.view.screen
     void router.push({ name: props.view.actionTargets.alternatives })

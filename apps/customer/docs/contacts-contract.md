@@ -23,7 +23,7 @@ Phone links only allow tel numbers; other links only allow HTTP(S) without crede
 Fixtures intentionally have no live phone/navigation/volunteer links. Their wording
 and addresses are placeholders, not verified emergency, medical, or legal guidance.
 The data-defined `actionTargets.alternatives` opens W22 through “Iné možnosti pomoci”.
-The successful-outcome action still shows a localized unavailable message and submits nothing.
+The data-defined `actionTargets.resolved` opens W24, the shared thank-you form, without submitting anything.
 Back has a data-defined target. The optional shell advice action opens a bottom-sheet
 dialog without navigation below 768px. At 768px and wider it navigates to the original
 advice screen; widening an open mobile dialog dismisses it. It reuses the last acknowledged advice view and the same

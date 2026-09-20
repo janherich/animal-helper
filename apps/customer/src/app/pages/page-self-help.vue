@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import HelpText from '../components/help-text.vue'
 import { previewSession } from '../preview-flow'
 import type { SelfHelpView } from './fixtures/self-help'
 const props = defineProps<{ view: SelfHelpView }>()
 const router = useRouter()
-const notice = ref('')
 function act(action: 'resolved' | 'unresolved') {
-  if (props.view.allowedActions.includes(action)) notice.value = props.view.copy.unavailable
+  if (!props.view.allowedActions.includes(action)) return
+  if (previewSession.value) previewSession.value.thankYouReturnTarget = props.view.screen
+  void router.push({ name: props.view.actionTargets[action] })
 }
 </script>
 
@@ -92,9 +92,4 @@ function act(action: 'resolved' | 'unresolved') {
       :disabled="!view.allowedActions.includes('unresolved')",
       @click="act('unresolved')"
     ) {{ view.copy.unresolved }}
-    p(
-      v-if="notice",
-      role="status",
-      class="text-center text-primary"
-    ) {{ notice }}
 </template>

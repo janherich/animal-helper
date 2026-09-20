@@ -7,8 +7,20 @@ import { homeDraftFixture, homeFixture } from '../pages/fixtures/home'
 import { locationFixture } from '../pages/fixtures/location'
 import { mediaFixture } from '../pages/fixtures/media'
 import { selfHelpFixture } from '../pages/fixtures/self-help'
+import { thankYouFixtures } from '../pages/fixtures/thank-you'
 import { previewSession } from '../preview-flow'
 export const routes: RouteRecordRaw[] = [
+  ...thankYouFixtures.map(view => ({
+    path: '/' + view.screen.toLowerCase(),
+    name: view.screen,
+    props: { view },
+    meta: view.layout,
+    beforeEnter: () =>
+      (!!previewSession.value?.location &&
+        !!previewSession.value.animalIdentification &&
+        !!previewSession.value.adviceReady) || { name: 'W01' },
+    component: () => import('../pages/page-thank-you.vue')
+  })),
   {
     path: '/w22',
     name: 'W22',

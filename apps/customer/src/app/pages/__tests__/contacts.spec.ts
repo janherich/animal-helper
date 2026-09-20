@@ -32,7 +32,7 @@ it('renders every fixture variant and repeated cards without live example links'
   expect(wrapper.find('.bg-warning').exists()).toBe(true)
   expect(wrapper.findAll('li')).toHaveLength(2)
   await wrapper.get('footer button').trigger('click')
-  expect(wrapper.get('[role=status]').text()).toBe(policeFixture.copy.unavailable)
+  expect(push).toHaveBeenLastCalledWith({ name: 'W24' })
   await wrapper.setProps({ view: { ...municipalityFixture, allowedActions: [] } })
   expect(wrapper.find('[role=status]').exists()).toBe(false)
   expect(wrapper.findAll('button').every(button => button.attributes('disabled') !== undefined)).toBe(true)

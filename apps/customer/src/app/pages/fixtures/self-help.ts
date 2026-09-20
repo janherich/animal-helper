@@ -10,6 +10,7 @@ export type SelfHelpView = {
   locale: string
   layout: { showMenu: boolean; adviceAction: { label: string } }
   backTarget: string
+  actionTargets: { resolved: 'W24'; unresolved: 'W25' }
   allowedActions: ('back' | 'resolved' | 'unresolved')[]
   copy: {
     title: string
@@ -27,6 +28,7 @@ export const selfHelpFixture: SelfHelpView = {
   locale: 'sk',
   layout: { showMenu: false, adviceAction: { label: 'Rady' } },
   backTarget: 'W15',
+  actionTargets: { resolved: 'W24', unresolved: 'W25' },
   allowedActions: ['back', 'resolved', 'unresolved'],
   copy: {
     title: 'Pomôžte sami',

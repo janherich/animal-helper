@@ -38,12 +38,55 @@ test('details and edit identification round trip preserve answers', async ({ pag
   await expect(page.getByRole('dialog', { name: 'Rady na pomoc' })).toBeVisible()
   await page.keyboard.press('Escape')
   await page.getByRole('button', { name: 'Podarilo sa pomôcť', exact: true }).click()
-  await expect(page.getByRole('status')).toContainText('Nasledujúca stránka zatiaľ nie je pripravená')
+  await expect(page.getByRole('heading', { name: 'Ďakujeme za vašu pomoc' })).toBeVisible()
+  await expect(page.getByRole('checkbox')).toHaveCount(23)
+  await expect(page.getByRole('heading', { name: 'Prečo sa nepodarilo pomôcť zvieraťu?' })).toHaveCount(1)
+  await expect(page.getByRole('heading', { name: 'Ako situácia dopadla?' })).toHaveCount(1)
+  await expect(page.locator('.customer-thank-you .bg-success-light')).toHaveCount(1)
+  await expect(page.getByRole('checkbox').first()).not.toBeChecked()
+  await expect(page.getByRole('button', { name: 'Rady', exact: true })).toHaveCount(0)
+  await page.getByRole('button', { name: 'Odoslať a ukončiť' }).click()
+  await expect(page.getByRole('status')).toContainText('neboli odoslané')
+  await page.getByRole('textbox', { name: 'E-mail (nepovinné)' }).fill('not-an-email')
+  expect(await page.locator('input[type=email]').evaluate((input: HTMLInputElement) => input.checkValidity())).toBe(
+    false
+  )
+  await page.getByRole('textbox', { name: 'E-mail (nepovinné)' }).fill('test@example.org')
+  await page.screenshot({ path: testInfo.outputPath('thank-you-mobile.png'), fullPage: true })
+  await page.setViewportSize({ width: 1280, height: 900 })
+  await page.screenshot({ path: testInfo.outputPath('thank-you-desktop.png'), fullPage: true })
+  await page.getByRole('button', { name: 'Späť', exact: true }).click()
+  await page.getByRole('button', { name: 'Nepodarilo sa pomôcť', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'Ďakujeme za vašu snahu' })).toBeVisible()
+  await expect(page.locator('.customer-thank-you .base-expander').first()).toHaveAttribute('aria-hidden', 'true')
+  await expect(page.locator('textarea').first()).toBeDisabled()
+  await page.getByRole('checkbox', { name: 'Iné', exact: true }).first().check()
+  await page.getByRole('textbox', { name: 'Opíšte, čo sa stalo' }).fill('Testovací dôvod')
+  await page.setViewportSize({ width: 402, height: 874 })
+  await page.screenshot({ path: testInfo.outputPath('thank-you-failure.png'), fullPage: true })
+  for (const [route, heading] of [
+    ['w26', 'Uzatvorenie prípadu'],
+    ['w38', 'Zviera žije a potrebuje ošetrenie?'],
+    ['w39', 'Ďakujeme za vašu pomoc']
+  ]) {
+    await page.evaluate(path => {
+      history.pushState({}, '', '/' + path)
+      dispatchEvent(new PopStateEvent('popstate'))
+    }, route)
+    await expect(page.getByRole('heading', { name: heading!, exact: true })).toBeVisible()
+    await page.screenshot({ path: testInfo.outputPath('thank-you-' + route + '.png'), fullPage: true })
+  }
+  await page.getByRole('button', { name: 'Späť', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'Pomôžte sami', exact: true })).toBeVisible()
   await page.setViewportSize({ width: 1280, height: 900 })
   await page.screenshot({ path: testInfo.outputPath('self-help-desktop.png'), fullPage: true })
   await page.getByRole('button', { name: 'Späť', exact: true }).click()
   await expect(page.getByRole('heading', { name: 'Možnosti kontaktovania' })).toBeVisible()
   await page.setViewportSize({ width: 402, height: 874 })
+  await page.getByRole('button', { name: 'Podarilo sa pomôcť', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'Ďakujeme za vašu pomoc' })).toBeVisible()
+  await expect(page.locator('input[type=email]')).toHaveValue('')
+  await page.getByRole('button', { name: 'Späť', exact: true }).click()
   const contactsUrl = page.url()
   const adviceTrigger = page.getByRole('button', { name: 'Rady', exact: true })
   await adviceTrigger.click()
@@ -155,7 +198,8 @@ test('details and edit identification round trip preserve answers', async ({ pag
   await page.setViewportSize({ width: 402, height: 874 })
   await page.screenshot({ path: testInfo.outputPath('contacts-mobile.png'), fullPage: true })
   await page.getByRole('button', { name: 'Podarilo sa pomôcť', exact: true }).click()
-  await expect(page.getByRole('status')).toContainText('Žiadne hlásenie sa neodoslalo')
+  await expect(page.getByRole('heading', { name: 'Ďakujeme za vašu pomoc' })).toBeVisible()
+  await page.getByRole('button', { name: 'Späť', exact: true }).click()
   for (const [path, title, cards] of [
     ['/w18', 'Môžete kontaktovať veterinárnu kliniku', 3],
     ['/w20', 'Zavolajte na políciu', 1],

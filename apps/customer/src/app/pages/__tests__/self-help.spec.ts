@@ -27,7 +27,10 @@ it('opens self help through a data-defined action and returns to the source', as
   await page.get('button').trigger('click')
   expect(push).toHaveBeenLastCalledWith({ name: 'W18' })
   await page.get('footer button').trigger('click')
-  expect(page.get('[role=status]').text()).toBe(selfHelpFixture.copy.unavailable)
+  expect(push).toHaveBeenLastCalledWith({ name: 'W24' })
+  expect(previewSession.value?.thankYouReturnTarget).toBe('W22')
+  await page.findAll('footer button')[1]!.trigger('click')
+  expect(push).toHaveBeenLastCalledWith({ name: 'W25' })
   await page.setProps({ view: { ...selfHelpFixture, allowedActions: [] } })
   expect(page.findAll('button').every(button => button.attributes('disabled') !== undefined)).toBe(true)
   previewSession.value = null

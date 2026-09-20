@@ -12,9 +12,8 @@ The contact fixture's `actionTargets.alternatives` selects W22 independently of 
 pomoci”). The in-memory session remembers the originating contact screen for Back. Advice remains accessible through the
 existing responsive Rady action. The same preview guard as the contact screens applies; it is not server authorization.
 
-Both outcome buttons currently announce that the next screen is not implemented. They neither submit a result nor claim
-success. A thank-you screen and the unsuccessful-outcome destination need separate implementation and explicit server
-action contracts.
+The outcome actions target the shared thank-you form: W24 for success and W25 for failure. Neither submits a result.
+See [the thank-you contract](thank-you-contract.md).
 
 All fixture paragraphs are neutral formatting examples, not animal-care instructions or legal guidance. Production
 advice, applicability, ordering and warnings must come from an approved source on the backend.
