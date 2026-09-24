@@ -11,17 +11,21 @@ This is a frontend presentation proposal for backend discussion, **not an implem
 - Each branch supplies a localized `otherLabel` for the alternative choice, including its grammatical form. The client
   displays it as provided rather than deriving it from the branch name. The root uses “Iné zviera”.
 - `kind: 'animal'` represents a selectable animal and has localized search `detail`.
-- “Mláďa” is a regular branch containing sample concrete animals, not an immediate-confirmation shortcut.
 - Other-species and unknown alternatives are always available in the shared footer, gated by `select-animal`.
 - `props` supplies the persistent heading, description, search labels, progress and preview notice. The heading stays “O
   aké zviera ide?” throughout traversal.
 - `copy` supplies alternative labels, required-description text, confirmation and preview status.
 - `allowedActions` gates local interactions; `layout`, `locale` and `backTarget` retain their existing roles.
 
-The fixture declares a small sample tree directly, starting with domestic and farm animals. Domestic animals include
-cats, dogs, small mammals, captive birds and aquarium animals. Aquarium fish add a deeper freshwater branch; farm
-mammals add a separate intermediate level. This is a navigation test dataset, not an exhaustive taxonomy. The component
-consumes only the tree. Real animal pictures are pending; missing images show a muted paw.
+The fixture builds its tree from `@animal-helper/guidance/catalog`, using all 116 current animal-kind entries
+and their stable keys, Slovak names and group/category/subcategory membership. The product CSV matrices remain the
+source of that shared catalogue. Four root groups cover domestic, farm, wildlife and exotic animals. Redundant
+category levels that repeat the domestic/farm/exotic group are omitted; wildlife retains its categories and optional
+subcategories. Children are sorted by Slovak label. Fixture-owned branch labels and alternative labels shape the
+presentation; the renderer still consumes only the supplied tree. Missing images show a muted paw.
+
+This imports catalogue identities only, not guidance routing or advice rules. The product sources remain working
+material; no live backend integration is introduced.
 
 ## Local behaviour
 
@@ -66,8 +70,7 @@ supplies the tree or authorized branch views, how global search supplies the tar
 commands are represented. Client route guards are not authorization. The server must validate each action and supply the
 next authorized screen.
 
-All user-facing catalogue data and text are fixture-owned today, intended to come localized from the server. Catalogue
-IDs, transport, loading/error states, stale responses and route identifiers require backend agreement.
+All user-facing catalogue data and text are fixture-owned today, intended to come localized from the server. Transport, loading/error states, stale responses and route identifiers require backend agreement; animal IDs now match the shared catalogue.
 
 Visual reference: UI Typy obrazoviek. Behaviour reference: developer wireframe annotations plus the agreed global
 search, arbitrary-depth traversal and persistent-heading refinements. Wireframes are not a visual specification.

@@ -9,7 +9,7 @@ test('documented cruelty ends at thanks without another advice stage', async ({ 
   await page.getByRole('button', { name: 'Potvrdiť polohu' }).click()
   await page.getByRole('button', { name: 'Nemám fotografiu' }).click()
   await page.getByRole('combobox').fill('mac')
-  await page.getByRole('option', { name: 'Mačka domáca' }).click()
+  await page.getByRole('option', { name: 'Mačka', exact: true }).click()
   await page.getByRole('button', { name: 'Potvrdiť voľbu' }).click()
   await page.getByRole('checkbox', { name: 'Krváca', exact: true }).check()
   await page.locator('input[name=conscious][value=yes]').check()

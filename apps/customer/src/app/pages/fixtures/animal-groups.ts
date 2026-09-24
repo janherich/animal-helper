@@ -1,5 +1,6 @@
-// Temporary presentation fixture, not a backend contract or a complete animal catalogue.
+// Presentation fixture populated from the shared product catalogue; not an API adapter.
 import type { FormValidation } from '../../contracts/validation'
+import { animalCatalogueTree } from './animal-tree'
 export type AnimalGroupsView = {
   validation?: FormValidation
   screen: 'W06a'
@@ -41,16 +42,6 @@ export type AnimalBranch = {
   children: AnimalNode[]
 }
 
-const animal = (id: string, label: string, detail: string): AnimalNode => ({ kind: 'animal', id, label, detail })
-const branch = (id: string, label: string, otherLabel: string, children: AnimalNode[]): AnimalBranch => ({
-  kind: 'branch',
-  id,
-  label,
-  otherLabel,
-  children
-})
-
-// Deliberately small test tree: not a production taxonomy or exhaustive catalogue.
 export const animalGroupsFixture: AnimalGroupsView = {
   screen: 'W06a',
   locale: 'sk',
@@ -73,54 +64,9 @@ export const animalGroupsFixture: AnimalGroupsView = {
     title: 'O aké zviera ide?',
     description: 'Vyhľadajte zviera alebo ho nájdite postupným výberom.',
     search: 'Vyhľadať zviera',
-    preview: 'Testovacia hierarchia, nie finálny číselník. Obrázky a ďalšie kroky doplníme neskôr.',
-    results: 'Ukážkové zvieratá',
-    empty: 'V ukážkovom číselníku sa nenašla zhoda.'
+    preview: 'Katalóg zvierat z produktových podkladov. Obrázky doplníme neskôr.',
+    results: 'Zvieratá',
+    empty: 'V katalógu sa nenašla zhoda.'
   },
-  root: branch('root', 'O aké zviera ide?', 'Iné zviera', [
-    branch('domestic', 'Domáce zvieratá', 'Iné domáce zviera', [
-      branch('cats', 'Mačky', 'Iný druh mačky', [animal('cat-domestic', 'Mačka domáca', 'Domáce zvieratá · Mačky')]),
-      branch('dogs', 'Psy', 'Iný druh psa', [animal('dog', 'Pes domáci', 'Domáce zvieratá · Psy')]),
-      branch('small-pets', 'Drobné cicavce', 'Iný drobný cicavec', [
-        animal('hamster', 'Škrečok zlatý', 'Domáce zvieratá · Drobné cicavce'),
-        animal('guinea-pig', 'Morča domáce', 'Domáce zvieratá · Drobné cicavce')
-      ]),
-      branch('aquarium', 'Akváriové zvieratá', 'Iné akváriové zviera', [
-        branch('fish', 'Ryby', 'Iný druh ryby', [
-          branch('freshwater', 'Sladkovodné ryby', 'Iný druh sladkovodnej ryby', [
-            animal('guppy', 'Gupka dúhová', 'Domáce zvieratá · Akváriové zvieratá · Ryby · Sladkovodné ryby'),
-            animal('betta', 'Bojovnica pestrá', 'Domáce zvieratá · Akváriové zvieratá · Ryby · Sladkovodné ryby')
-          ])
-        ]),
-        branch('invertebrates', 'Bezstavovce', 'Iný bezstavovec', [
-          animal('shrimp', 'Krevetka čerešňová', 'Domáce zvieratá · Akváriové zvieratá · Bezstavovce')
-        ])
-      ]),
-      branch('pet-birds', 'Chované vtáky', 'Iný chovaný vták', [
-        animal('budgie', 'Andulka vlnkovaná', 'Domáce zvieratá · Chované vtáky'),
-        animal('cockatiel', 'Korela chocholatá', 'Domáce zvieratá · Chované vtáky')
-      ])
-    ]),
-    branch('farm', 'Hospodárske zvieratá', 'Iné hospodárske zviera', [
-      branch('juvenile', 'Mláďa', 'Iné mláďa', [
-        animal('calf', 'Teľa', 'Hospodárske zvieratá · Mláďa'),
-        animal('lamb', 'Jahňa', 'Hospodárske zvieratá · Mláďa'),
-        animal('foal', 'Žriebä', 'Hospodárske zvieratá · Mláďa')
-      ]),
-      branch('poultry', 'Hydina', 'Iný druh hydiny', [
-        animal('chicken', 'Sliepka domáca', 'Hospodárske zvieratá · Hydina'),
-        animal('duck', 'Kačica domáca', 'Hospodárske zvieratá · Hydina')
-      ]),
-      branch('livestock', 'Hospodárske cicavce', 'Iný hospodársky cicavec', [
-        branch('small-livestock', 'Ovce a kozy', 'Iný druh ovce alebo kozy', [
-          animal('sheep', 'Ovca domáca', 'Hospodárske zvieratá · Hospodárske cicavce · Ovce a kozy'),
-          animal('goat', 'Koza domáca', 'Hospodárske zvieratá · Hospodárske cicavce · Ovce a kozy')
-        ]),
-        branch('large-livestock', 'Veľké hospodárske zvieratá', 'Iné veľké hospodárske zviera', [
-          animal('horse', 'Kôň domáci', 'Hospodárske zvieratá · Hospodárske cicavce · Veľké hospodárske zvieratá'),
-          animal('cattle', 'Tur domáci', 'Hospodárske zvieratá · Hospodárske cicavce · Veľké hospodárske zvieratá')
-        ])
-      ])
-    ])
-  ])
+  root: animalCatalogueTree
 }

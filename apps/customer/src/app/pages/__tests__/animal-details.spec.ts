@@ -17,8 +17,8 @@ function setup(view = structuredClone(animalDetailsFixture)) {
   beginPreview('injured')
   previewSession.value!.animalIdentification = {
     kind: 'species',
-    speciesId: 'cat-domestic',
-    path: ['domestic', 'cats']
+    speciesId: 'domestic_cat',
+    path: ['domestic']
   }
   return mount(PageAnimalDetails, {
     props: { view, catalogue: animalGroupsFixture.root },
@@ -41,7 +41,7 @@ it('renders independent group and description errors without discarding answers'
 })
 it('renders supplied questions, validates answers and makes unknown exclusive', async () => {
   const wrapper = setup()
-  expect(wrapper.text()).toContain('Mačka domáca')
+  expect(wrapper.text()).toContain('Mačka')
   expect(wrapper.get('button[type=submit]').attributes('disabled')).toBeDefined()
   await wrapper.get('input[value=bleeding]').setValue(true)
   await wrapper.get('input[name=symptoms][value=unknown]').setValue(true)

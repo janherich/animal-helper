@@ -14,8 +14,8 @@ afterEach(() => {
   push.mockClear()
 })
 
-it('provides a nonempty test tree with unique IDs and different branch depths', () => {
-  expect(animalGroupsFixture.root.children.map(node => node.id)).toEqual(['domestic', 'farm'])
+it('provides a nonempty catalogue tree with unique IDs and different branch depths', () => {
+  expect(animalGroupsFixture.root.children.map(node => node.id)).toEqual(['domestic', 'farm', 'wildlife', 'exotic'])
   const ids = new Set<string>()
   const depths = new Set<number>()
   const branchSizes: number[] = []
@@ -29,7 +29,7 @@ it('provides a nonempty test tree with unique IDs and different branch depths', 
   }
   visit(animalGroupsFixture.root, 0)
   expect(Math.min(...branchSizes)).toBeGreaterThan(0)
-  expect([...depths].sort()).toEqual([3, 4, 5])
+  expect([...depths].sort()).toEqual([2, 3, 4])
 })
 
 it('traverses an arbitrarily deep tree and search opens the same leaf parent', async () => {
@@ -94,8 +94,8 @@ it('preserves confirmed identification and advice while an edit is reset, search
   Object.assign(previewSession.value!, {
     animalIdentification: {
       kind: 'species',
-      path: ['domestic', 'cats'],
-      speciesId: 'cat-domestic'
+      path: ['domestic'],
+      speciesId: 'domestic_cat'
     },
     adviceReady: true
   })
@@ -110,7 +110,7 @@ it('preserves confirmed identification and advice while an edit is reset, search
     .find(button => button.text() === 'Hospodárske zvieratá')!
     .trigger('click')
   const search = wrapper.get('input[role="combobox"]')
-  await search.setValue('kačica')
+  await search.setValue('fretka')
   await search.trigger('focus')
   await wrapper.get('[role="option"]').trigger('click')
   expect(previewSession.value).toEqual(saved)
@@ -164,28 +164,25 @@ it('keeps alternatives and confirmation in the footer on every branch', async ()
   await click('Potvrdiť voľbu')
   expect(previewSession.value?.animalIdentification).toEqual({ kind: 'unknown', path: [] })
   await click('Hospodárske zvieratá')
-  await click('Mláďa')
   expect(confirmButton().attributes('disabled')).toBeDefined()
   expect(previewSession.value?.animalIdentification).toEqual({ kind: 'unknown', path: [] })
   await wrapper.get('input[value="unknown"]').setValue()
   await click('Potvrdiť voľbu')
   expect(previewSession.value?.animalIdentification).toEqual({
     kind: 'unknown',
-    path: ['farm', 'juvenile']
+    path: ['farm']
   })
   await click('Začať výber odznova')
   await click('Domáce zvieratá')
   expect(wrapper.text()).toContain('Iné domáce zviera')
   expect(confirmButton().attributes('disabled')).toBeDefined()
-  await click('Mačky')
-  expect(wrapper.text()).toContain('Iný druh mačky')
-  await click('Mačka domáca')
+  await click('Mačka')
   expect(confirmButton().attributes('disabled')).toBeUndefined()
   await wrapper.get('input[value="other"]').setValue()
   expect(wrapper.get('.customer-animal-groups__grid button').attributes('aria-pressed')).toBe('false')
   await click('Potvrdiť voľbu')
   expect(confirmButton().attributes('disabled')).toBeDefined()
-  expect(previewSession.value?.animalIdentification?.path).toEqual(['farm', 'juvenile'])
+  expect(previewSession.value?.animalIdentification?.path).toEqual(['farm'])
   await wrapper.get('textarea').setValue('   ')
   expect(confirmButton().attributes('disabled')).toBeDefined()
   await wrapper.get('textarea').setValue('Iná mačka')
@@ -197,14 +194,14 @@ it('keeps alternatives and confirmation in the footer on every branch', async ()
   await click('Potvrdiť voľbu')
   expect(previewSession.value?.animalIdentification).toEqual({
     kind: 'unknown',
-    path: ['domestic', 'cats']
+    path: ['domestic']
   })
-  expect(previewSession.value?.animalIdentification?.path).toEqual(['domestic', 'cats'])
+  expect(previewSession.value?.animalIdentification?.path).toEqual(['domestic'])
   expect(previewSession.value?.animalIdentification?.speciesId).toBeUndefined()
-  await click('Mačka domáca')
+  await click('Mačka')
   expect((wrapper.get('input[value="unknown"]').element as HTMLInputElement).checked).toBe(false)
   await click('Potvrdiť voľbu')
-  expect(previewSession.value?.animalIdentification?.speciesId).toBe('cat-domestic')
+  expect(previewSession.value?.animalIdentification?.speciesId).toBe('domestic_cat')
   await click('Začať výber odznova')
   await wrapper.get('input[value="other"]').setValue()
   await wrapper.get('textarea').setValue('  Neznáme exotické zviera  ')

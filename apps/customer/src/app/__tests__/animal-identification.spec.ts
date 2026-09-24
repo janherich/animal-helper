@@ -43,11 +43,11 @@ it('invalidates location-dependent results only when coordinates change', () => 
 })
 it('replaces the complete result and copies its path only at confirmation', () => {
   beginPreview('injured')
-  const path = ['domestic', 'cats']
-  confirmAnimalIdentification({ kind: 'species', speciesId: 'cat-domestic', path })
+  const path = ['domestic']
+  confirmAnimalIdentification({ kind: 'species', speciesId: 'domestic_cat', path })
   path.push('not-confirmed')
-  expect(previewSession.value?.animalIdentification?.path).toEqual(['domestic', 'cats'])
-  confirmAnimalIdentification({ kind: 'other', description: 'Another cat', path: ['domestic', 'cats'] })
+  expect(previewSession.value?.animalIdentification?.path).toEqual(['domestic'])
+  confirmAnimalIdentification({ kind: 'other', description: 'Another cat', path: ['domestic'] })
   expect(previewSession.value?.animalIdentification?.speciesId).toBeUndefined()
   previewSession.value!.adviceReady = true
   previewSession.value!.editingAnimal = true

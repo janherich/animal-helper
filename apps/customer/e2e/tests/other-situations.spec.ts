@@ -13,7 +13,7 @@ async function identify(page: Page) {
   await expect(page).toHaveURL(/\/w04$/)
   await page.getByRole('button', { name: 'Nemám fotografiu' }).click()
   await page.getByRole('combobox').fill('mac')
-  await page.getByRole('option', { name: 'Mačka domáca' }).click()
+  await page.getByRole('option', { name: 'Mačka', exact: true }).click()
   await page.getByRole('button', { name: 'Potvrdiť voľbu' }).click()
   await expect(page).toHaveURL(/\/w09$/)
 }
