@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BaseIcon from '@/libs/components/base-icon.vue'
+import FlowNavigation from './flow-navigation.vue'
 
 defineProps<{
   back: string
@@ -13,16 +13,11 @@ defineEmits<{ back: [] }>()
 </script>
 
 <template lang="pug">
-div(class="px-4 pt-5 pb-1")
-  button(
-    type="button",
-    class="mb-4 flex min-h-11 items-center gap-1 font-form text-back text-primary",
-    :disabled="backDisabled",
-    @click="$emit('back')"
-  )
-    BaseIcon(name="back")
-    span {{ back }}
-  hr(class="border-primary-light")
+FlowNavigation(
+  :back="back",
+  :back-disabled="backDisabled",
+  @back="$emit('back')"
+)
 div(class="px-4 pt-4 pb-2")
   div(
     class="progress-track h-2 overflow-hidden rounded bg-primary-light",

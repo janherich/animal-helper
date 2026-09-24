@@ -1,7 +1,9 @@
 // TEMPORARY SERVER SIMULATOR, not production client business rules.
 // Replace these functions with validated API responses (view + next action).
 // Routes register renderers; only this fixture adapter selects scenario variants.
+import { catalogueAnimals } from '../../animal-catalogue'
 import { previewSession } from '../../preview-flow'
+import { animalGroupsFixture } from './animal-groups'
 import type { ContactsView } from './contacts'
 import { contactFixtures } from './contacts'
 import { flowPolicy, flowScenarios } from './flow-scenarios'
@@ -9,6 +11,7 @@ import { homeDraftFixture, homeFixture } from './home'
 import { locationFixture } from './location'
 import { mediaFixture } from './media'
 import { roadInstructionsFixture } from './other-situations'
+import { previewDraftDismissed, suspendedPreview } from './preview-session'
 import { selfHelpFixture } from './self-help'
 import type { ThankYouView } from './thank-you'
 
@@ -38,7 +41,27 @@ export function previewDetailsView() {
   return scenario().details
 }
 export function previewHomeView(clean: boolean) {
-  return import.meta.env.DEV && !clean ? homeDraftFixture : homeFixture
+  const draft = suspendedPreview.value
+  if (draft) {
+    const session = draft.session
+    const identification = session.animalIdentification
+    const animal = catalogueAnimals(animalGroupsFixture.root).find(item => item.id === identification?.speciesId)
+    const situation = homeFixture.props.situations.find(item => item.id === session.situation)?.label
+    return {
+      ...homeDraftFixture,
+      props: {
+        ...homeDraftFixture.props,
+        draft: {
+          ...homeDraftFixture.props.draft!,
+          progress: draft.progress,
+          summary: [situation, animal?.label ?? identification?.description, session.location?.label].filter(
+            (value): value is string => !!value
+          )
+        }
+      }
+    }
+  }
+  return import.meta.env.DEV && !clean && !previewDraftDismissed.value ? homeDraftFixture : homeFixture
 }
 export function previewPageAdvice(screen: unknown) {
   if (screen === selfHelpFixture.screen) return selfHelpFixture.advice
@@ -91,4 +114,14 @@ export function previewAccess(screen: string): true | { name: string } {
     default:
       return ready || home
   }
+}
+
+// Demonstration progress only; the eventual server payload supplies this value.
+export function previewDraftProgress(screen: string) {
+  if (['W27', 'W28', 'W29', 'W30', 'W32'].includes(screen)) return 0
+  if (screen === 'W03') return locationFixture.props.progress
+  if (screen === 'W04') return mediaFixture.props.progress
+  if (screen === 'W06') return animalGroupsFixture.props.progress
+  if (['W09', 'W40', 'W33'].includes(screen)) return previewDetailsView().copy.progress
+  return 100
 }

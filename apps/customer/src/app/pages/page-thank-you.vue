@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useFlowDraft } from '../use-flow-draft'
+import FlowNavigation from '../components/flow-navigation.vue'
 import PageActions from '../components/page-actions.vue'
 import ValidationMessage from '../components/validation-message.vue'
 import { useFormValidation } from '@/libs/use-form-validation'
@@ -12,7 +14,8 @@ const form = ref<HTMLFormElement>()
 const validation = useFormValidation(() => props.view.validation)
 const id = useId()
 const finishing = computed(() => !!completion.value)
-// Deliberately page-local: no persistence, logging, submission or preselected consent.
+// Only explicit exit checkpoints these controls in the in-memory fixture draft.
+// No durable persistence, logging, submission or default consent.
 const values = ref<Record<string, string>>({ ...props.view.values })
 const consents = ref<Record<string, boolean>>({})
 const reasons = ref<Record<string, boolean>>({})
@@ -35,6 +38,7 @@ function submit() {
     completion.value = { label: props.view.completionLabel, target: props.view.submitTarget }
   }
 }
+useFlowDraft({ values, consents, reasons, descriptions })
 </script>
 
 <template lang="pug">
@@ -45,16 +49,11 @@ form.customer-thank-you(
   :inert="finishing",
   @submit.prevent="submit"
 )
-  div(class="px-4 pt-5 pb-1")
-    button(
-      type="button",
-      class="mb-4 flex min-h-11 items-center gap-1 font-form text-back text-primary",
-      :disabled="!view.allowedActions.includes('back')",
-      @click="router.push({ name: view.backTarget })"
-    )
-      base-icon(name="back")
-      span {{ view.copy.back }}
-    hr(class="border-primary-light")
+  FlowNavigation(
+    :back="view.copy.back",
+    :back-disabled="!view.allowedActions.includes('back')",
+    @back="router.push({ name: view.backTarget })"
+  )
   header(class="px-5 pt-5 pb-3")
     h1(class="mb-1 text-heading-1") {{ view.copy.title }}
     p(v-if="view.copy.description") {{ view.copy.description }}

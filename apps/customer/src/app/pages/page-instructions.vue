@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import FlowNavigation from '../components/flow-navigation.vue'
 import PageActions from '../components/page-actions.vue'
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -39,16 +40,11 @@ function act(action: InstructionAction) {
   :lang="view.locale",
   :class="view.screen === 'W22' ? 'customer-self-help' : 'customer-contacts'"
 )
-  div(class="px-4 pt-5 pb-1")
-    button(
-      type="button",
-      class="mb-4 flex min-h-11 items-center gap-1 font-form text-back text-primary",
-      :disabled="!view.allowedActions.includes('back')",
-      @click="goBack"
-    )
-      base-icon(name="back")
-      span {{ view.copy.back }}
-    hr(class="border-primary-light")
+  FlowNavigation(
+    :back="view.copy.back",
+    :back-disabled="!view.allowedActions.includes('back')",
+    @back="goBack"
+  )
   header(class="px-5 pt-5 pb-3")
     h1(class="mb-1 text-heading-1") {{ view.copy.title }}
     p {{ view.copy.description }}

@@ -4,6 +4,7 @@ import type { LocationPoint } from '../../contracts/forms'
 
 // In-memory fixture session only. Replace with a validated server view adapter.
 export const previewSession = ref<{
+  uiDrafts?: Record<string, Record<string, unknown>>
   situation: string
   fromDraft: boolean
   otherSituation?: 'road' | 'human' | 'other'
@@ -26,6 +27,7 @@ export function beginPreview(situation: string, fromDraft = false) {
 }
 
 export function finishPreview() {
+  if (suspendedPreview.value?.session === previewSession.value) suspendedPreview.value = null
   previewSession.value = null
 }
 
@@ -51,3 +53,11 @@ export function confirmAnimalIdentification(identification: AnimalIdentification
   session.identificationFailed = false
   session.adviceReady = false
 }
+
+// One suspended case for the local preview; files and form drafts stay in memory.
+export const suspendedPreview = ref<{
+  session: NonNullable<typeof previewSession.value>
+  screen: string
+  progress: number
+} | null>(null)
+export const previewDraftDismissed = ref(false)

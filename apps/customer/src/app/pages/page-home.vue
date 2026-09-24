@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import { nextTick, ref } from 'vue'
+import { nextTick, ref, useId } from 'vue'
 import type { HomeView } from './home-view'
 
 const props = defineProps<{ view: HomeView }>()
 const emit = defineEmits<{ action: [id: string] }>()
 const notice = ref('')
+const sectionId = useId()
+const expandedSections = ref<Record<string, boolean>>({})
 const gradients = ['bg-primary-gradient', 'bg-primary-gradient-1', 'bg-primary-gradient-2', 'bg-primary-gradient-3']
 async function requestAction(id: string) {
   if (!props.view.allowedActions.includes(id)) return
   emit('action', id)
   notice.value = ''
   await nextTick()
-  notice.value = props.view.props.actionNotice
+  if (!['draft-complete', 'draft-resume'].includes(id)) notice.value = props.view.props.actionNotice
 }
 </script>
 
@@ -23,50 +25,52 @@ async function requestAction(id: string) {
   header.customer-home__intro(class="px-5 pt-[30px] pb-3")
     h1(class="mb-1 text-heading-1") {{ view.props.title }}
     p(class="text-body") {{ view.props.description }}
-  section.customer-home__draft(
-    v-if="view.props.draft",
-    class="mx-4 mt-2 border-y border-primary-light pt-2 pb-6"
-  )
-    h2(class="px-2 py-3 text-heading-1") {{ view.props.draft.heading }}
-    .customer-home__draft-card(
-      class="mt-2 flex flex-col gap-6 rounded-control bg-surface px-4 pt-6 pb-4 shadow-[0_2px_6px_rgb(37_42_49/16%)]"
+  Transition(name="draft-dismiss")
+    base-expander.customer-home__draft-collapse(
+      v-if="view.props.draft",
+      :state="true"
     )
-      .customer-home__progress(
-        class="progress-track h-2 overflow-hidden rounded bg-primary-light",
-        role="progressbar",
-        :aria-label="view.props.draft.progressLabel",
-        :aria-valuenow="Math.max(0, Math.min(100, view.props.draft.progress))",
-        :aria-valuemin="0",
-        :aria-valuemax="100"
-      )
-        .customer-home__progress-fill(
-          class="h-full rounded bg-primary-gradient",
-          :style="{ width: `${Math.max(0, Math.min(100, view.props.draft.progress))}%` }"
+      section.customer-home__draft(class="mx-4 mt-2 border-y border-primary-light pt-2 pb-6")
+        h2(class="px-2 py-3 text-heading-1") {{ view.props.draft.heading }}
+        .customer-home__draft-card(
+          class="mt-2 flex flex-col gap-6 rounded-control bg-surface px-4 pt-6 pb-4 shadow-[0_2px_6px_rgb(37_42_49/16%)]"
         )
-      .customer-home__draft-info(class="flex flex-col gap-4")
-        h3(class="text-heading-2") {{ view.props.draft.title }}
-        ul(class="flex flex-wrap items-center gap-2")
-          li(
-            v-for="(part, index) in view.props.draft.summary",
-            :key="index",
-            class="flex items-center gap-2"
+          .customer-home__progress(
+            class="progress-track h-2 overflow-hidden rounded bg-primary-light",
+            role="progressbar",
+            :aria-label="view.props.draft.progressLabel",
+            :aria-valuenow="Math.max(0, Math.min(100, view.props.draft.progress))",
+            :aria-valuemin="0",
+            :aria-valuemax="100"
           )
-            span(
-              v-if="index",
-              class="size-2 shrink-0 rounded-full bg-accent",
-              aria-hidden="true"
+            .customer-home__progress-fill(
+              class="h-full rounded bg-primary-gradient",
+              :style="{ width: `${Math.max(0, Math.min(100, view.props.draft.progress))}%` }"
             )
-            span {{ part }}
-      .customer-home__draft-actions(class="flex gap-4")
-        button(
-          v-for="action in view.props.draft.actions",
-          :key="action.id",
-          type="button",
-          class="ui-button min-h-13 min-w-0 flex-1 cursor-pointer rounded-control p-4 text-button disabled:cursor-not-allowed disabled:opacity-50",
-          :class="action.appearance === 'primary' ? 'bg-primary-gradient text-white shadow-brand' : 'border border-primary bg-surface text-primary'",
-          :disabled="!view.allowedActions.includes(action.id)",
-          @click="requestAction(action.id)"
-        ) {{ action.label }}
+          .customer-home__draft-info(class="flex flex-col gap-4")
+            h3(class="text-heading-2") {{ view.props.draft.title }}
+            ul(class="flex flex-wrap items-center gap-2")
+              li(
+                v-for="(part, index) in view.props.draft.summary",
+                :key="index",
+                class="flex items-center gap-2"
+              )
+                span(
+                  v-if="index",
+                  class="size-2 shrink-0 rounded-full bg-accent",
+                  aria-hidden="true"
+                )
+                span {{ part }}
+          .customer-home__draft-actions(class="flex gap-4")
+            button(
+              v-for="action in view.props.draft.actions",
+              :key="action.id",
+              type="button",
+              class="ui-button min-h-13 min-w-0 flex-1 cursor-pointer rounded-control p-4 text-button disabled:cursor-not-allowed disabled:opacity-50",
+              :class="action.appearance === 'primary' ? 'bg-primary-gradient text-white shadow-brand' : 'border border-primary bg-surface text-primary'",
+              :disabled="!view.allowedActions.includes(action.id)",
+              @click="requestAction(action.id)"
+            ) {{ action.label }}
   section.customer-home__situations(
     class="flex flex-col gap-5 p-4",
     :aria-label="view.props.situationsLabel"
@@ -101,53 +105,61 @@ async function requestAction(id: string) {
       h2(class="mb-1 text-heading-1") {{ view.props.about.title }}
       p {{ view.props.about.description }}
     .customer-home__sections(class="bg-surface px-4 pb-2 [@media(width>640px)]:rounded-b-control")
-      details.customer-home__section(
+      .customer-home__section(
         v-for="section in view.props.sections",
         :key="section.id",
-        :open="section.expanded",
-        class="group border-t border-primary-light py-2"
+        class="border-t border-primary-light py-2"
       )
-        summary(
-          class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-2 px-1 text-heading-1 leading-7 [&::-webkit-details-marker]:hidden"
+        button.customer-home__section-toggle(
+          type="button",
+          :aria-expanded="expandedSections[section.id] ?? section.expanded ?? false",
+          :aria-controls="`${sectionId}-${section.id}`",
+          class="flex min-h-14 w-full cursor-pointer items-center justify-between gap-2 px-1 text-left text-heading-1 leading-7",
+          @click="expandedSections[section.id] = !(expandedSections[section.id] ?? section.expanded ?? false)"
         )
           span {{ section.title }}
           base-icon(
             name="chevron-down",
-            class="size-10 group-open:rotate-180"
+            class="size-10 motion-safe:transition-transform motion-safe:duration-200",
+            :class="{ 'rotate-180': expandedSections[section.id] ?? section.expanded ?? false }"
           )
-        .customer-home__section-content(class="px-1 pt-2 pb-4")
-          h3(
-            v-if="section.heading",
-            class="mb-2 text-body-strong"
-          ) {{ section.heading }}
-          p(
-            v-for="(paragraph, index) in section.paragraphs",
-            :key="index",
-            class="mb-2 last:mb-0"
-          ) {{ paragraph }}
-          ul(
-            v-if="section.items",
-            class="flex flex-col gap-2"
-          )
-            li(
-              v-for="item in section.items",
-              :key="item.id"
+        base-expander(
+          :id="`${sectionId}-${section.id}`",
+          :state="expandedSections[section.id] ?? section.expanded ?? false"
+        )
+          .customer-home__section-content(class="px-1 pt-2 pb-4")
+            h3(
+              v-if="section.heading",
+              class="mb-2 text-body-strong"
+            ) {{ section.heading }}
+            p(
+              v-for="(paragraph, index) in section.paragraphs",
+              :key="index",
+              class="mb-2 last:mb-0"
+            ) {{ paragraph }}
+            ul(
+              v-if="section.items",
+              class="flex flex-col gap-2"
             )
-              component(
-                :is="item.action ? 'button' : 'div'",
-                :type="item.action ? 'button' : undefined",
-                :disabled="item.action ? !view.allowedActions.includes(item.action) : undefined",
-                class="flex min-h-8 w-full items-center gap-3 text-left text-body",
-                :class="[item.action && 'cursor-pointer disabled:cursor-not-allowed disabled:opacity-50', item.accent && 'pt-2 font-semibold text-accent underline underline-offset-2']",
-                @click="item.action && requestAction(item.action)"
+              li(
+                v-for="item in section.items",
+                :key="item.id"
               )
-                base-icon(
-                  v-if="item.icon",
-                  :name="item.icon",
-                  class="size-5 shrink-0 text-primary",
-                  :class="item.icon === 'back' && 'rotate-180'"
+                component(
+                  :is="item.action ? 'button' : 'div'",
+                  :type="item.action ? 'button' : undefined",
+                  :disabled="item.action ? !view.allowedActions.includes(item.action) : undefined",
+                  class="flex min-h-8 w-full items-center gap-3 text-left text-body",
+                  :class="[item.action && 'cursor-pointer disabled:cursor-not-allowed disabled:opacity-50', item.accent && 'pt-2 font-semibold text-accent underline underline-offset-2']",
+                  @click="item.action && requestAction(item.action)"
                 )
-                span {{ item.label }}
+                  base-icon(
+                    v-if="item.icon",
+                    :name="item.icon",
+                    class="size-5 shrink-0 text-primary",
+                    :class="item.icon === 'back' && 'rotate-180'"
+                  )
+                  span {{ item.label }}
   footer.customer-home__footer(class="mt-auto px-4 pt-6 pb-[max(24px,env(safe-area-inset-bottom))] text-center text-primary")
     .customer-home__socials(class="mb-4 flex justify-center gap-2")
       button(
@@ -165,3 +177,14 @@ async function requestAction(id: string) {
         )
     p(class="text-small text-primary") {{ view.props.copyright }}
 </template>
+
+<style scoped>
+.draft-dismiss-leave-active {
+  pointer-events: none;
+}
+
+.customer-home__draft-collapse.draft-dismiss-leave-to {
+  grid-template-rows: minmax(0, 0fr);
+  opacity: 0;
+}
+</style>

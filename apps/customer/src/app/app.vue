@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { usePreferredReducedMotion, useScrollLock, useElementSize } from '@vueuse/core'
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-vue'
-import { nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { nextTick, onMounted, onUnmounted, provide, ref } from 'vue'
 import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
 import { shellFixture as shell } from './pages/fixtures/shell'
 import { finishPreview } from './preview-flow'
 import { flowActions } from './flow-client'
+import FlowExitDialog from './components/flow-exit-dialog.vue'
+import { requestFlowExit, flowDraftContext } from './flow-exit'
+import { flowExitFixture } from './pages/fixtures/flow-exit'
 import AdviceDrawer from './components/advice-drawer.vue'
 import { previewHomeView, previewPageAdvice } from './flow-client'
 import ManagerToasts from './components/manager-toasts.vue'
@@ -23,6 +26,23 @@ onUnmounted(clearScreenScroll)
 usePageScrollbars()
 const route = useRoute()
 const router = useRouter()
+const homeView = computed(() => previewHomeView(route.query.fixture === 'clean'))
+const exitDialog = ref<InstanceType<typeof FlowExitDialog>>()
+provide(requestFlowExit, opener => exitDialog.value?.open(opener))
+const draftCaptures = new Set<() => Record<string, unknown>>()
+provide(flowDraftContext, {
+  restore: () => flowActions.readDraft(String(route.name)),
+  register: capture => {
+    draftCaptures.add(capture)
+    return () => draftCaptures.delete(capture)
+  }
+})
+async function leaveFlow() {
+  const screen = String(route.name)
+  const target = flowActions.leave(screen)
+  for (const capture of draftCaptures) flowActions.saveDraft(screen, capture())
+  if (target) await router.push({ name: target })
+}
 let pendingPageFocus = false
 const stopNavigationFocus = router.afterEach((to, from, failure) => {
   if (failure || !from.matched.length || to.path === from.path) return
@@ -71,13 +91,14 @@ const { height: headerHeight } = useElementSize(appHeader, { width: 0, height: 8
 const stopToastNavigation = router.afterEach((to, from, failure) => {
   if (!failure && to.fullPath !== from.fullPath) {
     clearToasts()
+    exitDialog.value?.close(true)
     adviceDrawer.value?.close(true)
   }
 })
 onUnmounted(stopToastNavigation)
 function handlePageAction(id: string) {
   if (route.name !== 'W01') return
-  const target = flowActions.start(previewHomeView(route.query.fixture === 'clean'), id)
+  const target = flowActions.start(homeView.value, id)
   if (target) void router.push({ name: target })
 }
 const reducedMotion = usePreferredReducedMotion()
@@ -158,6 +179,11 @@ onUnmounted(() => {
   class="relative min-h-dvh w-full bg-canvas",
   :lang="shell.locale"
 )
+  FlowExitDialog(
+    ref="exitDialog",
+    :copy="flowExitFixture",
+    @leave="leaveFlow"
+  )
   ManagerToasts
   CompletionAnimation(
     v-if="completion",
@@ -230,6 +256,7 @@ onUnmounted(() => {
         )
           component(
             :is="Component",
+            v-bind="route.name === 'W01' ? { view: homeView } : {}",
             @action="handlePageAction"
           )
     p.customer-app__notice(
@@ -247,9 +274,7 @@ onUnmounted(() => {
     @keydown="onMenuKeydown",
     @close="onMenuClosed"
   )
-    .customer-app__drawer(
-      class="flex h-full w-[calc(100%-48px)] max-w-[324px] flex-col overflow-hidden rounded-r-control bg-surface"
-    )
+    .customer-app__drawer(class="flex h-full w-[calc(100%-48px)] max-w-[324px] flex-col rounded-r-control bg-surface")
       .customer-app__drawer-header(
         class="flex shrink-0 items-center justify-between border-b border-primary-light px-[15px] pt-[max(16px,env(safe-area-inset-top))] pb-5"
       )
@@ -297,7 +322,7 @@ onUnmounted(() => {
               base-icon(:name="item.icon")
               span {{ item.label }}
       .customer-app__drawer-footer(
-        class="flex shrink-0 justify-center gap-2 border-t border-primary-light bg-canvas px-4 pt-3 pb-[max(16px,env(safe-area-inset-bottom))] text-primary"
+        class="relative flex shrink-0 justify-center gap-2 rounded-br-control border-t border-primary-light bg-canvas px-4 pt-3 pb-[max(16px,env(safe-area-inset-bottom))] text-primary"
       )
         button(
           v-for="social in shell.socials",
@@ -332,6 +357,15 @@ onUnmounted(() => {
 .customer-app__drawer {
   /* Extend the surface beyond the viewport during the small rightward overshoot. */
   box-shadow: -12px 0 0 var(--color-surface);
+}
+.customer-app__drawer-footer::before {
+  content: '';
+  position: absolute;
+  inset: -1px 100% 0 auto;
+  width: 12px;
+  background: inherit;
+  border-top: inherit;
+  pointer-events: none;
 }
 @media (prefers-reduced-motion: no-preference) {
   .customer-app__splash {

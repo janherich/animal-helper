@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useFlowDraft } from '../use-flow-draft'
 import PageActions from '../components/page-actions.vue'
 import PageIntro from '../components/page-intro.vue'
 import ValidationMessage from '../components/validation-message.vue'
@@ -148,6 +149,7 @@ function goBack() {
   if (!props.view.allowedActions.includes('back')) return
   void router.push({ name: props.view.backTarget })
 }
+useFlowDraft({ query, path, choice, description, searchFirst })
 </script>
 
 <template lang="pug">

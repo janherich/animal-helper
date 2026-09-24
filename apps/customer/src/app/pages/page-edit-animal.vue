@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useFlowDraft } from '../use-flow-draft'
 import PageActions from '../components/page-actions.vue'
 import PageIntro from '../components/page-intro.vue'
 import { computed, ref, useId } from 'vue'
@@ -43,6 +44,7 @@ function go(action: 'media' | 'manual') {
   if (!props.view.allowedActions.includes(action)) return
   void router.push({ name: flowActions.edit(action === 'media' ? props.view.mediaTarget : props.view.manualTarget) })
 }
+useFlowDraft({ query })
 </script>
 
 <template lang="pug">

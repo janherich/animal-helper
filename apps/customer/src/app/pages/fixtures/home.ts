@@ -120,7 +120,7 @@ export const homeDraftFixture: HomeView = {
       progress: 35,
       progressLabel: 'Dokončenie hlásenia',
       actions: [
-        { id: 'draft-complete', label: 'Vybavené', appearance: 'secondary' },
+        { id: 'draft-complete', label: 'Uzavrieť prípad', appearance: 'secondary' },
         { id: 'draft-resume', label: 'Pokračovať', appearance: 'primary' }
       ]
     }

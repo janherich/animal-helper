@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import FlowNavigation from '../components/flow-navigation.vue'
 import { useRouter } from 'vue-router'
 import { flowActions } from '../flow-client'
 import { backWithinFlow } from '../instruction-navigation'
@@ -14,15 +15,10 @@ function choose(choice: OtherSituationChoice) {
   class="flex flex-1 flex-col",
   :lang="view.locale"
 )
-  div(class="px-4 pt-5 pb-1")
-    button(
-      type="button",
-      class="mb-4 flex min-h-11 items-center gap-1 font-form text-back text-primary",
-      @click="backWithinFlow(router, view.backTarget, [view.backTarget])"
-    )
-      base-icon(name="back")
-      span {{ view.copy.back }}
-    hr(class="border-primary-light")
+  FlowNavigation(
+    :back="view.copy.back",
+    @back="backWithinFlow(router, view.backTarget, [view.backTarget])"
+  )
   header(class="px-5 pt-5 pb-3")
     h1(class="text-heading-1") {{ view.copy.title }}
   div(class="flex flex-col gap-4 px-4 pt-6 pb-4")

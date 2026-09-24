@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useFlowDraft } from '../use-flow-draft'
 import PageActions from '../components/page-actions.vue'
 import PageIntro from '../components/page-intro.vue'
 import { computed, onUnmounted, ref, watch, useId } from 'vue'
@@ -50,12 +51,16 @@ function titleParts(title: string) {
     after: title.slice(index + needle.length)
   }
 }
-watch(query, () => {
-  selected.value = undefined
-  message.value = ''
-  requestId++
-  locating.value = false
-})
+watch(
+  query,
+  () => {
+    selected.value = undefined
+    message.value = ''
+    requestId++
+    locating.value = false
+  },
+  { flush: 'sync' }
+)
 function selectPlace(place: LocationPoint) {
   focused.value = false
   requestId++
@@ -105,6 +110,7 @@ function goBack() {
 onUnmounted(() => {
   requestId++
 })
+useFlowDraft({ query, selected })
 </script>
 
 <template lang="pug">

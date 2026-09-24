@@ -29,7 +29,7 @@ test('applies Figma foundations and generates theme utilities', async ({ page })
 test('matches audited navigation typography, progress shadow and footer headings', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('/')
-  const headings = page.locator('.customer-home__section > summary')
+  const headings = page.locator('.customer-home__section-toggle')
   await expect(headings).toHaveCount(3)
   for (const heading of await headings.all()) await expect(heading).toHaveCSS('line-height', '28px')
   await page.getByRole('button', { name: 'Zviera je zranené', exact: true }).click()

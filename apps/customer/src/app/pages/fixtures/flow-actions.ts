@@ -6,16 +6,45 @@ import type { CrueltyFollowupView } from './cruelty-followup'
 import { flowPolicy } from './flow-scenarios'
 import type { InstructionAction, InstructionsView } from './instructions'
 import type { LocationPoint } from './location'
+import { previewDraftProgress } from './preview-server'
+import { previewDraftDismissed, suspendedPreview } from './preview-session'
 
 // Mock command handlers. They return navigation results, never touch the router.
 // The API implementation will validate commands and return authoritative state.
 export const fixtureFlowActions = {
   start(view: HomeView, id: string) {
     if (!view.allowedActions.includes(id)) return
+    if (id === 'draft-complete') {
+      if (previewSession.value === suspendedPreview.value?.session) previewSession.value = null
+      suspendedPreview.value = null
+      previewDraftDismissed.value = true
+      return
+    }
+    if (id === 'draft-resume' && suspendedPreview.value) {
+      previewSession.value = suspendedPreview.value.session
+      return suspendedPreview.value.screen
+    }
     const action = view.previewActions[id]
     if (!action) return
     beginPreview(action.situation, action.fromDraft)
     return action.target
+  },
+  leave(screen: string) {
+    if (!previewSession.value) return
+    previewDraftDismissed.value = true
+    suspendedPreview.value = { session: previewSession.value, screen, progress: previewDraftProgress(screen) }
+    return 'W01'
+  },
+  readDraft(screen: string) {
+    const draft = previewSession.value?.uiDrafts?.[screen]
+    if (draft) delete previewSession.value!.uiDrafts![screen]
+    return draft
+  },
+  saveDraft(screen: string, values: Record<string, unknown>) {
+    const session = previewSession.value
+    if (!session || suspendedPreview.value?.session !== session || suspendedPreview.value.screen !== screen) return
+    session.uiDrafts ??= {}
+    session.uiDrafts[screen] = values
   },
   chooseSituation(choice: OtherSituationChoice) {
     if (previewSession.value?.otherSituation !== choice.id) beginPreview('other')

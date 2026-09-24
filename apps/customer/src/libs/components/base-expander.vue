@@ -1,9 +1,10 @@
 <script setup lang="ts">
-withDefaults(defineProps<{ state?: boolean }>(), { state: false })
+withDefaults(defineProps<{ state?: boolean; id?: string }>(), { state: false })
 </script>
 
 <template lang="pug">
 .base-expander(
+  :id="id",
   :class="{ 'is-open': state }",
   :inert="state ? undefined : true",
   :aria-hidden="!state"
