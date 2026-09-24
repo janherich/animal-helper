@@ -49,21 +49,17 @@ cancelled/stale media results, alongside browser tests for complete flows and hi
 
 ## Leaving and resuming a report
 
-The shared flow navigation exposes an X button from the first situation-specific
-screen, including cruelty and Other interstitials. It opens the confirmation
-“Opustiť hlásenie prípadu”. Continue and Escape dismiss the dialog without changing
-the report; focus returns to X. Confirming calls the fixture `leave` command and
-navigates to its returned homepage target.
+The shared flow navigation exposes an X button from the first situation-specific screen, including cruelty and Other
+interstitials. It opens the confirmation “Opustiť hlásenie prípadu”. Continue and Escape dismiss the dialog without
+changing the report; focus returns to X. Confirming calls the fixture `leave` command and navigates to its returned
+homepage target.
 
-The fixture provider retains one suspended report, its resume screen and demo
-progress, and supplies the homepage draft card from that report. Resume restores
-the same session; “Uzavrieť prípad” removes the draft. Confirmed answers and media
-stay in the session. Unsubmitted location, manual selection, identification search
-and final form controls are checkpointed separately, only on explicit exit.
+The fixture provider retains one suspended report, its resume screen and demo progress, and supplies the homepage draft
+card from that report. Resume restores the same session; “Uzavrieť prípad” removes the draft. Confirmed answers and
+media stay in the session. Unsubmitted location, manual selection, identification search and final form controls are
+checkpointed separately, only on explicit exit.
 
-This is an in-memory preview, including File objects. Refreshing or closing the
-app loses the draft; it does not call an API or persist personal data to browser
-storage. Server integration must replace the commands and homepage payload,
-persist the report and return the authoritative navigation result. The frontend
-must await success before leaving and handle pending/error states. This is not a
-final endpoint or command schema.
+This is an in-memory preview, including File objects. Refreshing or closing the app loses the draft; it does not call an
+API or persist personal data to browser storage. Server integration must replace the commands and homepage payload,
+persist the report and return the authoritative navigation result. The frontend must await success before leaving and
+handle pending/error states. This is not a final endpoint or command schema.

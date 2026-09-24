@@ -16,7 +16,7 @@ import CompletionAnimation from './components/completion-animation.vue'
 import { completion } from './completion'
 import { clearToasts } from './toasts'
 import logoOrange from '@/assets/brand/logo-orange.svg'
-import logoSplash from '@/assets/brand/logo-splash.svg?raw'
+import SplashLogo from './components/splash-logo.vue'
 import { usePageScrollbars } from '@/plugins/overlay-scrollbars'
 import { computed } from 'vue'
 import { holdScreenHeight, screenEntered, clearScreenScroll } from '@/providers/router/transition-scroll'
@@ -342,11 +342,9 @@ onUnmounted(() => {
     role="status",
     :aria-label="shell.props.welcome"
   )
-    div(
-      role="img",
-      :aria-label="shell.props.brand",
-      class="h-[134px] w-[207px]",
-      v-html="logoSplash"
+    SplashLogo(
+      :label="shell.props.brand",
+      class="h-[134px] w-[207px]"
     )
 </template>
 

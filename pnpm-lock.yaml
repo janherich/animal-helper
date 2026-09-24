@@ -114,7 +114,7 @@ importers:
 
   apps/customer:
     dependencies:
-      '@animal-helper/guidance':
+      "@animal-helper/guidance":
         specifier: workspace:*
         version: link:../../packages/guidance
       "@floating-ui/vue":

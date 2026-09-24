@@ -17,12 +17,12 @@ This is a frontend presentation proposal for backend discussion, **not an implem
 - `copy` supplies alternative labels, required-description text, confirmation and preview status.
 - `allowedActions` gates local interactions; `layout`, `locale` and `backTarget` retain their existing roles.
 
-The fixture builds its tree from `@animal-helper/guidance/catalog`, using all 116 current animal-kind entries
-and their stable keys, Slovak names and group/category/subcategory membership. The product CSV matrices remain the
-source of that shared catalogue. Four root groups cover domestic, farm, wildlife and exotic animals. Redundant
-category levels that repeat the domestic/farm/exotic group are omitted; wildlife retains its categories and optional
-subcategories. Children are sorted by Slovak label. Fixture-owned branch labels and alternative labels shape the
-presentation; the renderer still consumes only the supplied tree. Missing images show a muted paw.
+The fixture builds its tree from `@animal-helper/guidance/catalog`, using all 116 current animal-kind entries and their
+stable keys, Slovak names and group/category/subcategory membership. The product CSV matrices remain the source of that
+shared catalogue. Four root groups cover domestic, farm, wildlife and exotic animals. Redundant category levels that
+repeat the domestic/farm/exotic group are omitted; wildlife retains its categories and optional subcategories. Children
+are sorted by Slovak label. Fixture-owned branch labels and alternative labels shape the presentation; the renderer
+still consumes only the supplied tree. Missing images show a muted paw.
 
 This imports catalogue identities only, not guidance routing or advice rules. The product sources remain working
 material; no live backend integration is introduced.
@@ -70,7 +70,9 @@ supplies the tree or authorized branch views, how global search supplies the tar
 commands are represented. Client route guards are not authorization. The server must validate each action and supply the
 next authorized screen.
 
-All user-facing catalogue data and text are fixture-owned today, intended to come localized from the server. Transport, loading/error states, stale responses and route identifiers require backend agreement; animal IDs now match the shared catalogue.
+All user-facing catalogue data and text are fixture-owned today, intended to come localized from the server. Transport,
+loading/error states, stale responses and route identifiers require backend agreement; animal IDs now match the shared
+catalogue.
 
 Visual reference: UI Typy obrazoviek. Behaviour reference: developer wireframe annotations plus the agreed global
 search, arbitrary-depth traversal and persistent-heading refinements. Wireframes are not a visual specification.
