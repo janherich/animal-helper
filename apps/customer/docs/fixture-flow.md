@@ -71,6 +71,6 @@ card from that report. Resume restores the same session; “Uzavrieť prípad”
 media stay in the session. Unsubmitted location, manual selection, identification search and final form controls are
 checkpointed separately, only on explicit exit.
 
-Accepted injured and stray commands are stored by the API. The browser case session is still in memory, so refreshing or
-closing the app drops the capability and the local draft even though the server draft remains until it expires. Files
-and unsubmitted form controls are not sent. IndexedDB resume is still later work.
+Accepted injured and stray commands are stored by the API. The browser keeps the case id, capability, and walk cursor in
+IndexedDB, so a refresh reopens the same draft. Files and unsubmitted form controls are not stored. “Uzavrieť prípad”
+and a successful submit remove the local case.

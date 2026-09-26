@@ -24,6 +24,11 @@ export {
   type CaseSnapshot,
 } from "./session.js";
 export {
+  createIdbCaseStore,
+  createIdbRecordStore,
+  type IdbRecordStore,
+} from "./idb-case-store.js";
+export {
   createMemoryCaseStore,
   durabilityOf,
   hydrateStoredCase,

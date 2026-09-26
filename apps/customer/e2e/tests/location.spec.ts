@@ -52,7 +52,21 @@ test('guards direct entry and previews location selection without submitting', a
   await expect(confirm).toBeDisabled()
   await expect(page.getByText('V ukážkových dátach sa nenašla zhoda.')).toBeVisible()
   await page.reload()
-  await expect(page).toHaveURL(/\/$/)
+  await expect(page).toHaveURL(/\/w03$/)
+})
+
+test('reopens the same report after reload', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Zviera je zranené', exact: true }).click()
+  await page.getByRole('button', { name: 'Ukážková mapa — vybrať Dolné Orešany' }).click()
+  await page.getByRole('button', { name: 'Potvrdiť polohu' }).click()
+  await expect(page).toHaveURL(/\/w04$/)
+  await page.reload()
+  await expect(page).toHaveURL(/\/w04$/)
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Pokračovať', exact: true }).click()
+  await expect(page).toHaveURL(/\/w04$/)
 })
 
 test('supports keyboard selection and dismissing the location overlay', async ({ page }) => {

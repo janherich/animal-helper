@@ -101,7 +101,8 @@ test('previews local media, preserves it on back and removes it', async ({ page 
   await expect(page.locator('input[type=file]')).toHaveCount(1)
   await expect(page.getByRole('button', { name: 'Otvoriť fotoaparát' })).toHaveCount(0)
   await page.reload()
-  await expect(page).toHaveURL(/\/$/)
+  await expect(page).toHaveURL(/\/w04$/)
+  await expect(page.locator('.customer-media__grid img')).toHaveCount(0)
 })
 
 test('groups removals into one toast and restores the original order', async ({ page }) => {

@@ -4,8 +4,9 @@ Framework-free reporter command client. Vue screens project this state and call
 these methods; they do not own retries, capabilities, or `expectedVersion`. See
 the [UI cookbook](../../docs/product/ui-cookbook.md).
 
-The package is browser-safe (Web Crypto, no Node APIs). IndexedDB is a later
-`CaseStore` adapter; tests and first Vue wiring use the memory store.
+The package is browser-safe (Web Crypto, no Node APIs). `createIdbCaseStore`
+keeps the case id, capability, queue, and last public status in IndexedDB. Tests
+use the memory store, which resets when the page is discarded.
 
 ```ts
 import {

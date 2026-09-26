@@ -190,5 +190,5 @@ test('opens the manual group fixture, selects a group and preserves it on return
   await expect(search).toHaveValue('')
   await expect(page.getByRole('button', { name: 'Začať výber odznova' })).toBeDisabled()
   await page.reload()
-  await expect(page).toHaveURL(/\/$/)
+  await expect(page).toHaveURL(/\/w06$/)
 })

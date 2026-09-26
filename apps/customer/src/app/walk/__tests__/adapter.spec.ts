@@ -1,17 +1,35 @@
-import { createCaseSession, createMemoryCaseStore, type ApiTransport } from '@animal-helper/client'
+import { createCaseSession, createMemoryCaseStore, type ApiTransport, type CaseStore } from '@animal-helper/client'
 import { bundledPublicGuidance } from '@animal-helper/guidance'
 import { afterEach, expect, it } from 'vitest'
 import { homeFixture } from '../../pages/fixtures/home'
+import { suspendedPreview } from '../../pages/fixtures/preview-session'
 import { finishPreview } from '../../preview-flow'
 import { createWalkActions } from '../adapter'
+import type { WalkCheckpoint } from '../checkpoint'
 
 afterEach(() => {
   finishPreview()
 })
 
-function harness(transport?: ApiTransport) {
+function memoryCheckpoint() {
+  let value: WalkCheckpoint | undefined
+  return {
+    async load() {
+      return value
+    },
+    async save(next: WalkCheckpoint) {
+      value = next
+    },
+    async clear() {
+      value = undefined
+    }
+  }
+}
+
+function harness(transport?: ApiTransport, store?: CaseStore, checkpoint = memoryCheckpoint()) {
   const commands: { type: string; kind?: string; privatePayload?: unknown }[] = []
   const failures: string[] = []
+  const caseStore = store ?? createMemoryCaseStore()
   const sessionTransport: ApiTransport = transport ?? {
     async sendCommand({ command }) {
       commands.push({
@@ -35,13 +53,14 @@ function harness(transport?: ApiTransport) {
     }
   }
   const actions = createWalkActions({
-    session: createCaseSession({ store: createMemoryCaseStore(), transport: sessionTransport }),
+    session: createCaseSession({ store: caseStore, transport: sessionTransport }),
     guidance: async () => bundledPublicGuidance(),
+    checkpoint,
     reportFailure: error => {
       failures.push(error.code)
     }
   })
-  return { actions, commands, failures }
+  return { actions, commands, failures, caseStore, checkpoint }
 }
 
 const place = { label: 'Dolné Orešany', lat: 48.433, lng: 17.43, source: 'fixture' as const }
@@ -116,6 +135,21 @@ it('leaves cruelty on the fixture provider', async () => {
   expect(await actions.start(homeFixture, 'start-cruelty')).toBe('W27')
   expect(commands).toEqual([])
   expect(actions.status().hasDraft).toBe(false)
+})
+
+it('reopens the same case id and walk step from the saved checkpoint', async () => {
+  const checkpoint = memoryCheckpoint()
+  const started = harness(undefined, createMemoryCaseStore(), checkpoint)
+  await started.actions.start(homeFixture, 'start-injured')
+  expect(await started.actions.location(place, 'W99')).toBe('W04')
+
+  const reloaded = harness(undefined, started.caseStore, checkpoint)
+  await reloaded.actions.restore()
+  expect(reloaded.actions.status().hasDraft).toBe(true)
+  expect(reloaded.actions.status().hasLocation).toBe(true)
+  expect(suspendedPreview.value?.screen).toBe('W04')
+  expect(await reloaded.actions.location({ ...place, label: 'Iná ulica' }, 'W99')).toBe('W04')
+  expect(reloaded.commands[0]).toMatchObject({ kind: 'location' })
 })
 
 it('stays on the current screen when the server rejects the draft', async () => {

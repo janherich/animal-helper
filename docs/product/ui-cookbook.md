@@ -32,7 +32,9 @@ Keep the dependency set small. Ephemeral chrome may use Pinia; **case, queue,
 and capability state must not**.
 
 Local app: `npm run dev` from the repository root, then `http://127.0.0.1:5173`.
-The backoffice is `http://localhost:5174`. The in-memory store resets on reload.
+The backoffice is `http://localhost:5174`. The customer app keeps the open case
+in IndexedDB and resumes it after reload. The memory store used by tests resets
+when discarded.
 
 ## What you own
 

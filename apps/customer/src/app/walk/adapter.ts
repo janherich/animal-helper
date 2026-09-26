@@ -1,14 +1,17 @@
 import {
   createCaseSession,
   createFetchTransport,
+  createIdbCaseStore,
   createMemoryCaseStore,
   type CaseSession,
-  type ClientError
+  type ClientError,
+  type IdbRecordStore
 } from '@animal-helper/client'
 import {
   bundledPublicGuidance,
   findAnimalKind,
   parsePublicGuidance,
+  resumeWalkView,
   walkViewAfterPath,
   type PublicGuidance,
   type WalkFacts
@@ -16,10 +19,13 @@ import {
 import type { AnimalIdentification } from '../animal-identification'
 import type { LocationPoint } from '../contracts/forms'
 import { fixtureFlowActions } from '../pages/fixtures/flow-actions'
+import { previewDraftProgress } from '../pages/fixtures/preview-server'
+import { suspendedPreview } from '../pages/fixtures/preview-session'
 import type { HomeView } from '../pages/home-view'
 import { previewSession } from '../preview-flow'
 import { notify } from '../toasts'
 import { apiBaseUrl } from './api'
+import { createWalkCheckpoint, type WalkCheckpoint } from './checkpoint'
 
 type ServerSituation = 'injured' | 'stray'
 type DetailAnswers = Record<string, string | string[]>
@@ -102,6 +108,7 @@ function failureText(error: ClientError) {
 export type WalkDependencies = {
   session: CaseSession
   guidance: () => Promise<PublicGuidance>
+  checkpoint?: IdbRecordStore<WalkCheckpoint>
   reportFailure?: (error: ClientError) => void
 }
 
@@ -141,9 +148,69 @@ export function createWalkActions(dependencies: WalkDependencies) {
     }
   }
 
+  let checkpointTail = Promise.resolve()
+
+  function captureCheckpoint(): WalkCheckpoint {
+    const session = previewSession.value
+    const checkpoint: WalkCheckpoint = {
+      facts: { ...facts },
+      ...(session?.location ? { location: { ...session.location } } : {}),
+      ...(session?.animalIdentification
+        ? { animalIdentification: { ...session.animalIdentification, path: [...session.animalIdentification.path] } }
+        : {}),
+      ...(session?.animalDetails ? { animalDetails: { ...session.animalDetails } } : {}),
+      ...(session?.adviceReady ? { adviceReady: true } : {})
+    }
+    // Vue proxies cannot be stored in IndexedDB.
+    return JSON.parse(JSON.stringify(checkpoint)) as WalkCheckpoint
+  }
+
+  function persistCheckpoint() {
+    const checkpoint = dependencies.checkpoint
+    if (!checkpoint) return Promise.resolve()
+    const saved = facts.hasDraft ? captureCheckpoint() : undefined
+    const run = checkpointTail.then(async () => {
+      if (!saved) return
+      try {
+        await checkpoint.save(saved)
+      } catch {
+        // The open tab still has the case when the browser refuses storage.
+      }
+    })
+    checkpointTail = run
+    return run
+  }
+
   async function resetCase() {
     facts = initialFacts()
+    await checkpointTail
+    await dependencies.checkpoint?.clear()
     await dependencies.session.removeLocal()
+  }
+
+  async function restore() {
+    const snapshot = await dependencies.session.snapshot()
+    if (!snapshot?.mutationAllowed || snapshot.publicState === 'received' || snapshot.publicState === 'closed') {
+      if (snapshot) await resetCase()
+      return
+    }
+    const saved = await dependencies.checkpoint?.load()
+    const restored =
+      saved?.facts.hasDraft === true
+        ? saved.facts
+        : { ...initialFacts(), situationType: 'injured' as const, hasDraft: true }
+    facts = withPublicState(restored, snapshot.publicState ?? restored.publicState)
+    previewSession.value = {
+      situation: facts.situationType,
+      fromDraft: true,
+      ...(saved?.location ? { location: saved.location } : {}),
+      ...(saved?.animalIdentification ? { animalIdentification: saved.animalIdentification } : {}),
+      ...(saved?.animalDetails ? { animalDetails: saved.animalDetails } : {}),
+      ...(saved?.adviceReady ? { adviceReady: true } : {})
+    }
+    const guidance = await dependencies.guidance()
+    const screen = presentationRoutes[resumeWalkView(facts, guidance).path] ?? 'W03'
+    suspendedPreview.value = { session: previewSession.value, screen, progress: previewDraftProgress(screen) }
   }
 
   async function routeAfter(completedPath: string) {
@@ -193,6 +260,7 @@ export function createWalkActions(dependencies: WalkDependencies) {
   return {
     ...fixtureFlowActions,
     status: () => facts,
+    restore,
     start(view: HomeView, id: string) {
       return exclusive(async () => {
         if (!view.allowedActions.includes(id) || id === 'draft-resume') return fixtureFlowActions.start(view, id)
@@ -213,7 +281,9 @@ export function createWalkActions(dependencies: WalkDependencies) {
             { ...initialFacts(), situationType: situation, hasDraft: true },
             opened.value.publicState
           )
-          return fixtureFlowActions.start(view, id)
+          const target = fixtureFlowActions.start(view, id)
+          await persistCheckpoint()
+          return target
         }
         if (view.previewActions[id]) await resetCase()
         return fixtureFlowActions.start(view, id)
@@ -232,7 +302,9 @@ export function createWalkActions(dependencies: WalkDependencies) {
           return undefined
         }
         facts = withPublicState({ ...facts, hasLocation: true }, attached.value.publicState)
-        return fixtureFlowActions.location(location, (await routeAfter('/w03')) ?? target)
+        const next = fixtureFlowActions.location(location, (await routeAfter('/w03')) ?? target)
+        await persistCheckpoint()
+        return next
       })
     },
     identify(identification: AnimalIdentification, target: string) {
@@ -244,7 +316,9 @@ export function createWalkActions(dependencies: WalkDependencies) {
           ...(identification.kind === 'species' ? { kindKey: identification.speciesId } : {})
         }
       }
-      return fixtureFlowActions.identify(identification, target)
+      const next = fixtureFlowActions.identify(identification, target)
+      if (persisted()) void persistCheckpoint()
+      return next
     },
     details(answers: DetailAnswers, scope: 'animalDetails' | 'roadDetails', target: string) {
       if (!persisted() || scope !== 'animalDetails') return fixtureFlowActions.details(answers, scope, target)
@@ -270,12 +344,17 @@ export function createWalkActions(dependencies: WalkDependencies) {
           },
           attached.value.publicState
         )
-        return fixtureFlowActions.details(answers, scope, (await routeAfter('/w09')) ?? target)
+        const next = fixtureFlowActions.details(answers, scope, (await routeAfter('/w09')) ?? target)
+        await persistCheckpoint()
+        return next
       })
     },
     async processMedia(duration: number, target: string, signal: AbortSignal) {
       const next = await fixtureFlowActions.processMedia(duration, target, signal)
-      if (next && persisted()) facts = { ...facts, photoDone: true }
+      if (next && persisted()) {
+        facts = { ...facts, photoDone: true }
+        await persistCheckpoint()
+      }
       return next
     },
     submitReport(reportInput: ContactReport) {
@@ -344,17 +423,18 @@ async function fetchPublishedGuidance(): Promise<PublicGuidance> {
   }
 }
 
-let liveSession: CaseSession | undefined
-
-function customerSession() {
-  liveSession ??= createCaseSession({
-    store: createMemoryCaseStore(),
-    transport: createFetchTransport({ baseUrl: apiBaseUrl() })
-  })
-  return liveSession
-}
+const durableBrowser = import.meta.env.MODE !== 'test' && typeof indexedDB !== 'undefined'
+const browserTransport = createFetchTransport({ baseUrl: apiBaseUrl() })
 
 export const walkFlowActions = createWalkActions({
-  session: customerSession(),
-  guidance: loadWalkGuidance
+  session: createCaseSession({
+    store: durableBrowser ? createIdbCaseStore(indexedDB) : createMemoryCaseStore(),
+    transport: browserTransport
+  }),
+  guidance: loadWalkGuidance,
+  ...(durableBrowser ? { checkpoint: createWalkCheckpoint(indexedDB) } : {})
 })
+
+export function restorePersistedWalk() {
+  return walkFlowActions.restore()
+}
