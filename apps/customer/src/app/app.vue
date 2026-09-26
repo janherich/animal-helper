@@ -96,10 +96,11 @@ const stopToastNavigation = router.afterEach((to, from, failure) => {
   }
 })
 onUnmounted(stopToastNavigation)
-function handlePageAction(id: string) {
+async function handlePageAction(id: string) {
   if (route.name !== 'W01') return
-  const target = flowActions.start(homeView.value, id)
-  if (target) void router.push({ name: target })
+  const pending = flowActions.start(homeView.value, id)
+  const target = pending instanceof Promise ? await pending : pending
+  if (target) await router.push({ name: target })
 }
 const reducedMotion = usePreferredReducedMotion()
 const starting = ref(true)

@@ -114,6 +114,9 @@ importers:
 
   apps/customer:
     dependencies:
+      "@animal-helper/client":
+        specifier: workspace:*
+        version: link:../../packages/client
       "@animal-helper/guidance":
         specifier: workspace:*
         version: link:../../packages/guidance

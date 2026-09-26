@@ -95,9 +95,11 @@ function locate() {
     { timeout: 10000, maximumAge: 60000 }
   )
 }
-function confirmLocation() {
+async function confirmLocation() {
   if (!selected.value || !previewSession.value || !props.view.allowedActions.includes('confirm-location')) return
-  void router.push({ name: flowActions.location(selected.value, props.view.confirmTarget) })
+  const pending = flowActions.location(selected.value, props.view.confirmTarget)
+  const target = pending instanceof Promise ? await pending : pending
+  if (target) void router.push({ name: target })
 }
 function goBack() {
   if (!props.view.allowedActions.includes('back')) return

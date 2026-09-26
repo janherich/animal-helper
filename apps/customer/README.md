@@ -147,8 +147,10 @@ Home now renders a typed local fixture from `src/app/pages/fixtures/home.ts`, pa
 labels, accordion content and allowed action IDs come from this object; the component does no translation. CTA clicks
 emit an action ID and show a fixture notice, without network requests or navigation to unimplemented steps. Accordion
 bodies are explicitly labelled sample copy, not approved legal or contact information. Social actions are disabled.
-Before server integration, reconcile this model with the existing shared WalkView schema (currently only two
-situations), implement a validated adapter and server-backed navigation guards. No generic form engine is introduced.
+Injured and stray starts, location, animal details and contact submission go through the walk adapter in
+`src/app/walk/adapter.ts` and persist public case status on the API. The walk view still chooses the next screen for
+those commands. Dead, cruelty and other situations stay on the local fixture provider. No generic form engine is
+introduced.
 
 In development, `/?fixture=draft` selects the W01 draft-card fixture (Figma `2120:13168`). Plain `/` has no draft. The
 optional `props.draft` supplies the summary, progress and actions. Resume opens the fixture location step; Complete only

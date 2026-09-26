@@ -1,5 +1,5 @@
-// Temporary frontend presentation model, NOT an agreed API contract.
-// Reconcile with @animal-helper/contracts WalkView before wiring a server adapter.
+// Presentation model for the homepage. Injured and stray starts are persisted by
+// the walk adapter; these action ids are not a second command schema.
 export type HomeView = {
   screen: 'W01'
   locale: string

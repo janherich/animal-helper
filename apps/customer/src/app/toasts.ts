@@ -33,6 +33,11 @@ export function dismissToast(id: number) {
   toasts.value = toasts.value.filter(toast => toast.id !== id)
   removed?.onDismiss?.()
 }
+export function notify(toast: Omit<Toast, 'id'>) {
+  const id = ++nextId
+  toasts.value = [...toasts.value, { ...toast, id, remaining: toast.duration }]
+  return id
+}
 export function clearToasts() {
   for (const toast of [...toasts.value]) dismissToast(toast.id)
 }

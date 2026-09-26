@@ -32,19 +32,19 @@ it.each([
   expect(previewDetailsView().confirmTarget).toBe(detailsTarget)
 })
 
-it('only starts actions exposed by the home payload', () => {
-  expect(flowActions.start({ ...homeFixture, allowedActions: [] }, 'start-injured')).toBeUndefined()
+it('only starts actions exposed by the home payload', async () => {
+  expect(await flowActions.start({ ...homeFixture, allowedActions: [] }, 'start-injured')).toBeUndefined()
   expect(previewSession.value).toBeNull()
-  expect(flowActions.start(homeFixture, 'start-cruelty')).toBe('W27')
+  expect(await flowActions.start(homeFixture, 'start-cruelty')).toBe('W27')
   expect(previewSession.value?.situation).toBe('cruelty')
 })
 
-it('keeps road documentation and the thanks return target in the fixture provider', () => {
+it('keeps road documentation and the thanks return target in the fixture provider', async () => {
   const road = otherSituationFixture.choices.find(choice => choice.id === 'road')!
   expect(flowActions.chooseSituation(road)).toBe('W03')
   expect(flowActions.followup(otherFailedFixture, otherFailedFixture.actions[0]!)).toBe('W04')
   expect(previewMediaView().backTarget).toBe('W37')
-  expect(flowActions.details({}, 'animalDetails', 'W39')).toBe('W39')
+  expect(await flowActions.details({}, 'animalDetails', 'W39')).toBe('W39')
   expect(previewThankYouView(thankYouFixture).backTarget).toBe('W09')
 })
 

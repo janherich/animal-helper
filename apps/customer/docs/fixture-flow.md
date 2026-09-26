@@ -30,16 +30,28 @@ and self-help supports the failure variant. History, focus and animations stay i
 supplies eligible history targets and fallback destinations. Advice in the header comes from the same fixture view
 selection used by the contact page, rather than independently choosing a second variant.
 
-## Backend integration later
+## Walk adapter
 
-Replace the mock provider with validated API responses for the current page and commands. The backend owns scenario
-selection, permitted commands, state updates, validation errors and the next destination. The frontend renders supported
-views and navigates to supported internal routes; it must not execute code supplied in payloads.
+Injured and stray reports use `src/app/walk/adapter.ts`. It keeps the fixture session for presentation, and it persists
+process status through `@animal-helper/client`:
 
-This is **not yet a drop-in asynchronous API adapter**: most mock commands are synchronous, routes still inject
-presentation fixtures, draft fields remain local, and upload/submission are not connected. Integration must add async
-loading/error handling, response validation and synchronization of authoritative state. The media simulator is already
-abortable and ignores results for a replaced session. Contact form values are not submitted or stored by this mock.
+| Step                    | Server command                        | Next screen                                   |
+| ----------------------- | ------------------------------------- | --------------------------------------------- |
+| Start injured or stray  | `create_draft`                        | walk view after `/w01`                        |
+| Confirm location        | `attach_location`                     | walk view after `/w03`                        |
+| Confirm animal details  | `attach_form_snapshot`                | walk view after `/w09`, or contact if none    |
+| Submit the contact form | `attach_contact`, then `submit_draft` | completion only after `publicState: received` |
+
+Photo and manual identification stay on the device. The walk view is resolved locally from those facts plus the
+published guidance revision, with the bundled revision when `/guidance` is unavailable. The command reply's
+`publicState` is the persisted case status. Navigation waits for a successful command.
+
+Dead, cruelty and other situations are still fixture-only. The command schema accepts only `injured` and `stray`. Guide
+buttons after the first post-details screen still follow the fixture targets, because those branches are not in the walk
+view. Uploads are not sent.
+
+Browser tests set `E2E_STUB_COMMANDS=1`, which accepts the command envelope without Postgres. `pnpm dev` proxies
+`/commands`, `/status` and `/guidance` to the API.
 
 Frontend guards and disabled controls are only UX checks. The real server must independently validate every command, its
 payload, permissions and current case revision. No backend authorization or new CI job is implemented here.
@@ -59,7 +71,6 @@ card from that report. Resume restores the same session; “Uzavrieť prípad”
 media stay in the session. Unsubmitted location, manual selection, identification search and final form controls are
 checkpointed separately, only on explicit exit.
 
-This is an in-memory preview, including File objects. Refreshing or closing the app loses the draft; it does not call an
-API or persist personal data to browser storage. Server integration must replace the commands and homepage payload,
-persist the report and return the authoritative navigation result. The frontend must await success before leaving and
-handle pending/error states. This is not a final endpoint or command schema.
+Accepted injured and stray commands are stored by the API. The browser case session is still in memory, so refreshing or
+closing the app drops the capability and the local draft even though the server draft remains until it expires. Files
+and unsubmitted form controls are not sent. IndexedDB resume is still later work.

@@ -8,6 +8,7 @@ import { computed, ref, useId, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import type { ThankYouView } from './fixtures/thank-you'
 import { completion } from '../completion'
+import { flowActions } from '../flow-client'
 const props = defineProps<{ view: ThankYouView }>()
 const router = useRouter()
 const form = ref<HTMLFormElement>()
@@ -29,14 +30,22 @@ watch(
     descriptions.value = {}
   }
 )
-function submit() {
+async function submit() {
   if (validation.hasFieldErrors.value) {
     validation.focusFirstError(form.value)
     return
   }
-  if (!finishing.value && props.view.allowedActions.includes('submit')) {
-    completion.value = { label: props.view.completionLabel, target: props.view.submitTarget }
-  }
+  if (finishing.value || !props.view.allowedActions.includes('submit')) return
+  const pending = flowActions.submitReport({
+    name: values.value.name,
+    phone: values.value.phone,
+    email: values.value.email,
+    shareWithAuthorities: !!consents.value['share-contact'],
+    newsletter: !!consents.value.newsletter
+  })
+  const accepted = pending instanceof Promise ? await pending : pending
+  if (!accepted) return
+  completion.value = { label: props.view.completionLabel, target: props.view.submitTarget }
 }
 useFlowDraft({ values, consents, reasons, descriptions })
 </script>

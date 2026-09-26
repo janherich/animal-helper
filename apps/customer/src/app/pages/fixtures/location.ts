@@ -25,7 +25,7 @@ export const locationFixture: LocationView = {
     locating: 'Zisťujem polohu…',
     mapLabel: 'Ukážková mapa — vybrať Dolné Orešany',
     mapHint: 'Označte polohu',
-    preview: 'Ukážková mapa a výsledky, nie živé Google Maps. Poloha sa nikam neodosiela.',
+    preview: 'Ukážková mapa a výsledky, nie živé Google Maps. Potvrdená poloha sa uloží k hláseniu.',
     results: 'Ukážkové lokality',
     empty: 'V ukážkových dátach sa nenašla zhoda.',
     selected: 'Vybraná poloha',
@@ -33,7 +33,7 @@ export const locationFixture: LocationView = {
     denied: 'Prístup k polohe nebol povolený. Vyberte lokalitu vyhľadaním.',
     unavailable: 'Polohu sa nepodarilo zistiť. Skúste vyhľadávanie.',
     confirm: 'Potvrdiť polohu',
-    confirmed: 'Poloha potvrdená iba v ukážke. Ďalší krok a uloženie na server ešte nie sú zapojené.'
+    confirmed: 'Poloha je uložená k hláseniu.'
   },
   places: [
     {

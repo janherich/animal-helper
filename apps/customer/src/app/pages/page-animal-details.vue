@@ -95,13 +95,14 @@ const valid = computed(() =>
         : question.options.some(option => selected(question, option.id)))
   )
 )
-function confirm() {
+async function confirm() {
   if (!valid.value || !props.view.allowedActions.includes('confirm') || !previewSession.value) return
   if (validation.hasFieldErrors.value) {
     validation.focusFirstError(form.value)
     return
   }
-  const target = flowActions.details(answers.value, props.answerScope, props.view.confirmTarget)
+  const pending = flowActions.details(answers.value, props.answerScope, props.view.confirmTarget)
+  const target = pending instanceof Promise ? await pending : pending
   if (target) void router.push({ name: target })
 }
 function edit() {

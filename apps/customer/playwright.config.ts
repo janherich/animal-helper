@@ -8,7 +8,7 @@ export default defineConfig({
     { name: 'webkit', use: { ...devices['Desktop Safari'] } }
   ],
   webServer: {
-    command: './node_modules/.bin/vite --port 5183',
+    command: 'E2E_STUB_COMMANDS=1 ./node_modules/.bin/vite --port 5183',
     url: 'http://localhost:5183',
     reuseExistingServer: false
   }
