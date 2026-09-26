@@ -1,4 +1,4 @@
-import { createIdbRecordStore, type IdbRecordStore } from '@animal-helper/client'
+import { createIdbRecordStore, type IdbRecordStore } from '@animal-helper/client/browser'
 import type { WalkFacts } from '@animal-helper/guidance'
 import type { AnimalIdentification } from '../animal-identification'
 import type { LocationPoint } from '../contracts/forms'

@@ -1,12 +1,11 @@
 import {
   createCaseSession,
   createFetchTransport,
-  createIdbCaseStore,
   createMemoryCaseStore,
   type CaseSession,
-  type ClientError,
-  type IdbRecordStore
+  type ClientError
 } from '@animal-helper/client'
+import { createIdbCaseStore, type IdbRecordStore } from '@animal-helper/client/browser'
 import {
   bundledPublicGuidance,
   findAnimalKind,

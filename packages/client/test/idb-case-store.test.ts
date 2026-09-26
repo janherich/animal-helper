@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { createIdbCaseStore, type StoredCase } from "../src/index.js";
+import { type StoredCase } from "../src/index.js";
+import { createIdbCaseStore } from "../src/idb-case-store.js";
 
 const succeed = <T>(value: T): IDBRequest<T> => {
   const request = {

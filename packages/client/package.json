@@ -9,6 +9,10 @@
     ".": {
       "types": "./src/index.ts",
       "default": "./src/index.ts"
+    },
+    "./browser": {
+      "types": "./src/idb-case-store.ts",
+      "default": "./src/idb-case-store.ts"
     }
   },
   "scripts": {

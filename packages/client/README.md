@@ -5,8 +5,10 @@ these methods; they do not own retries, capabilities, or `expectedVersion`. See
 the [UI cookbook](../../docs/product/ui-cookbook.md).
 
 The package is browser-safe (Web Crypto, no Node APIs). `createIdbCaseStore`
-keeps the case id, capability, queue, and last public status in IndexedDB. Tests
-use the memory store, which resets when the page is discarded.
+from `@animal-helper/client/browser` keeps the case id, capability, queue, and
+last public status in IndexedDB. Tests use the memory store, which resets when
+the page is discarded. The root entry stays free of browser storage types so
+Node projects can typecheck it.
 
 ```ts
 import {
