@@ -5,10 +5,10 @@ individually authenticated administrators. See
 [ADR 0007](../../docs/architecture/decisions/0007-vue-static-pwas.md) and
 [ADR 0009](../../docs/architecture/decisions/0009-passkey-admin-auth.md).
 
-This slice is passkey login, a case queue with the reporter summary, a case
-page for internal follow-up, and a guidance matrix that can edit injured copy,
-toggle applicability, and publish. Opening a case audits the read. It does not
-dispatch mail or store authority files; those stay as copied filenames.
+This slice is passkey login, a case queue with the reporter summary, a case page
+for internal follow-up, and a guidance matrix that can edit injured copy, toggle
+applicability, and publish. Opening a case audits the read. It does not dispatch
+mail or store authority files; those stay as copied filenames.
 
 `npm run dev` from the repository root starts Docker Postgres, the API on
 `http://127.0.0.1:8787`, the customer app on `http://localhost:5173`, and this
