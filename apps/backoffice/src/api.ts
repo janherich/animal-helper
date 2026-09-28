@@ -19,6 +19,77 @@ export type QueueCase = Readonly<{
   updatedAt: string;
 }>;
 
+export type AdminCaseSummary = Readonly<{
+  streamId: string;
+  caseNumber: string;
+  createdAt: string;
+  updatedAt: string;
+  workflowState: string;
+  situationType: string;
+  speciesKey: string;
+  address: string;
+  mode: "passive" | "review" | "active" | "closed";
+  urgency: "acute" | "high" | "normal";
+  ownerEmail: string;
+  nextStep: string;
+  deadline: string;
+  unread: boolean;
+  waitingOnAuthority: boolean;
+}>;
+
+export type AdminCaseDetail = AdminCaseSummary &
+  Readonly<{
+    facts: {
+      situationType: string;
+      speciesKey: string;
+      address: string;
+      latitude?: number;
+      longitude?: number;
+      symptoms: readonly string[];
+      description: string;
+      reporterName: string;
+      reporterPhone: string;
+      reporterEmail: string;
+      shareWithAuthorities: boolean;
+      mediaCount: number;
+    };
+    work: {
+      mode: AdminCaseSummary["mode"];
+      urgency: AdminCaseSummary["urgency"];
+      ownerEmail: string;
+      nextStep: string;
+      deadline: string;
+      note: string;
+      volunteer?: { name: string; task: string; result: string };
+      actions: readonly {
+        id: string;
+        kind: string;
+        at: string;
+        by: string;
+        result: string;
+      }[];
+      referrals: readonly {
+        id: string;
+        recipient: string;
+        sentOn: string;
+        replyFileName: string;
+        inspections: readonly {
+          id: string;
+          on: string;
+          by: string;
+          outcome: string;
+          findings: string;
+        }[];
+      }[];
+      steps: readonly {
+        id: string;
+        text: string;
+        due: string;
+        done: boolean;
+      }[];
+    };
+  }>;
+
 export type AdminError = Error & { status?: number; code?: string };
 
 const adminFetch = async (path: string, body?: unknown): Promise<unknown> => {
@@ -97,6 +168,15 @@ export const fetchSession = () =>
 
 export const fetchQueue = () =>
   adminFetch("/admin/queue") as Promise<{ cases: QueueCase[] }>;
+
+export const fetchCases = () =>
+  adminFetch("/admin/cases") as Promise<{ cases: AdminCaseSummary[] }>;
+
+export const fetchCase = (streamId: string) =>
+  adminFetch(`/admin/cases/${streamId}`) as Promise<AdminCaseDetail>;
+
+export const updateCase = (streamId: string, body: unknown) =>
+  adminFetch(`/admin/cases/${streamId}`, body) as Promise<AdminCaseDetail>;
 
 export const logoutSession = () => adminFetch("/admin/auth/logout", {});
 

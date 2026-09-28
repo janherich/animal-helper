@@ -18,6 +18,12 @@ import {
 import type { AdminConfig } from "./config.js";
 import { clearedSessionCookie, readCookie, sessionCookie } from "./cookies.js";
 import {
+  adminCaseDetail,
+  adminCaseList,
+  adminCommandFromBody,
+  adminUpdateCase,
+} from "./cases.js";
+import {
   adminGuidanceKind,
   adminGuidanceSummary,
   adminPublishGuidance,
@@ -202,6 +208,91 @@ export const handleAdminRequest = async (
         environment: config.environment,
         expiresAt: session.expiresAt.toISOString(),
       });
+    }
+
+    const caseMatch = /^\/admin\/cases\/([0-9a-f-]{36})$/.exec(
+      request.pathname,
+    );
+
+    if (request.method === "GET" && request.pathname === "/admin/cases") {
+      const session = await readOperatorSession(sql, sessionToken, now);
+      if (session === undefined) {
+        return fail("unauthenticated", 401);
+      }
+      const body = await adminCaseList(sql, session.email);
+      await recordOperatorAudit(sql, {
+        operatorEmail: session.email,
+        action: "case_list_read",
+        outcome: "accepted",
+      });
+      return json(200, body);
+    }
+
+    if (request.method === "GET" && caseMatch !== null) {
+      const session = await readOperatorSession(sql, sessionToken, now);
+      if (session === undefined) {
+        return fail("unauthenticated", 401);
+      }
+      const streamId = caseMatch[1];
+      if (streamId === undefined) {
+        return fail("not_found", 404);
+      }
+      const detail = await adminCaseDetail(sql, streamId, session.email);
+      if (detail === undefined) {
+        return fail("not_found", 404);
+      }
+      const seen = adminCommandFromBody(
+        { type: "seen" },
+        session.email,
+        now,
+        () => crypto.randomUUID(),
+      );
+      if (seen !== undefined) {
+        await adminUpdateCase(sql, streamId, session.email, seen);
+      }
+      await recordOperatorAudit(sql, {
+        operatorEmail: session.email,
+        action: "case_detail_read",
+        outcome: "accepted",
+        streamId,
+      });
+      return json(200, await adminCaseDetail(sql, streamId, session.email));
+    }
+
+    if (request.method === "POST" && caseMatch !== null) {
+      const session = await readOperatorSession(sql, sessionToken, now);
+      if (session === undefined) {
+        return fail("unauthenticated", 401);
+      }
+      const streamId = caseMatch[1];
+      const command = adminCommandFromBody(
+        request.body,
+        session.email,
+        now,
+        () => crypto.randomUUID(),
+      );
+      if (streamId === undefined || command === undefined) {
+        return fail("invalid_request", 400);
+      }
+      const updated = await adminUpdateCase(
+        sql,
+        streamId,
+        session.email,
+        command,
+      );
+      await recordOperatorAudit(sql, {
+        operatorEmail: session.email,
+        action: `case_${command.type}`,
+        outcome: updated.ok ? "accepted" : "rejected",
+        streamId,
+      });
+      if (!updated.ok) {
+        return fail(
+          updated.code === "not_found" ? "not_found" : "invalid_request",
+          updated.code === "not_found" ? 404 : 400,
+        );
+      }
+      return json(200, updated.case);
     }
 
     if (request.method === "GET" && request.pathname === "/admin/queue") {

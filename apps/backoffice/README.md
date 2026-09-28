@@ -5,9 +5,10 @@ individually authenticated administrators. See
 [ADR 0007](../../docs/architecture/decisions/0007-vue-static-pwas.md) and
 [ADR 0009](../../docs/architecture/decisions/0009-passkey-admin-auth.md).
 
-This slice is passkey login, a read-only case queue, and a guidance matrix that
-can edit injured copy, toggle applicability, and publish. It does not open
-private case data or dispatch mail.
+This slice is passkey login, a case queue with the reporter summary, a case
+page for internal follow-up, and a guidance matrix that can edit injured copy,
+toggle applicability, and publish. Opening a case audits the read. It does not
+dispatch mail or store authority files; those stay as copied filenames.
 
 `npm run dev` from the repository root starts Docker Postgres, the API on
 `http://127.0.0.1:8787`, the customer app on `http://localhost:5173`, and this
@@ -35,8 +36,10 @@ bootstrap link:
 pnpm admin:bootstrap -- --email you@example.com --open --reset-passkeys
 ```
 
-The queue lists `stream_id`, workflow state, and timestamps from
-`ah.case_queue_projection`. Private payloads are not loaded.
+The queue lists case number, situation, species, place, and admin status. The
+case page reads location, form snapshot, and contact from private records.
+Newsletter consent is not shown. Admin notes, actions, referrals, and
+inspections are stored in `ah.admin_case_work`.
 
 **Matica sprievodcu** (`/guidance`) browses the code-owned
 `@animal-helper/guidance` catalog and edits injured copy. Save writes a draft;

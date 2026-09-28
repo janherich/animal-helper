@@ -1,4 +1,20 @@
 export {
+  applyAdminCommand,
+  appFactsFromRecords,
+  caseNumber,
+  initialAdminDocument,
+  isUnread,
+  loadAdminCases,
+  parseAdminDocument,
+  saveAdminDocument,
+  type AdminCaseDocument,
+  type AdminCommand,
+  type AdminMode,
+  type AdminUrgency,
+  type AppCaseFacts,
+  type StoredAdminCase,
+} from "./admin-case.js";
+export {
   applyCommand,
   type ApplyCommandInput,
   type ApplyFailure,
